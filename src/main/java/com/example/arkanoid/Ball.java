@@ -173,8 +173,10 @@ public class Ball extends MovableObject{
             this.setdx(-this.getdx());
             // Cho ball ra khỏi brick
             if (deltaX > 0) {
+                this.setdx(Math.abs(this.getdx()));// đảm bảo đúng hướng ko có thì vẫn chạy đc
                 this.setX(brick.getX() + brick.getWidth());
             } else {
+                this.setdx(-Math.abs(this.getdx()));// đảm bảo đúng hướng
                 this.setX(brick.getX() - this.getWidth());
             }
         } else {
@@ -184,8 +186,10 @@ public class Ball extends MovableObject{
             this.setdy(-this.getdy());
             // Cho ball ra khỏi brick
             if (deltaY > 0) {
+                this.setdy(Math.abs(this.getdy()));// đảm bảo đúng hướng
                 this.setY(brick.getY() + brick.getHeight());
             } else {
+                this.setdy(-Math.abs(this.getdy()));// đảm bảo đúng hướng
                 this.setY(brick.getY() - this.getHeight());
             }
         }
