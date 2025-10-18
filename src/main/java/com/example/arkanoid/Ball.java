@@ -20,7 +20,10 @@ public class Ball extends MovableObject{
         Rball.setTranslateX(x);
         Rball.setTranslateY(y);
 
-        Rball.setFill(Color.RED);
+        String iball = getClass().getResource("/com/example/arkanoid/images/ball.png").toExternalForm();
+        Image imagineBallUrl = new Image(iball);
+        Rball.setFill(new ImagePattern(imagineBallUrl));
+
         //Node view khoi tao la Rball
         this.view = Rball;
     }
@@ -67,7 +70,7 @@ public class Ball extends MovableObject{
 
     public void reset(Paddle paddle) {
         this.setX(paddle.getX() + paddle.getWidth()/2 - this.getWidth()/2);
-        this.setY(paddle.getY() - this.getHeight);
+        this.setY(paddle.getY() - this.getHeight());
     }
 
 
