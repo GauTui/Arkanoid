@@ -164,6 +164,7 @@ public class Ball extends MovableObject{
         double ratioX = Math.abs(deltaX) / (brick.getWidth() / 2 + this.getWidth() / 2);
         double ratioY = Math.abs(deltaY) / (brick.getHeight() / 2 + this.getHeight() / 2);
 
+
         // 2. Xử lý Phản xạ và Đẩy bóng ra khỏi gạch
         if (ratioX > ratioY) {
             // Va chạm Ngang (Trái/Phải)
