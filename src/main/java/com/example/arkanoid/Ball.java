@@ -1,5 +1,6 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Brick.Brick;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -7,6 +8,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
+
+import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
+import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject{
     public static final int BALL_SIZE = 20;
@@ -78,9 +82,9 @@ public class Ball extends MovableObject{
     /**
      * Kiểm tra va chạm với tường.
      * Truyền tham số kiểu dữ liệu GameManager để thay đổi thuộc tính số mạng do nó quản lý.
-     * @param gm đối tượng GameManager gm quản lý trò chơi
+     * Đối tượng GameManager gm quản lý trò chơi
      */
-    public void collideWithWall(GameManager gm) {
+    public void collideWithWall() {
         //Va cham trai va phai
         if(this.getX() < 0) {
             //Đảo ngược hướng di chuyển ngang
@@ -98,10 +102,12 @@ public class Ball extends MovableObject{
             this.setdy(-this.getdy());
             this.setY(0);
         }
+
+        GameManager gm = GameManager.getInstance();
         //Xử lý va chạm dưới rớt xuống khỏi màn hình, ngoài ra hàm này thực hiện việc giảm máu và gameOver.
         else if(this.getY() + this.getHeight() > SCREEN_HEIGHT) {
             gm.loseLife();
-            this.reset();
+            this.reset(gm.getPaddle());
         }
     }
 
@@ -122,7 +128,7 @@ public class Ball extends MovableObject{
             this.setdy(-this.getdy());
 
             //cho dx > 1.5
-            int rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
+            double rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
             // Cho qua bong di chuyen sang trai hay phai (dx) dua tren diem va cham voi thanh paddle.
             // Neu va cham nua phai paddle thi ta cho bong di chuyen phai(dx<0), va nguoc lai (dx>0)
 
@@ -143,6 +149,11 @@ public class Ball extends MovableObject{
 
     }
 
+    /**
+     * kiểm tra va chạm với brick.
+     * xóa luôn brick va chạm nếu thỏa mãn máu của nó về 0
+     * @param brick
+     */
     public void collideWithBrick(Brick brick) {
         /* tránh trường hợp null của brick và rectangle brick.
         khi ta xóa đi brick thì còn lưu trong Pane*/
@@ -194,9 +205,13 @@ public class Ball extends MovableObject{
             }
         }
 
-        // 3. Phá hủy Gạch
-        brick.setIsVisiable(false);
-
+        // giảm máu gạch, phá hủy nếu máu về không bằng cách kiểm tra IsVisiable
+        brick.takeHit();
+        if(brick.isDestroyed()) {
+            GameManager gm = GameManager.getInstance();
+            gm.getGamePane().getChildren().remove(brick.getView());
+            gm.getBricks().remove(brick);
+        }
     }
 
     /**
@@ -220,5 +235,6 @@ public class Ball extends MovableObject{
         this.setY(paddle.getY() - this.getHeight());
         this.setdx(BALL_DX);
         this.setdy(BALL_DY);
+        updateView();
     }
 }
