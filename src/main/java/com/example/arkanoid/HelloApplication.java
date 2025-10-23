@@ -1,4 +1,4 @@
-package com.example.testcodegame;
+package com.example.arkanoid;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +47,7 @@ public class HelloApplication extends Application {
         TutorialButton.setLayoutY(420); // tọa độ Y của đầu nút
 
 
-        File LoadImg3 = new File("C:\\Users\\Gold D Rophi\\Desktop\\imageGame\\ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImg3 = new File("src/image/ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image ExitImg = new Image(LoadImg3.toURL().toString());
         ImageView ExitImg3 = new ImageView(ExitImg);
         ExitImg3.setFitHeight(70); // set chieu cao
@@ -105,7 +105,7 @@ public class HelloApplication extends Application {
         pbgView.setFitHeight(800);
 
 
-        File LoadImgLV1 = new File("C:\\Users\\Gold D Rophi\\Desktop\\imageGame\\Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImgLV1 = new File("src/image/Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV1Img = new Image(LoadImgLV1.toURL().toString());
         ImageView LV1ImgV = new ImageView(LV1Img);
         LV1ImgV.setFitHeight(80); // set chieu cao
@@ -116,7 +116,7 @@ public class HelloApplication extends Application {
         LV1Button.setLayoutX(110); // tọa độ X của đầu nút
         LV1Button.setLayoutY(260);
 
-        File LoadImgLV2 = new File("C:\\Users\\Gold D Rophi\\Desktop\\imageGame\\Level2Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImgLV2 = new File("src/image/Level2Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV2Img = new Image(LoadImgLV2.toURL().toString());
         ImageView LV2ImgV = new ImageView(LV2Img);
         LV2ImgV.setFitHeight(80); // set chieu cao
@@ -127,7 +127,7 @@ public class HelloApplication extends Application {
         LV2Button.setLayoutX(250); // tọa độ X của đầu nút
         LV2Button.setLayoutY(260);
 
-        File LoadImgLV3 = new File("C:\\Users\\Gold D Rophi\\Desktop\\imageGame\\Level3Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImgLV3 = new File("src/image/Level3Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV3Img = new Image(LoadImgLV3.toURL().toString());
         ImageView LV3ImgV = new ImageView(LV3Img);
         LV3ImgV.setFitHeight(80); // set chieu cao
@@ -138,7 +138,7 @@ public class HelloApplication extends Application {
         LV3Button.setLayoutX(390); // tọa độ X của đầu nút
         LV3Button.setLayoutY(260);
 
-        File LoadImgLV4 = new File("C:\\Users\\Gold D Rophi\\Desktop\\imageGame\\Level4Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImgLV4 = new File("src/image/Level4Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV4Img = new Image(LoadImgLV4.toURL().toString());
         ImageView LV4ImgV = new ImageView(LV4Img);
         LV4ImgV.setFitHeight(80); // set chieu cao
@@ -149,7 +149,7 @@ public class HelloApplication extends Application {
         LV4Button.setLayoutX(530); // tọa độ X của đầu nút
         LV4Button.setLayoutY(260);
 
-        File LoadImgLV5 = new File("C:\\Users\\Gold D Rophi\\Desktop\\imageGame\\Level5Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImgLV5 = new File("src/image/Level5Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV5Img = new Image(LoadImgLV5.toURL().toString());
         ImageView LV5ImgV = new ImageView(LV5Img);
         LV5ImgV.setFitHeight(80); // set chieu cao
