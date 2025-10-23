@@ -51,6 +51,7 @@ public class GameManager {
     public Paddle getPaddle() {
         return paddle;
     }
+    public List<Ball> getBalls() { return balls; }
 
     public Pane getGamePane() {
         return gamePane;
@@ -69,10 +70,7 @@ public class GameManager {
     }
     /*====phuong thuc====*/
 
-    //doc map
-    public void loadLevel(int levelNumber) {
 
-    }
 
     public GameManager() {
         // Khởi tạo các danh sách
@@ -84,7 +82,7 @@ public class GameManager {
         // Khởi tạo giá trị ban đầu
         score = 0;
         lives = INITIAL_LIVES;
-        currentLevel = random.nextInt(MAP_NUMBERS + 1);
+
     }
 
     /**
@@ -130,10 +128,113 @@ public class GameManager {
         gamePane.getChildren().addAll(scoreText, livesText);
 
         // Load level bricks
+        currentLevel = 1; // reset về level 1 khi bắt đầu game mới
         loadLevel(currentLevel);
     }
+    public void loadLevel(int levelNumber) {
+        //  dọn các viên gạch của màn cũ
+        bricks.forEach(brick -> gamePane.getChildren().remove(brick.getView()));
+        bricks.clear();
+
+        //   đường dẫn đến file level
+        String levelFile = "/levels/level" + levelNumber + ".txt";
+
+        try (InputStream is = getClass().getResourceAsStream(levelFile);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            int brickWidth = 60;
+            int brickHeight = 20;
+            int currentY = 50; // tọa độ Y ban đầu cho hàng gạch đầu tiên
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                int currentX = 0; // tọa độ X ban đầu cho mỗi hàng
+                for (char brickType : line.toCharArray()) {
+                    Brick newBrick = null;
+                    //  đọc từng ký tự và tạo loại gạch tương ứng
+                    switch (brickType) {
+                        case '1':
+                            newBrick = new NormalBrick(currentX, currentY, brickWidth, brickHeight);
+                            break;
+                        case '2':
+                            newBrick = new StrongBrick(currentX, currentY, brickWidth, brickHeight);
+                            break;
+                        // sau này thêm case cho các loại gạch khác ở đây
+                    }
+
+                    if (newBrick != null) {
+                        bricks.add(newBrick);
+                        gamePane.getChildren().add(newBrick.getView());
+                    }
+                    currentX += brickWidth ; // di chuyển sang phải cho viên gạch tiếp theo
+                }
+                currentY += brickHeight ; // di chuyển xuống dưới cho hàng gạch tiếp theo
+            }
+        } catch (Exception e) {
+            // nếu không tìm thấy file level (ví dụ: level3.txt không tồn tại),
+            // có nghĩa là đã qua hết level
+            System.out.println("YOU WIN! CONGRATULATIONS!");
+            // có thể thêm logic hiển thị màn hình chiến thắng ở đây
+        }
+    }
+
+    public void update() {
+        //  code cập nhật vị trí và va chạm
+           paddle.update();
+        for (Ball ball : balls) {
+            ball.update();
+        }
+        for (PowerUp aPowerUp : activePowerUp) {
+            aPowerUp.update();
+        }
+        checkCollisions();
+
+
+        // xóa các viên gạch , vật phẩm đã bị phá hủy khỏi danh sách
+        activePowerUp.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT);
+        bricks.removeIf(Brick::isDestroyed);
+
+        // kiểm tra chuyển màn
+        if (bricks.isEmpty()) {
+            System.out.println("Level " + currentLevel + " cleared!");
+            currentLevel++; // tăng level
+
+            // reset bóng và thanh đỡ cho màn mới
+            paddle.reset(instance);
+            for (Ball ball : balls) {
+                ball.reset(paddle);
+            }
+
+            loadLevel(currentLevel);
+            return;// tải màn chơi tiếp theo
+        }
+        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
+        paddle.updateView();
+        balls.forEach(GameObject::updateView);
+        activePowerUp.forEach(GameObject::updateView);
+
+        //  code cập nhật text
+        scoreText.setText("Score: " + score);
+        livesText.setText("Lives: " + lives);
+
+
+    }
+
+    private void spawnPowerUp(double x, double y) {
+
+            PowerUp newPowerUp;
+            if (random.nextBoolean()) {
+                newPowerUp = new ExpandPaddlePowerUp(x, y);
+            } else {
+                newPowerUp = new FastBallPowerUp(x, y);
+            }
+            activePowerUp.add(newPowerUp);
+            gamePane.getChildren().add(newPowerUp.getView());
+        }
+
 
     public void loseLife() {
         lives = lives - 1;
+
     }
 }
