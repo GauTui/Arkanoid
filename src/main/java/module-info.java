@@ -11,6 +11,7 @@ module com.example.arkanoid {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
+    requires jdk.jfr;
 
     opens com.example.arkanoid to javafx.fxml;
     exports com.example.arkanoid;
