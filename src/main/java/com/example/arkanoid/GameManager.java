@@ -174,7 +174,7 @@ public class GameManager {
             // nếu không tìm thấy file level (ví dụ: level3.txt không tồn tại),
             // có nghĩa là đã qua hết level
             System.out.println("YOU WIN! CONGRATULATIONS!");
-            // có thể thêm logic hiển thị màn hình chiến thắng ở đây
+            // có thể thêm logic hiển thị màn hình chiến thắng ở đây ok
         }
     }
 
@@ -205,15 +205,15 @@ public class GameManager {
                 ball.reset(paddle);
             }
 
-            loadLevel(currentLevel);
-            return;// tải màn chơi tiếp theo
+            loadLevel(currentLevel);// tải màn chơi tiếp theo
+            return;
         }
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
         paddle.updateView();
         balls.forEach(GameObject::updateView);
         activePowerUp.forEach(GameObject::updateView);
 
-        //  code cập nhật text
+        //   cập nhật text
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
 
