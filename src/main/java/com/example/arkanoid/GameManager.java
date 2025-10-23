@@ -1,5 +1,7 @@
 package com.example.arkanoid;
 
+import Game.Ball;
+import Game.Paddle;
 import com.example.arkanoid.Brick.Brick;
 import javafx.scene.layout.Pane;
 
@@ -11,7 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import static com.example.arkanoid.Ball.*;
+import static Game.Paddle.PADDLE_HEIGHT;
+import static Game.Paddle.PADDLE_WIDTH;
+import static Game.Ball.*;
 
 public class GameManager {
     public static final int SCREEN_WIDTH = 720;
@@ -103,14 +107,13 @@ public class GameManager {
         this.mainApp = mainApp;
 
         // Paddle
-        paddle = new Paddle(SCREEN_WIDTH/2 - PADDLE_WIDTH/2, SCREEN_HEIGHT - PADDLE_HEIGHT - 15,
-                            PADDLE_WIDTH, PADDLE_HEIGHT);
+        paddle = new Paddle(SCREEN_WIDTH/2.0 - PADDLE_WIDTH/2.0, SCREEN_HEIGHT - PADDLE_HEIGHT - 15);
         gamePane.getChildren().add(paddle.getView());
 
         // Ball
         Ball ball = new Ball(0,0, BALL_DX, BALL_DY);
         // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
-        ball.reset(getPaddle());
+        ball.reset(this.getPaddle());
         balls.add(ball);
         gamePane.getChildren().add(ball.getView());
 
@@ -131,6 +134,45 @@ public class GameManager {
 
         // Load level bricks
         loadLevel(currentLevel);
+    }
+
+    // ====== KIỂM TRA VA CHẠM ======
+    public void checkCollisions() {
+        for (Ball ball : balls) {
+            ball.collideWithWall();
+            ball.collideWithPaddle(this.getPaddle());
+
+            // Xử lý va chạm bóng với gạch
+            for (int i = 0; i < bricks.size(); i++) {
+                Brick brick = bricks.get(i);
+                if (brick.isDestroyed()) continue;
+
+                if (ball.checkCollision(brick)) {
+                    //xu ly va cham voi bong, xoa brick ra list va ra pane, tang diem,.
+                    ball.collideWithBrick(brick);
+                    score += INCREASE_POINTS;
+
+                    // Có thể sinh power-up
+                    if (random.nextDouble() < 0.2) {
+                        spawnPowerUp(brick.getX(), brick.getY());
+                    }
+
+                    if (brick.isDestroyed()) {
+                        gamePane.getChildren().remove(brick);
+                    }
+                }
+            }
+
+            // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
+            // Ông đức viết code chuyển màn hình game over khi máu về 0
+            if(lives <= 0) {
+
+            }
+
+
+            // Cập nhật ScoreText
+
+        }
     }
 
     public void loseLife() {

@@ -3,7 +3,7 @@ package Game;
 public abstract class MovableObject extends GameObject {
     private double dx;
     private double dy;
-    public MovableObject(double x; double y; int width; int height; double dx; double dy){
+    public MovableObject(double x, double y, int width, int height, double dx, double dy){
         super(x, y, width, height);
         this.dx = dx;
         this.dy = dy;

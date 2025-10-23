@@ -1,9 +1,9 @@
-package com.example.arkanoid;
+package Game;
 
 import com.example.arkanoid.Brick.Brick;
+import com.example.arkanoid.GameManager;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -12,7 +12,7 @@ import java.util.Random;
 import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
 import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
-public class Ball extends MovableObject{
+public class Ball extends MovableObject {
     public static final int BALL_SIZE = 20;
     public static final double BALL_DX = 3;
     public static final double BALL_DY = -3;
@@ -88,24 +88,24 @@ public class Ball extends MovableObject{
         //Va cham trai va phai
         if(this.getX() < 0) {
             //Đảo ngược hướng di chuyển ngang
-            this.setdx(-this.getdx());
+            this.setDx(-this.getDx());
             //Đặt lại ball mép trái màn hình
             this.setX(0);
         } else if(this.getX()>SCREEN_WIDTH){
-            this.setdx(-this.getdx());
+            this.setDx(-this.getDx());
             //Đặt ball ở mép phải màn hình
             this.setX(SCREEN_WIDTH - this.getWidth());
         }
 
         //Va cham tren
         if(this.getY() < 0) {
-            this.setdy(-this.getdy());
+            this.setDy(-this.getDy());
             this.setY(0);
         }
 
         GameManager gm = GameManager.getInstance();
         //Xử lý va chạm dưới rớt xuống khỏi màn hình, ngoài ra hàm này thực hiện việc giảm máu và gameOver.
-        else if(this.getY() + this.getHeight() > SCREEN_HEIGHT) {
+        if(this.getY() + this.getHeight() > SCREEN_HEIGHT) {
             gm.loseLife();
             this.reset(gm.getPaddle());
         }
@@ -125,7 +125,7 @@ public class Ball extends MovableObject{
 
         // Xử lý va chạm khi quả bóng đi xuống (dy>0), ở đây chỉ coi va chạm là chạm trên
         if(checkCollision(paddle)) {
-            this.setdy(-this.getdy());
+            this.setDy(-this.getDy());
 
             //cho dx > 1.5
             double rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
@@ -144,7 +144,7 @@ public class Ball extends MovableObject{
             }
 
             // Đặt vận tốc dx cho bóng
-            this.setdx(rdx);
+            this.setDx(rdx);
         }
 
     }
@@ -181,36 +181,37 @@ public class Ball extends MovableObject{
             // Va chạm Ngang (Trái/Phải)
 
             // Đảo dx
-            this.setdx(-this.getdx());
+            this.setDx(-this.getDx());
             // Cho ball ra khỏi brick
             if (deltaX > 0) {
-                this.setdx(Math.abs(this.getdx()));// đảm bảo đúng hướng ko có thì vẫn chạy đc
+                this.setDx(Math.abs(this.getDx()));// đảm bảo đúng hướng ko có thì vẫn chạy đc
                 this.setX(brick.getX() + brick.getWidth());
             } else {
-                this.setdx(-Math.abs(this.getdx()));// đảm bảo đúng hướng
+                this.setDx(-Math.abs(this.getDx()));// đảm bảo đúng hướng
                 this.setX(brick.getX() - this.getWidth());
             }
         } else {
             // Va chạm Dọc (Trên/Dưới)
 
             // Đảo dy
-            this.setdy(-this.getdy());
+            this.setDy(-this.getDy());
             // Cho ball ra khỏi brick
             if (deltaY > 0) {
-                this.setdy(Math.abs(this.getdy()));// đảm bảo đúng hướng
+                this.setDy(Math.abs(this.getDy()));// đảm bảo đúng hướng
                 this.setY(brick.getY() + brick.getHeight());
             } else {
-                this.setdy(-Math.abs(this.getdy()));// đảm bảo đúng hướng
+                this.setDy(-Math.abs(this.getDy()));// đảm bảo đúng hướng
                 this.setY(brick.getY() - this.getHeight());
             }
         }
 
         // giảm máu gạch, phá hủy nếu máu về không bằng cách kiểm tra IsVisiable
         brick.takeHit();
+
+
         if(brick.isDestroyed()) {
             GameManager gm = GameManager.getInstance();
             gm.getGamePane().getChildren().remove(brick.getView());
-            gm.getBricks().remove(brick);
         }
     }
 
@@ -231,10 +232,20 @@ public class Ball extends MovableObject{
      * @param paddle thanh trượt để lấy vị trí tâm gậy
      */
     public void reset(Paddle paddle) {
-        this.setX(paddle.getX() + paddle.getWidth()/2 - this.getWidth()/2);
+        this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
         this.setY(paddle.getY() - this.getHeight());
-        this.setdx(BALL_DX);
-        this.setdy(BALL_DY);
+        this.setDx(BALL_DX);
+        this.setDy(BALL_DY);
+        updateView();
+    }
+
+    /**
+     * Cap nhat vi tri theo van toc, diem hien thi cua rectangle chua ball.
+     */
+    @Override
+    public void update() {
+        setX(getX() + getDx());
+        setY(getY() + getDy());
         updateView();
     }
 }

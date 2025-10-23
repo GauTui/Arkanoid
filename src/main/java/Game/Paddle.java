@@ -1,7 +1,11 @@
 package Game;
 
+import com.example.arkanoid.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
+import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Paddle extends MovableObject{
 
@@ -11,7 +15,7 @@ public class Paddle extends MovableObject{
     public static final int PADDLE_HEIGHT = 40;
     private static final double PADDLE_SPEED = 8.0;
 
-    public Paddle(double x; double y;){
+    public Paddle(double x, double y){
         super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0);
         this.initialWidth = PADDLE_WIDTH;
         this.currentPowerUp = null; // Ban đầu không có power-up nào
@@ -58,29 +62,30 @@ public class Paddle extends MovableObject{
         setDx(0);
     }
     //đưa paddle về trạng thái ban đầu
-    public void update(double screenWidth) {
+    public void update() {
         super.update();
 
         // Giới hạn paddle không đi ra khỏi màn hình
         if (getX() < 0) {
             setX(0);
         }
-        if (getX() + getWidth() > screenWidth) {
-            setX(screenWidth - getWidth());
+        if (getX() + getWidth() > SCREEN_WIDTH) {
+            setX(SCREEN_WIDTH - getWidth());
         }
         updateView();
     }
-    public void reset(GameManager gm){
-        setX(240.0);
-        setY(540.0);
+    public void reset(){
+        setX(SCREEN_WIDTH/2.0 - PADDLE_WIDTH/2.0);
+        setY(SCREEN_HEIGHT - PADDLE_HEIGHT - 15.0);
 
         // Đặt lại kích thước và dừng di chuyển
         setWidth(this.initialWidth);
         stopMove();
 
+        GameManager gm = GameManager.getInstance();
         // gỡ powerup
         if (currentPowerUp != null) {
-            currentPowerUp.removeEffect(gm); //bao gio co gamemanager thi dung lenh nay
+            currentPowerUp.removeEffect(); //bao gio co gamemanager thi dung lenh nay
             currentPowerUp = null;
         }
         updateView();

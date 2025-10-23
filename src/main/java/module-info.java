@@ -15,4 +15,6 @@ module com.example.arkanoid {
 
     opens com.example.arkanoid to javafx.fxml;
     exports com.example.arkanoid;
+    exports Game;
+    opens Game to javafx.fxml;
 }

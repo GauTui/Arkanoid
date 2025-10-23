@@ -1,9 +1,10 @@
 package com.example.arkanoid.Brick;
 
+import Game.GameObject;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Brick {
+public class Brick extends GameObject {
     protected int hitPoints;
     protected boolean isDestroyed = false;
 
@@ -11,11 +12,12 @@ public class Brick {
     public static final int BRICK_HEIGHT = 60;
 
     public Brick(double x, double y, int width, int height, int hitPoints) {
-        //super(x, y, width, height);
+        super(x, y, width, height);
         this.hitPoints = hitPoints;
-        this.view = new Rectangle(x, y, width, height);
+        Rectangle rBrick= new Rectangle(x, y, width, height);
         //đặt màu mặc định
-        this.view.setFill(Color.GREEN);;
+        rBrick.setFill(Color.GREEN);
+        this.view = rBrick;
     }
     public void takeHit() {
         hitPoints--;
