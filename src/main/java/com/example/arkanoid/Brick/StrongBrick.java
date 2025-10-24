@@ -1,12 +1,13 @@
 package com.example.arkanoid.Brick;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class StrongBrick extends Brick{
     public StrongBrick(double x, double y, int width, int height, int hitPoints) {
         super(x,y,width,height,hitPoints);
         //sửa màu
-        this.view.setFill(Color.GRAY);
+        ((Rectangle) this.view).setFill(Color.GRAY);
     }
 
     @Override
@@ -14,9 +15,9 @@ public class StrongBrick extends Brick{
         hitPoints--;
         // Đặt lại màu gạch cho phù hợp với số máu của nó
         if(hitPoints == 2) {
-            this.view.setFill(Color.YELLOW);
+            ((Rectangle) this.view).setFill(Color.YELLOW);
         } else if(hitPoints == 1) {
-            this.view.setFill(Color.GREEN);
+            ((Rectangle) this.view).setFill(Color.GREEN);
         }
         else if(hitPoints <= 0 ) {
             isDestroyed = true;
