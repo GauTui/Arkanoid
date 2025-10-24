@@ -260,7 +260,7 @@ public class GameManager {
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
-                mainApp.showEndGameScreen(score);
+                mainApp.GameLoseSc(score);
             }
         }
         // Xử lý va chạm paddle với PowerUp (duyệt ngược)
