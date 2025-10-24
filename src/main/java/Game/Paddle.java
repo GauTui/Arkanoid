@@ -33,7 +33,8 @@ public class Paddle extends MovableObject{
     public void setCurrentPowerUp(PowerUp currentPowerup){
         this.currentPowerUp = currentPowerup;
     }
-    public void applyPowerUp(PowerUp p, GameManager gm) {
+    public void applyPowerUp(PowerUp p) {
+        GameManager gm = GameManager.getInstance();
         // luu powerup moi
         this.currentPowerUp = p;
         this.currentPowerUp.applyEffect(gm);
@@ -43,6 +44,7 @@ public class Paddle extends MovableObject{
     }
     public void setInitialWidth(int initialWidth){
         this.initialWidth = initialWidth;
+        this.updateView();
     }
     public void setWidth(int width){
         super.setWidth(width); // Cập nhật thuộc tính width của GameObject

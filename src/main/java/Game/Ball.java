@@ -91,7 +91,7 @@ public class Ball extends MovableObject {
             this.setDx(-this.getDx());
             //Đặt lại ball mép trái màn hình
             this.setX(0);
-        } else if(this.getX()>SCREEN_WIDTH){
+        } else if(this.getX() + this.getWidth() >SCREEN_WIDTH){
             this.setDx(-this.getDx());
             //Đặt ball ở mép phải màn hình
             this.setX(SCREEN_WIDTH - this.getWidth());
