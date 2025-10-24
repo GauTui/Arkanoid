@@ -1,8 +1,8 @@
-package com.example.arkanoid.Brick;
+package Game;
 
 import javafx.scene.paint.Color;
 
-public class StrongBrick extends Brick{
+public class StrongBrick extends Brick {
     public StrongBrick(double x, double y, int width, int height, int hitPoints) {
         super(x,y,width,height,hitPoints);
         //sửa màu

@@ -1,6 +1,5 @@
 package Game;
 
-import com.example.arkanoid.Brick.Brick;
 import com.example.arkanoid.GameManager;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;

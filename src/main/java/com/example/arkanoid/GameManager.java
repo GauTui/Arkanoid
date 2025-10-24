@@ -3,7 +3,7 @@ package com.example.arkanoid;
 import Game.Ball;
 import Game.GameObject;
 import Game.Paddle;
-import com.example.arkanoid.Brick.Brick;
+import Game.Brick;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;

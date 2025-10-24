@@ -1,6 +1,5 @@
-package com.example.arkanoid.Brick;
+package Game;
 
-import Game.GameObject;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
