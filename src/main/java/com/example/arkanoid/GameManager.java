@@ -4,6 +4,8 @@ import Game.Ball;
 import Game.GameObject;
 import Game.Paddle;
 import com.example.arkanoid.Brick.Brick;
+import com.example.arkanoid.Brick.NormalBrick;
+import com.example.arkanoid.Brick.StrongBrick;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;

@@ -4,8 +4,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class StrongBrick extends Brick{
-    public StrongBrick(double x, double y, int width, int height, int hitPoints) {
-        super(x,y,width,height,hitPoints);
+    public static final int HIT_POINT_STRONG_BRICK = 3;
+
+    public StrongBrick(double x, double y, int width, int height) {
+        super(x,y,width,height,HIT_POINT_STRONG_BRICK);
         //sửa màu
         ((Rectangle) this.view).setFill(Color.GRAY);
     }
