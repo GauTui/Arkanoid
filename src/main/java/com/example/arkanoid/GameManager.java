@@ -85,7 +85,7 @@ public class GameManager {
         bricks.clear();
 
         //   đường dẫn đến file level
-        String levelFile = "/levels/level" + levelNumber + ".txt";
+        String levelFile = "/com/example/arkanoid/levels/level" + levelNumber + ".txt";
 
         try (InputStream is = getClass().getResourceAsStream(levelFile);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
