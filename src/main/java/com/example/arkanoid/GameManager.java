@@ -1,16 +1,18 @@
 package com.example.arkanoid;
 
-import Game.Ball;
-import Game.GameObject;
-import Game.Paddle;
-import com.example.arkanoid.Brick.Brick;
-import com.example.arkanoid.Brick.NormalBrick;
-import com.example.arkanoid.Brick.StrongBrick;
+import com.example.arkanoid.Model.Ball;
+import com.example.arkanoid.Model.GameObject;
+import com.example.arkanoid.Model.Paddle;
+import com.example.arkanoid.Model.Brick.Brick;
+import com.example.arkanoid.Model.Brick.NormalBrick;
+import com.example.arkanoid.Model.Brick.StrongBrick;
+import com.example.arkanoid.Utils.SoundEffect;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import static Game.Paddle.PADDLE_HEIGHT;
-import static Game.Paddle.PADDLE_WIDTH;
-import static Game.Ball.*;
+import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
+import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
+import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
     public static final int SCREEN_WIDTH = 720;
@@ -191,7 +193,7 @@ public class GameManager {
         loadLevel(currentLevel);
     }
 
-    public void update() {
+    public void update() throws MalformedURLException {
         //  code cập nhật vị trí và va chạm
         paddle.update();
         for (Ball ball : balls) {
@@ -233,7 +235,7 @@ public class GameManager {
     }
 
     // ====== KIỂM TRA VA CHẠM ======
-    public void checkCollisions() {
+    public void checkCollisions() throws MalformedURLException {
         for (Ball ball : balls) {
             ball.collideWithWall();
             ball.collideWithPaddle(this.getPaddle());
@@ -297,7 +299,9 @@ public class GameManager {
         gamePane.getChildren().add(newPowerUp.getView());
     }
 
-    public void loseLife() {
+    public void loseLife() throws MalformedURLException {
         lives = lives - 1;
+        SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
+        loseLifeSound.play(0.5);
     }
 }
