@@ -1,6 +1,5 @@
 package com.example.arkanoid.Model;
 
-import com.example.arkanoid.Model.Brick.Brick;
 import com.example.arkanoid.GameManager;
 import com.example.arkanoid.Utils.SoundEffect;
 import javafx.geometry.Bounds;
@@ -169,7 +168,7 @@ public class Ball extends MovableObject {
     /**
      * kiểm tra va chạm với brick.
      * xóa luôn brick va chạm nếu thỏa mãn máu của nó về 0
-     * @param brick
+     * @param brick gach
      */
     public void collideWithBrick(Brick brick) throws MalformedURLException {
         /* tránh trường hợp null của brick và rectangle brick.

@@ -3,9 +3,9 @@ package com.example.arkanoid;
 import com.example.arkanoid.Model.Ball;
 import com.example.arkanoid.Model.GameObject;
 import com.example.arkanoid.Model.Paddle;
-import com.example.arkanoid.Model.Brick.Brick;
-import com.example.arkanoid.Model.Brick.NormalBrick;
-import com.example.arkanoid.Model.Brick.StrongBrick;
+import com.example.arkanoid.Model.Brick;
+import com.example.arkanoid.Model.NormalBrick;
+import com.example.arkanoid.Model.StrongBrick;
 import com.example.arkanoid.Utils.SoundEffect;
 import javafx.scene.layout.Pane;
 

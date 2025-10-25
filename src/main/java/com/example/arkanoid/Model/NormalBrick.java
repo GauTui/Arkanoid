@@ -1,4 +1,4 @@
-package com.example.arkanoid.Model.Brick;
+package com.example.arkanoid.Model;
 
 public class NormalBrick extends Brick {
     public NormalBrick(double x, double y, int width, int height) {
