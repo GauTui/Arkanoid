@@ -20,6 +20,53 @@ import java.io.IOException;
  */
 
 public class HelloApplication extends Application {
+    public Pane PauseGame(Stage stage) throws Exception {
+        Pane PauseGamePane = new Pane();
+
+        File loadResume = new File("src/main/resources/com/example/arkanoid/images/ResumeButton.png");
+        Image ResumeImg = new Image(loadResume.toURI().toString());
+        ImageView ResumeImgV = new ImageView(ResumeImg);
+        ResumeImgV.setFitHeight(70);
+        ResumeImgV.setFitWidth(230);
+        Button ResumeBt = new Button();
+        ResumeBt.setStyle("-fx-background-color: transparent;");
+        ResumeBt.setGraphic(ResumeImgV);
+        ResumeBt.setLayoutX(245);
+        ResumeBt.setLayoutY(330);
+
+        File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
+        Image RestartImg = new Image(loadRestart.toURI().toString());
+        ImageView RestartImgV = new ImageView(RestartImg);
+        RestartImgV.setFitHeight(70);
+        RestartImgV.setFitWidth(230);
+        Button RestartBt = new Button();
+        RestartBt.setStyle("-fx-background-color: transparent;");
+        RestartBt.setGraphic(RestartImgV);
+        RestartBt.setLayoutX(245);
+        RestartBt.setLayoutY(420);
+
+        File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
+        ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
+        MainMenu2ImgV.setFitHeight(70); // set chieu cao
+        MainMenu2ImgV.setFitWidth(230); // set chiều rong
+        Button MainMenu2Button = new Button();
+        MainMenu2Button.setStyle("-fx-background-color: transparent;");
+        MainMenu2Button.setGraphic(MainMenu2ImgV); // set ảnh
+        MainMenu2Button.setLayoutX(245); // tọa độ X của đầu nút
+        MainMenu2Button.setLayoutY(510);
+
+        MainMenu2Button.setOnAction(e->{
+            try{
+                start(stage);
+            }catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        PauseGamePane.getChildren().addAll(MainMenu2Button,RestartBt,ResumeBt);
+        return PauseGamePane;
+    }
     @Override
     public void start(Stage stage) throws IOException {
         //set button 1 va tuong tu voi cac button con lai nhe!!!
@@ -179,10 +226,45 @@ public class HelloApplication extends Application {
             }
         });
 
-
         SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button, MainMenuButton);
         SelectLV.getChildren().addAll(pbgView, SelectLVButton);
         Scene lvScene = new Scene(SelectLV, 720, 800);
         stage.setScene(lvScene);
+    }
+    public Pane GameLoseSc(Stage stage) throws Exception {
+
+        Pane GameLosePane = new Pane();
+        File LoadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png"); // nem dia chi nut start
+        Image RestartImg2 = new Image(LoadRestart.toURI().toString());
+        ImageView RestartImgV = new ImageView(RestartImg2);
+        RestartImgV.setFitHeight(70);
+        RestartImgV.setFitWidth(230);
+        Button RestartButton2 = new Button();
+        RestartButton2.setStyle("-fx-background-color: transparent;");
+        RestartButton2.setGraphic(RestartImgV);
+        RestartButton2.setLayoutX(245);
+        RestartButton2.setLayoutY(330);
+
+        File LoadMainmenu = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // nem dia chi nut start
+        Image MainenuImg2 = new Image(LoadMainmenu.toURI().toString());
+        ImageView MainmenuImgV2 = new ImageView(MainenuImg2);
+        MainmenuImgV2.setFitHeight(70);
+        MainmenuImgV2.setFitWidth(230);
+        Button MainMenuButton2 = new Button();
+        MainMenuButton2.setStyle("-fx-background-color: transparent;");
+        MainMenuButton2.setGraphic(MainmenuImgV2);
+        MainMenuButton2.setLayoutX(245);
+        MainMenuButton2.setLayoutY(420);
+
+        MainMenuButton2.setOnAction(e->{
+            try{
+                start(stage);
+            }catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        GameLosePane.getChildren().addAll(MainMenuButton2,RestartButton2);
+        return GameLosePane;
     }
 }
