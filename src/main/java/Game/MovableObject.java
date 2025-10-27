@@ -10,7 +10,7 @@ public abstract class MovableObject extends GameObject {
     }
     public double getDx(){
         return x;
-    }
+    } //return dx dy chu
     public double getDy(){
         return y;
     }

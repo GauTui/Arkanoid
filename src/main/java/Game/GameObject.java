@@ -37,7 +37,8 @@ public abstract class GameObject {
 
     public boolean isVisiable() {
         return isVisiable;
-    }
+    } // cai nay sai chinh ta roi
+    //
 
     public Node getView() {
         return view;
@@ -63,7 +64,7 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    public void setVisiable(boolean visiable) {
+    public void setVisiable(boolean visiable) { //sai chinh ta roi visible
         isVisiable = visiable;
         view.setVisible(visiable);
     }

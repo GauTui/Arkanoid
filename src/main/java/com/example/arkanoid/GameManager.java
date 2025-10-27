@@ -4,6 +4,12 @@ import Game.Ball;
 import Game.GameObject;
 import Game.Paddle;
 import Game.Brick;
+//import Game.PowerUp;
+//import Game.NormalBrick;
+//import Game.StrongBrick;
+//import Game.ExpandPaddlePowerUp;
+//import Game.FastBallPowerUp;
+
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -45,6 +51,7 @@ public class GameManager {
     //danh sach cac PowerUp co the sinh ra
     private List<PowerUp> acPowerUp;
     //danh sach cac PowerUp dang hoat dong trong chuong trinh
+    //cái này phải là danh sách các PowerUp ĐANG RƠI trên màn hình (chưa kích hoạt hiệu ứng)
     private List<PowerUp> activePowerUp;
     //dung de sinh ngau nhien PowerUp
     private Random random = new Random();
@@ -72,6 +79,12 @@ public class GameManager {
     public List<Brick> getBricks() {
         return bricks;
     }
+
+    // để cho FastBallPowerUp nhìn thấy
+    public List<Ball> getBalls() {
+        return balls;
+    }
+
 
     public void setBricks(List<Brick> bricks) {
         this.bricks = bricks;
@@ -202,7 +215,7 @@ public class GameManager {
 
 
         // xóa các viên gạch , vật phẩm đã bị phá hủy khỏi danh sách
-        activePowerUp.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT);
+        activePowerUp.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT); // sao ở đây là visible mà trong gameobject la visiable
         bricks.removeIf(Brick::isDestroyed);
 
         // kiểm tra chuyển màn
@@ -219,10 +232,10 @@ public class GameManager {
             loadLevel(currentLevel);// tải màn chơi tiếp theo
             return;
         }
-        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        paddle.update(); //có thể bỏ dòng trên
-        balls.forEach(Ball::update);
-        activePowerUp.forEach(GameObject::updateView);
+//        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
+//        paddle.update(); //có thể bỏ dòng trên
+//        balls.forEach(Ball::update);
+//        activePowerUp.forEach(GameObject::updateView);
 
         //   cập nhật text
         scoreText.setText("Score: " + score);
