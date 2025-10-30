@@ -87,7 +87,7 @@ public class Paddle extends MovableObject{
         GameManager gm = GameManager.getInstance();
         // gỡ powerup
         if (currentPowerUp != null) {
-            currentPowerUp.removeEffect(); //bao gio co gamemanager thi dung lenh nay
+            currentPowerUp.removeEffect(gm); //bao gio co gamemanager thi dung lenh nay
             currentPowerUp = null;
         }
         updateView();

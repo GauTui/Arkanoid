@@ -1,11 +1,6 @@
 package com.example.arkanoid;
 
-import com.example.arkanoid.Model.Ball;
-import com.example.arkanoid.Model.GameObject;
-import com.example.arkanoid.Model.Paddle;
-import com.example.arkanoid.Model.Brick;
-import com.example.arkanoid.Model.NormalBrick;
-import com.example.arkanoid.Model.StrongBrick;
+import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
 import javafx.scene.layout.Pane;
 
@@ -43,6 +38,7 @@ public class GameManager {
     private static GameManager instance;
 
     private Paddle paddle;
+
     private List<Ball> balls;
     private List<Brick> bricks;
     private Pane gamePane;
@@ -61,6 +57,13 @@ public class GameManager {
     private Arkanoid mainApp;
 
     /*====Getter/setter====*/
+    public List<Ball> getBalls() {
+        return balls;
+    }
+
+    public void setBalls(List<Ball> balls) {
+        this.balls = balls;
+    }
     public Paddle getPaddle() {
         return paddle;
     }

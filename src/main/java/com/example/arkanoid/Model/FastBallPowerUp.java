@@ -1,8 +1,10 @@
-package Game;
+package com.example.arkanoid.Model;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.example.arkanoid.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 

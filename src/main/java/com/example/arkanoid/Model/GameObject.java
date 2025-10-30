@@ -8,7 +8,7 @@ public abstract class GameObject {
     protected double y;
     protected int width;
     protected int height;
-    protected boolean isVisiable;
+    protected boolean isVisible;
     protected Node view;
 
     public GameObject(double x, double y, int width, int height) {
@@ -16,7 +16,7 @@ public abstract class GameObject {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.isVisiable = true;
+        this.isVisible = true;
     }
 
     public double getX() {
@@ -35,8 +35,8 @@ public abstract class GameObject {
         return height;
     }
 
-    public boolean isVisiable() {
-        return isVisiable;
+    public boolean isVisible() {
+        return isVisible;
     }
 
     public Node getView() {
@@ -63,9 +63,9 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    public void setVisiable(boolean visiable) {
-        isVisiable = visiable;
-        view.setVisible(visiable);
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+        view.setVisible(visible);
     }
 
     public void updateView() {

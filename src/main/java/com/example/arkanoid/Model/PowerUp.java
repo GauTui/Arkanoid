@@ -1,5 +1,6 @@
-package Game;
+package com.example.arkanoid.Model;
 
+import com.example.arkanoid.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,7 +13,7 @@ public abstract class PowerUp extends MovableObject {
 
     public static final int POWERUP_WIDTH = 40;
     public static final int POWERUP_HEIGHT = 40;
-    public static final double GRAVITY = 3; // tốc độ rơi xuống (pixels/frame)
+    public static final double POWERUP_GRAVITY = 3; // tốc độ rơi xuống (pixels/frame)
 
     // ====== Constructor ======
     public PowerUp(double x, double y) {
