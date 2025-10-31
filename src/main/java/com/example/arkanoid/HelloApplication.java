@@ -2,6 +2,7 @@ package com.example.arkanoid;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -23,7 +24,7 @@ public class HelloApplication extends Application {
     public Pane PauseGame(Stage stage) throws Exception {
         Pane PauseGamePane = new Pane();
 
-        File loadResume = new File("src/main/resources/com/example/testcodegame/images/ResumeButton.png");
+        File loadResume = new File("src/main/resources/com/example/arkanoid/images/ResumeButton.png");
         Image ResumeImg = new Image(loadResume.toURI().toString());
         ImageView ResumeImgV = new ImageView(ResumeImg);
         ResumeImgV.setFitHeight(70);
@@ -36,7 +37,7 @@ public class HelloApplication extends Application {
         ResumeBt.setLayoutX(245);
         ResumeBt.setLayoutY(330);
 
-        File loadRestart = new File("src/main/resources/com/example/testcodegame/images/RestartButton.png");
+        File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
         Image RestartImg = new Image(loadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg);
         RestartImgV.setFitHeight(70);
@@ -49,7 +50,7 @@ public class HelloApplication extends Application {
         RestartBt.setLayoutX(245);
         RestartBt.setLayoutY(420);
 
-        File LoadMainMenuImg = new File("src/main/resources/com/example/testcodegame/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
         ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
         MainMenu2ImgV.setFitHeight(70); // set chieu cao
@@ -76,7 +77,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //set button 1 va tuong tu voi cac button con lai nhe!!!
-        File LoadImg = new File("src/main/resources/com/example/testcodegame/images/StartGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImg = new File("src/main/resources/com/example/arkanoid/images/StartGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image StartImg = new Image(LoadImg.toURL().toString());
         ImageView StartImgV = new ImageView(StartImg);
         StartImgV.setFitHeight(70); // set chieu cao
@@ -90,7 +91,7 @@ public class HelloApplication extends Application {
         StartButton.setLayoutY(330); // tọa độ Y của đầu nút
         //chuc nang cho start button
 
-        File LoadImg2 = new File("src/main/resources/com/example/testcodegame/images/TutorialBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImg2 = new File("src/main/resources/com/example/arkanoid/images/TutorialBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image TutorialImg = new Image(LoadImg2.toURL().toString());
         ImageView TutorialImgV = new ImageView(TutorialImg);
         TutorialImgV.setFitHeight(70); // set chieu cao
@@ -104,7 +105,7 @@ public class HelloApplication extends Application {
         TutorialButton.setLayoutY(420); // tọa độ Y của đầu nút
 
 
-        File LoadImg3 = new File("src/main/resources/com/example/testcodegame/images/ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImg3 = new File("src/main/resources/com/example/arkanoid/images/ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image ExitImg = new Image(LoadImg3.toURL().toString());
         ImageView ExitImg3 = new ImageView(ExitImg);
         ExitImg3.setFitHeight(70); // set chieu cao
@@ -117,9 +118,13 @@ public class HelloApplication extends Application {
         ExitButton.setLayoutX(245); // tọa độ X của đầu nút
         ExitButton.setLayoutY(510); // tọa độ Y của đầu nút
 
+        ExitButton.setOnAction(e->{
+            System.exit(0);
+        });
+
 
         //tạo file để load ảnh nền
-        File StartBackground = new File("src/main/resources/com/example/testcodegame/images/nenStartGame.png"); //ảnh này là nền nhé, anh em chỉnh thành ảnh gì cũng được
+        File StartBackground = new File("src/main/resources/com/example/arkanoid/images/nenStartGame.png"); //ảnh này là nền nhé, anh em chỉnh thành ảnh gì cũng được
 
         //tạo ảnh nền cho phần start game
         Image anhnen = new Image(StartBackground.toURL().toString());
@@ -161,14 +166,14 @@ public class HelloApplication extends Application {
     public void openLevelSelect(Stage stage, Scene menuScene) throws IOException {
         Pane SelectLVButton = new Pane();
         StackPane SelectLV = new StackPane();
-        File PauseBackground = new File("src/main/resources/com/example/testcodegame/images/SelectLVBG.png");// nhap dia chi;
+        File PauseBackground = new File("src/main/resources/com/example/arkanoid/images/SelectLVBG.png");// nhap dia chi;
         Image anhpause = new Image(PauseBackground.toURL().toString());
         ImageView pbgView = new ImageView(anhpause);
         pbgView.setFitWidth(720);
         pbgView.setFitHeight(800);
 
 
-        File LoadImgLV1 = new File("src/main/resources/com/example/testcodegame/images/Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImgLV1 = new File("src/main/resources/com/example/arkanoid/images/Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV1Img = new Image(LoadImgLV1.toURL().toString());
         ImageView LV1ImgV = new ImageView(LV1Img);
         LV1ImgV.setFitHeight(80); // set chieu cao
@@ -181,7 +186,12 @@ public class HelloApplication extends Application {
         LV1Button.setLayoutX(110); // tọa độ X của đầu nút
         LV1Button.setLayoutY(260);
 
-        File LoadImgLV2 = new File("src/main/resources/com/example/testcodegame/images/Level2Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        LV1Button.setOnAction(e -> {
+            Stage stage1 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 1);
+        });
+
+        File LoadImgLV2 = new File("src/main/resources/com/example/arkanoid/images/Level2Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV2Img = new Image(LoadImgLV2.toURL().toString());
         ImageView LV2ImgV = new ImageView(LV2Img);
         LV2ImgV.setFitHeight(80); // set chieu cao
@@ -194,7 +204,12 @@ public class HelloApplication extends Application {
         LV2Button.setLayoutX(250); // tọa độ X của đầu nút
         LV2Button.setLayoutY(260);
 
-        File LoadImgLV3 = new File("src/main/resources/com/example/testcodegame/images/Level3Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        LV2Button.setOnAction(e -> {
+            Stage stage2 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 2);
+        });
+
+        File LoadImgLV3 = new File("src/main/resources/com/example/arkanoid/images/Level3Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV3Img = new Image(LoadImgLV3.toURL().toString());
         ImageView LV3ImgV = new ImageView(LV3Img);
         LV3ImgV.setFitHeight(80); // set chieu cao
@@ -207,7 +222,12 @@ public class HelloApplication extends Application {
         LV3Button.setLayoutX(390); // tọa độ X của đầu nút
         LV3Button.setLayoutY(260);
 
-        File LoadImgLV4 = new File("src/main/resources/com/example/testcodegame/images/Level4Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        LV3Button.setOnAction(e -> {
+            Stage stage3 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 3);
+        });
+
+        File LoadImgLV4 = new File("src/main/resources/com/example/arkanoid/images/Level4Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV4Img = new Image(LoadImgLV4.toURL().toString());
         ImageView LV4ImgV = new ImageView(LV4Img);
         LV4ImgV.setFitHeight(80); // set chieu cao
@@ -220,7 +240,12 @@ public class HelloApplication extends Application {
         LV4Button.setLayoutX(530); // tọa độ X của đầu nút
         LV4Button.setLayoutY(260);
 
-        File LoadImgLV5 = new File("src/main/resources/com/example/testcodegame/images/Level5Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        LV4Button.setOnAction(e -> {
+            Stage stage4 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 4);
+        });
+
+        File LoadImgLV5 = new File("src/main/resources/com/example/arkanoid/images/Level5Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV5Img = new Image(LoadImgLV5.toURL().toString());
         ImageView LV5ImgV = new ImageView(LV5Img);
         LV5ImgV.setFitHeight(80); // set chieu cao
@@ -233,7 +258,12 @@ public class HelloApplication extends Application {
         LV5Button.setLayoutX(320); // tọa độ X của đầu nút
         LV5Button.setLayoutY(400);
 
-        File LoadImg4 = new File("src/main/resources/com/example/testcodegame/images/BackButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        LV5Button.setOnAction(e -> {
+            Stage stage5 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 5);
+        });
+
+        File LoadImg4 = new File("src/main/resources/com/example/arkanoid/images/BackButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenuImg = new Image(LoadImg4.toURL().toString());
         ImageView MainMenuImgV = new ImageView(MainMenuImg);
         MainMenuImgV.setFitHeight(60); // set chieu cao
@@ -253,38 +283,6 @@ public class HelloApplication extends Application {
                 ex.printStackTrace();
             }
         });
-
-        LV1Button.setOnAction(e->{
-            try {
-                Pane lose = GameLoseSc(stage);
-                Pane Root = (Pane) stage.getScene().getRoot();
-                Root.getChildren().add(lose);
-                lose.toFront();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        LV2Button.setOnAction(e->{
-            try {
-                Pane Pause = PauseGame(stage);
-                Pane root = (Pane) stage.getScene().getRoot();
-                root.getChildren().add(Pause);
-                Pause.toFront();
-            }catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        LV3Button.setOnAction(e->{
-            try {
-                Pane Win = GameWin(stage,3);
-                Pane root = (Pane) stage.getScene().getRoot();
-                root.getChildren().add(Win);
-                Win.toFront();
-            }catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
         SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button, MainMenuButton);
         SelectLV.getChildren().addAll(pbgView, SelectLVButton);
         Scene lvScene = new Scene(SelectLV, 720, 800);
@@ -293,7 +291,7 @@ public class HelloApplication extends Application {
     public Pane GameLoseSc(Stage stage) throws Exception {
 
         Pane GameLosePane = new Pane();
-        File LoadRestart = new File("src/main/resources/com/example/testcodegame/images/RestartButton.png"); // nem dia chi nut start
+        File LoadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png"); // nem dia chi nut start
         Image RestartImg2 = new Image(LoadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg2);
         RestartImgV.setFitHeight(70);
@@ -306,7 +304,7 @@ public class HelloApplication extends Application {
         RestartButton2.setLayoutX(245);
         RestartButton2.setLayoutY(330);
 
-        File LoadMainmenu = new File("src/main/resources/com/example/testcodegame/images/MenuButton.png"); // nem dia chi nut start
+        File LoadMainmenu = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // nem dia chi nut start
         Image MainenuImg2 = new Image(LoadMainmenu.toURI().toString());
         ImageView MainmenuImgV2 = new ImageView(MainenuImg2);
         MainmenuImgV2.setFitHeight(70);
@@ -334,9 +332,9 @@ public class HelloApplication extends Application {
     public void TutorialGame (Stage stage, Scene scene) {
 
         File[] loadTutorial = {
-                new File("src/main/resources/com/example/testcodegame/images/Tutorial1.png"),//nhap hinh vao day,
-                new File("src/main/resources/com/example/testcodegame/images/Tutorial2.png"),// nhap dia chi vao day,
-                new File("src/main/resources/com/example/testcodegame/images/Tutorial3.png"), // nhap dia chi file vao day
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial1.png"),//nhap hinh vao day,
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial2.png"),// nhap dia chi vao day,
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial3.png"), // nhap dia chi file vao day
         };
         Image[] TutorialImg = new Image[loadTutorial.length];
         for(int i=0; i<3;++i) {
@@ -347,7 +345,7 @@ public class HelloApplication extends Application {
         TutorialView.setFitWidth(720);
         TutorialView.setFitHeight(800);
 
-        File loadBackButton = new File("src/main/resources/com/example/testcodegame/images/BackButton.png");
+        File loadBackButton = new File("src/main/resources/com/example/arkanoid/images/BackButton.png");
         Image backImg = new Image(loadBackButton.toURI().toString());
         ImageView backImgV = new ImageView(backImg);
         backImgV.setFitHeight(55);
@@ -360,7 +358,7 @@ public class HelloApplication extends Application {
         BackButton.setLayoutX(30);
         BackButton.setLayoutY(5);
 
-        File loadNextButton = new File("src/main/resources/com/example/testcodegame/images/NextButton.png");
+        File loadNextButton = new File("src/main/resources/com/example/arkanoid/images/NextButton.png");
         Image nextImg = new Image(loadNextButton.toURI().toString());
         ImageView nextImgV = new ImageView(nextImg);
         nextImgV.setFitHeight(55);
@@ -389,7 +387,7 @@ public class HelloApplication extends Application {
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
         });
-        File LoadMainMenuT = new File("src/main/resources/com/example/testcodegame/images/BackToMenu.png");
+        File LoadMainMenuT = new File("src/main/resources/com/example/arkanoid/images/BackToMenu.png");
         Image BackToMenuImg = new Image(LoadMainMenuT.toURI().toString());
         ImageView BackToMenuImgV = new ImageView(BackToMenuImg);
         BackToMenuImgV.setFitWidth(300);
@@ -417,7 +415,7 @@ public class HelloApplication extends Application {
     public Pane GameWin(Stage stage, int Score) throws Exception{
         Pane GameWinPane = new Pane();
 
-        File loadRestart = new File("src/main/resources/com/example/testcodegame/images/RestartButton.png");
+        File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
         Image RestartImg = new Image(loadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg);
         RestartImgV.setFitHeight(70);
@@ -430,7 +428,7 @@ public class HelloApplication extends Application {
         RestartBt.setLayoutX(245);
         RestartBt.setLayoutY(420);
 
-        File loadNextLV = new File("src/main/resources/com/example/testcodegame/images/NextLevelButton.png");
+        File loadNextLV = new File("src/main/resources/com/example/arkanoid/images/NextLevelButton.png");
         Image NextLVImg = new Image(loadNextLV.toURI().toString());
         ImageView NextLVImgV = new ImageView(NextLVImg);
         NextLVImgV.setFitHeight(70);
@@ -443,7 +441,7 @@ public class HelloApplication extends Application {
         NextLevel.setLayoutX(245);
         NextLevel.setLayoutY(330);
 
-        File LoadMainMenuImg = new File("src/main/resources/com/example/testcodegame/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
         ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
         MainMenu2ImgV.setFitHeight(70); // set chieu cao
@@ -459,4 +457,15 @@ public class HelloApplication extends Application {
         GameWinPane.getChildren().addAll(RestartBt,NextLevel,MainMenu2Button);
         return GameWinPane;
     }
+    private void startLevel(Stage stage, int levelNumber) {
+        Pane gamePane = new Pane();
+        GameManager gm = GameManager.getInstance();
+        gm.init(gamePane, this, levelNumber);
+
+        Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+        stage.setScene(gameScene);
+        stage.show();
+    }
+
+
 }

@@ -154,7 +154,7 @@ public class GameManager {
         return instance;
     }
 
-    public void init(Pane gamePane, Arkanoid mainApp) {
+    public void init(Pane gamePane, Arkanoid mainApp, int LevelNumber) {
         this.gamePane = gamePane;
         this.mainApp = mainApp;
 
@@ -189,8 +189,8 @@ public class GameManager {
         gamePane.getChildren().addAll(scoreText, livesText);
 
         // Load level bricks
-        currentLevel = 1; // reset về level 1 khi bắt đầu game mới
-        loadLevel(currentLevel);
+        currentLevel = LevelNumber; // reset về level 1 khi bắt đầu game mới
+        loadLevel(LevelNumber);
     }
 
     public void update() throws MalformedURLException {
