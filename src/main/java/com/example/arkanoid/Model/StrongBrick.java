@@ -1,6 +1,8 @@
 package com.example.arkanoid.Model;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class StrongBrick extends Brick{
@@ -9,7 +11,9 @@ public class StrongBrick extends Brick{
     public StrongBrick(double x, double y, int width, int height) {
         super(x,y,width,height,HIT_POINT_STRONG_BRICK);
         //sửa màu
-        ((Rectangle) this.view).setFill(Color.GRAY);
+        Image StrongBrickIMG = new Image(getClass().getResourceAsStream(""));
+
+        ((Rectangle) this.view).setFill(new ImagePattern(StrongBrickIMG));
     }
 
     @Override
