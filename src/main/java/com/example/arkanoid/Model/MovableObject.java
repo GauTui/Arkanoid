@@ -9,10 +9,10 @@ public abstract class MovableObject extends GameObject {
         this.dy = dy;
     }
     public double getDx(){
-        return x;
+        return dx;
     }
     public double getDy(){
-        return y;
+        return dy;
     }
     public void setDx(double dx){
         this.dx = dx;

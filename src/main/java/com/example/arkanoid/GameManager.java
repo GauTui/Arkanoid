@@ -42,10 +42,10 @@ public class GameManager {
     private List<Ball> balls;
     private List<Brick> bricks;
     private Pane gamePane;
-    //danh sach cac PowerUp co the sinh ra
-    private List<PowerUp> acPowerUp;
-    //danh sach cac PowerUp dang hoat dong trong chuong trinh
-    private List<PowerUp> activePowerUp;
+    //danh sach cac PowerUp dang roi
+    private List<PowerUp> fallingPowerups;
+    //danh sach cac PowerUp da cham vao paddle va dang gay hieu ung
+    private List<PowerUp> activePowerups;
     //dung de sinh ngau nhien PowerUp
     private Random random = new Random();
     //text hien thi so diem ra man hinh voi dinh nghia : "Score : " + score
@@ -64,6 +64,7 @@ public class GameManager {
     public void setBalls(List<Ball> balls) {
         this.balls = balls;
     }
+
     public Paddle getPaddle() {
         return paddle;
     }
@@ -137,8 +138,8 @@ public class GameManager {
         // Khởi tạo các danh sách
         balls = new ArrayList<>();
         bricks = new ArrayList<>();
-        acPowerUp = new ArrayList<>();
-        activePowerUp = new ArrayList<>();
+        activePowerups = new ArrayList<>();
+        fallingPowerups = new ArrayList<>();
 
         // Khởi tạo giá trị ban đầu
         score = 0;
@@ -198,24 +199,37 @@ public class GameManager {
 
     public void update() throws MalformedURLException {
         //  code cập nhật vị trí và va chạm
+
         paddle.update();
         for (Ball ball : balls) {
             ball.update();
         }
-        for (PowerUp aPowerUp : activePowerUp) {
+        for (PowerUp aPowerUp : fallingPowerups) {
             aPowerUp.update();
         }
         checkCollisions();
 
+        // di chuyển, cập nhật vị trí powerup rơi
+        for(PowerUp fPowerup : fallingPowerups) {
+            fPowerup.update();
+        }
+
+        // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
+        handleRemoveActivePowerUp();
 
         // xóa các viên gạch , vật phẩm đã bị phá hủy khỏi danh sách
-        activePowerUp.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT);
+        fallingPowerups.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT);
         bricks.removeIf(Brick::isDestroyed);
 
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
             System.out.println("Level " + currentLevel + " cleared!");
             currentLevel++; // tăng level
+
+            // Để tạm, vượt quá map tạo đc thì quay lại level đầu
+            if (currentLevel > MAP_NUMBERS) {
+                currentLevel = 1;
+            }
 
             // reset bóng và thanh đỡ cho màn mới
             paddle.reset();
@@ -229,7 +243,7 @@ public class GameManager {
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
         paddle.update(); //có thể bỏ dòng trên
         balls.forEach(Ball::update);
-        activePowerUp.forEach(GameObject::updateView);
+        fallingPowerups.forEach(GameObject::updateView);
 
         //   cập nhật text
         scoreText.setText("Score: " + score);
@@ -267,27 +281,69 @@ public class GameManager {
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
-                mainApp.showEndGameScreen(score);
+                System.exit(0);
+                //mainApp.showEndGameScreen(score);
             }
         }
-        // Xử lý va chạm paddle với PowerUp (duyệt ngược)
-        for (int i = activePowerUp.size() - 1; i >= 0; i--) {
-            PowerUp p = activePowerUp.get(i);
 
-            // Kiểm tra va chạm giữa Paddle và PowerUp
+        // Xử lý va chạm paddle với fallingPowerUp (duyệt ngược)
+        for (int i = fallingPowerups.size() - 1; i >= 0; i--) {
+            PowerUp p = fallingPowerups.get(i);
+
+            // Nếu va chạm giữa Paddle và fallingPowerUp thêm fallingPowerUp vào list activePowerups
+            // Xóa fallingPowerUp chạm vào paddle khỏi danh sách hiển thị và list fallingPowerups
             if (p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
-                // Gọi Paddle xử lý hiệu ứng PowerUp
-                paddle.applyPowerUp(p);
+                handlePowerUpCollision(p);
+            }
+        }
+    }
 
-                // Xóa PowerUp khỏi màn hình và danh sách
-                gamePane.getChildren().remove(p.getView());
-                activePowerUp.remove(i);
+    public void handleRemoveActivePowerUp() {
+        for (int i = activePowerups.size() - 1; i >= 0; i--) {
+            PowerUp aPowerup = activePowerups.get(i);
+            long elapsed = System.currentTimeMillis() - aPowerup.getActivationTime();
+            long duration = aPowerup.getDuration();
+
+            // Làm mờ dần trong suốt thời gian hiệu ứng
+            double remaining = 1.0 - (double) elapsed / duration;
+            aPowerup.getView().setOpacity(Math.max(0.3, remaining));
+
+            if (elapsed > duration) {
+                aPowerup.removeEffect(this);
+                activePowerups.remove(i);
+            }
+        }
+    }
+
+    // xử lý khi fallingPowerups chạm vào paddle
+    private void handlePowerUpCollision(PowerUp p) {
+
+        p.setDy(0);
+        // kiểm tra trong danh sách activatePowerup có powerup cùng loại với p không
+        // Nếu có reset thời gian bắt đầu hiệu ứng của powerup có trong list activatePowerups
+
+        // Thời gian bắt đầu hiệu ứng
+        long now = System.currentTimeMillis();
+        p.setActivationTime(now);
+        boolean isDuplicate = false;
+        for (PowerUp iAcPowerup : activePowerups) {
+            if (iAcPowerup.getClass().equals(p.getClass())) {
+                isDuplicate = true;
+                iAcPowerup.setActivationTime(now);
+                break;
             }
         }
 
-        // Cập nhật ScoreText, liveText
-        scoreText.setText("Score: " + score);
-        livesText.setText("Lives: " + lives);
+        // Nếu không có thì thêm vào list activatePowerups, đặt hiệu ứng lên các đối tượng
+        if (!isDuplicate) {
+            activePowerups.add(p);
+            p.applyEffect(this);
+        }
+
+        // Xóa fallingPowerUp khỏi màn hình và danh sách
+        gamePane.getChildren().remove(p.getView());
+        fallingPowerups.remove(p);
+
     }
 
     private void spawnPowerUp(double x, double y) {
@@ -298,7 +354,7 @@ public class GameManager {
         } else {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-        activePowerUp.add(newPowerUp);
+        fallingPowerups.add(newPowerUp);
         gamePane.getChildren().add(newPowerUp.getView());
     }
 

@@ -18,8 +18,8 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
     @Override
     public void applyEffect(GameManager gm) {
-        if (isActive) return; // tránh áp lặp
-        isActive = true;
+        if (isActive()) return; // tránh áp lặp
+        setActive(true);
 
         Paddle pad = gm.getPaddle();
         // lưu kích thước cũ 1 lần
@@ -29,10 +29,11 @@ public class ExpandPaddlePowerUp extends PowerUp {
         pad.updateView(); // đồng bộ hiển thị (nếu Paddle tự cập nhật width cho Rectangle thì vẫn an toàn)
     }
 
+
     @Override
     public void removeEffect(GameManager gm) {
-        if (!isActive) return;
-        isActive = false;
+        if (!isActive()) return;
+        setActive(false);
 
         if (originalWidth != null) {
             Paddle pad = gm.getPaddle();

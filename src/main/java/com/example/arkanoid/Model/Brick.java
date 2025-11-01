@@ -16,6 +16,8 @@ public class Brick extends GameObject {
         Rectangle rBrick= new Rectangle(x, y, width, height);
         //đặt màu mặc định
         rBrick.setFill(Color.GREEN);
+        rBrick.setStroke(Color.BLACK);        // Màu viền: Đen
+        rBrick.setStrokeWidth(2.0);           // Độ dày viền: 2.0 pixels
         this.view = rBrick;
     }
     public void takeHit() {

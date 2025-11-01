@@ -24,8 +24,8 @@ public class FastBallPowerUp extends PowerUp {
 
     @Override
     public void applyEffect(GameManager gm) {
-        if (isActive) return;
-        isActive = true;
+        if (isActive()) return;
+        setActive(true);
 
         // cần GameManager.getBalls()
         List<Ball> balls = gm.getBalls();
@@ -43,8 +43,8 @@ public class FastBallPowerUp extends PowerUp {
 
     @Override
     public void removeEffect(GameManager gm) {
-        if (!isActive) return;
-        isActive = false;
+        if (!isActive()) return;
+        setActive(false);
 
         // phục hồi vận tốc cũ
         for (Map.Entry<Ball, double[]> e : originalSpeeds.entrySet()) {

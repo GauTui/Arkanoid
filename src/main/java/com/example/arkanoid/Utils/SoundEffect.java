@@ -2,22 +2,34 @@ package com.example.arkanoid.Utils;
 
 import javafx.scene.media.AudioClip;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class SoundEffect {
     private AudioClip clip;
 
-    public SoundEffect(String path) throws MalformedURLException { // bắt url ko hợp lệ
-        URL resource = new File(path).toURI().toURL();
-        clip = new AudioClip(resource.toString());
+    public SoundEffect(String resourcePath) {
+        try {
+            // resourcePath ví dụ: "/com/example/arkanoid/sounds/WallPaddle.wav"
+            var url = getClass().getResource(resourcePath);
+            if (url == null) {
+                throw new IllegalArgumentException("Resource not found: " + resourcePath);
+            }
+            clip = new AudioClip(url.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            clip = null;
+        }
     }
 
     public void play(double volume) {
         if (clip != null) {
-            clip.setVolume(volume); // 0.0 → 1.0
+            volume = Math.max(0, Math.min(1, volume));
+            clip.setVolume(volume);
             clip.play();
+        } else {
+            System.err.println("AudioClip chưa được khởi tạo!");
         }
+    }
+
+    public void stop() {
+        if (clip != null) clip.stop();
     }
 }

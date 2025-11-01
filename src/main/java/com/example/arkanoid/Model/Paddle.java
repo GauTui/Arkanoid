@@ -11,9 +11,11 @@ public class Paddle extends MovableObject{
 
     private PowerUp currentPowerUp;
     private int initialWidth;
-    public static final int PADDLE_WIDTH = 160;
-    public static final int PADDLE_HEIGHT = 40;
+    public static final int PADDLE_WIDTH = 100;
+    public static final int PADDLE_HEIGHT = 10;
     private static final double PADDLE_SPEED = 8.0;
+    public static final Color PADDLE_COLOR = Color.AQUAMARINE;
+
 
     public Paddle(double x, double y){
         super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0);
@@ -22,7 +24,7 @@ public class Paddle extends MovableObject{
 
         // Khởi tạo giao diện
         Rectangle paddleShape = new Rectangle(width, height);
-        paddleShape.setFill(Color.AQUAMARINE);
+        paddleShape.setFill(PADDLE_COLOR);
         this.view = paddleShape;
         updateView();
     }

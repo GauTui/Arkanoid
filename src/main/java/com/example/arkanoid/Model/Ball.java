@@ -15,8 +15,8 @@ import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject {
     public static final int BALL_SIZE = 20;
-    public static final double BALL_DX = 3;
-    public static final double BALL_DY = -3;
+    public static final double BALL_DX = 2;
+    public static final double BALL_DY = -2;
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
@@ -145,10 +145,10 @@ public class Ball extends MovableObject {
             // Neu va cham nua phai paddle thi ta cho bong di chuyen phai(dx<0), va nguoc lai (dx>0)
 
             // Diem va cham xet voi tam qua bong theo truc x
-            double pointCollision = this.getX() + this.getWidth()/2;
+            double pointCollision = this.getX() + this.getWidth()/2.0;
 
             // Diem dua thanh paddle
-            double midPaddle = paddle.getX() + paddle.getWidth()/2;
+            double midPaddle = paddle.getX() + paddle.getWidth()/2.0;
 
             // Neu bong nam ben trai ta dat lai van toc qua bong dx âm. TH còn lại giữ nguyên
             if(pointCollision < midPaddle) {
@@ -232,7 +232,7 @@ public class Ball extends MovableObject {
 
         //hiển thị âm thanh
         SoundEffect BrickCollideSound = new SoundEffect("/com/example/arkanoid/sounds/collision.wav");
-        BrickCollideSound.play(0.5);
+        BrickCollideSound.play(2);
     }
 
     /**

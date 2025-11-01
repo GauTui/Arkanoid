@@ -5,16 +5,37 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public abstract class PowerUp extends MovableObject {
-    // ====== Thuộc tính chung ======
-    protected boolean isActive;          // Đã được nhặt/kích hoạt chưa
-    protected long activationTime;  // Thời điểm bắt đầu kích hoạt
 
-    // protected double duration = 5000;    // Thời gian hiệu lực (ms)
+    // ====== Thuộc tính chung ======
+    private boolean isActive;
+    private long activationTime;  // Thời điểm bắt đầu kích hoạt
+
+    private long duration = 5000;    // Thời gian hiệu lực (ms)
 
     public static final int POWERUP_WIDTH = 40;
     public static final int POWERUP_HEIGHT = 40;
     public static final double POWERUP_GRAVITY = 3; // tốc độ rơi xuống (pixels/frame)
 
+    // ====== Getter & Setter ======
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public long getActivationTime() {
+        return activationTime;
+    }
+
+    public void setActivationTime(long activationTime) {
+        this.activationTime = activationTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
     // ====== Constructor ======
     public PowerUp(double x, double y) {
         this(x, y, 0, POWERUP_GRAVITY); // rơi thẳng xuống
@@ -26,7 +47,6 @@ public abstract class PowerUp extends MovableObject {
         Rectangle rect = new Rectangle(POWERUP_WIDTH, POWERUP_HEIGHT, Color.GOLD);
         this.view = rect;
         updateView();
-        this.isActive = false;
     }
 
     // ====== Cập nhật vị trí mỗi frame ======
@@ -35,8 +55,6 @@ public abstract class PowerUp extends MovableObject {
         // MovableObject.update(): x += dx; y += dy; updateView();
         super.update();
     }
-
-
 
     // ====== Hai phương thức trừu tượng (các class con sẽ định nghĩa sau) ======
     public abstract void applyEffect(GameManager gm);   // Khi được nhặt
