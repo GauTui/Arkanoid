@@ -28,11 +28,11 @@ public class GameManager {
     public static final int MAP_NUMBERS = 5;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 640;
-    public static final int SCORE_Y = 10;
+    public static final int SCORE_X = 20;
+    public static final int SCORE_Y = 30;
 
-    public static final int LIVES_X = 10;
-    public static final int LIVES_Y = 720;
+    public static final int LIVES_X = 20;
+    public static final int LIVES_Y = 60;
 
     // Singleton GameManager
     private static GameManager instance;
@@ -361,6 +361,6 @@ public class GameManager {
     public void loseLife() throws MalformedURLException {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
-        loseLifeSound.play(0.5);
+        loseLifeSound.play(1);
     }
 }
