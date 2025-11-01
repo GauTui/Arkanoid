@@ -347,15 +347,37 @@ public class GameManager {
     }
 
     private void spawnPowerUp(double x, double y) {
+        // Lấy một số ngẫu nhiên từ 0.0 (bao gồm) đến 1.0 (không bao gồm)
+        double chance = random.nextDouble();
 
-        PowerUp newPowerUp;
-        if (random.nextBoolean()) {
+        PowerUp newPowerUp = null; // Khởi tạo là null
+
+        // --- ĐÂY LÀ NƠI CHÚNG TA ĐỊNH NGHĨA TỈ LỆ RƠI ---
+
+        // 5% cơ hội rơi ra Extra Life (khi chance < 0.05)
+        if (chance < 0.05) {
+            newPowerUp = new ExtraLifePowerUp(x, y);
+
+            // 10% cơ hội rơi ra Split Ball (khi chance >= 0.05 và < 0.15)
+        } else if (chance < 0.15) {
+            newPowerUp = new SplitBallPowerUp(x, y);
+
+            // 20% cơ hội rơi ra Expand Paddle (khi chance >= 0.15 và < 0.35)
+        } else if (chance < 0.35) {
             newPowerUp = new ExpandPaddlePowerUp(x, y);
-        } else {
+
+            // 20% cơ hội rơi ra Fast Ball (khi chance >= 0.35 và < 0.55)
+        } else if (chance < 0.55) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-        fallingPowerups.add(newPowerUp);
-        gamePane.getChildren().add(newPowerUp.getView());
+
+        // Nếu không rơi vào các trường hợp trên (chance >= 0.55), sẽ không có power-up nào được tạo ra.
+
+        // Chỉ thêm power-up vào game nếu nó đã được tạo (không phải là null)
+        if (newPowerUp != null) {
+            fallingPowerups.add(newPowerUp);
+            gamePane.getChildren().add(newPowerUp.getView());
+        }
     }
 
     public void loseLife() throws MalformedURLException {
@@ -370,5 +392,20 @@ public class GameManager {
 
         // Thêm hình ảnh của quả bóng vào Pane chính của game để nó được hiển thị
         this.gamePane.getChildren().add(ball.getView());
+    }
+    public void increaseLives(int amount) {
+        this.lives += amount;
+
+        // Cập nhật giao diện người dùng (UI) để hiển thị số mạng mới
+        updateLivesDisplay();
+        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
+    }
+
+    // Một phương thức helper để cập nhật Text hiển thị số mạng
+    // Bạn cần gọi phương thức này ở hàm init() để hiển thị số mạng ban đầu
+    public void updateLivesDisplay() {
+        if (livesText != null) {
+            livesText.setText("Mạng: " + this.lives);
+        }
     }
 }
