@@ -363,4 +363,12 @@ public class GameManager {
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
         loseLifeSound.play(0.5);
     }
+
+    public void addBall(Ball ball) {
+        // Thêm đối tượng ball vào danh sách quản lý các quả bóng
+        this.balls.add(ball);
+
+        // Thêm hình ảnh của quả bóng vào Pane chính của game để nó được hiển thị
+        this.gamePane.getChildren().add(ball.getView());
+    }
 }
