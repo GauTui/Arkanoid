@@ -2,6 +2,7 @@ package com.example.arkanoid;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -31,6 +32,8 @@ public class HelloApplication extends Application {
         Button ResumeBt = new Button();
         ResumeBt.setStyle("-fx-background-color: transparent;");
         ResumeBt.setGraphic(ResumeImgV);
+        ResumeBt.setOnMouseExited(e-> ResumeImgV.setOpacity(1.0));
+        ResumeBt.setOnMouseEntered(e-> ResumeImgV.setOpacity(0.5));
         ResumeBt.setLayoutX(245);
         ResumeBt.setLayoutY(330);
 
@@ -42,6 +45,8 @@ public class HelloApplication extends Application {
         Button RestartBt = new Button();
         RestartBt.setStyle("-fx-background-color: transparent;");
         RestartBt.setGraphic(RestartImgV);
+        RestartBt.setOnMouseExited(e-> RestartImgV.setOpacity(1.0));
+        RestartBt.setOnMouseEntered(e-> RestartImgV.setOpacity(0.5));
         RestartBt.setLayoutX(245);
         RestartBt.setLayoutY(420);
 
@@ -52,7 +57,9 @@ public class HelloApplication extends Application {
         MainMenu2ImgV.setFitWidth(230); // set chiều rong
         Button MainMenu2Button = new Button();
         MainMenu2Button.setStyle("-fx-background-color: transparent;");
-        MainMenu2Button.setGraphic(MainMenu2ImgV); // set ảnh
+        MainMenu2Button.setGraphic(MainMenu2ImgV);
+        MainMenu2Button.setOnMouseExited(e-> MainMenu2ImgV.setOpacity(1.0));
+        MainMenu2Button.setOnMouseEntered(e-> MainMenu2ImgV.setOpacity(0.5));// set ảnh
         MainMenu2Button.setLayoutX(245); // tọa độ X của đầu nút
         MainMenu2Button.setLayoutY(510);
 
@@ -77,7 +84,9 @@ public class HelloApplication extends Application {
         StartImgV.setFitWidth(230); // set chiều rong
         Button StartButton = new Button();
         StartButton.setStyle("-fx-background-color: transparent;");
-        StartButton.setGraphic(StartImgV); // set ảnh
+        StartButton.setGraphic(StartImgV);
+        StartButton.setOnMouseExited(e-> StartImgV.setOpacity(1.0));
+        StartButton.setOnMouseEntered(e-> StartImgV.setOpacity(0.8));
         StartButton.setLayoutX(245); // tọa độ X của đầu nút
         StartButton.setLayoutY(330); // tọa độ Y của đầu nút
         //chuc nang cho start button
@@ -89,7 +98,9 @@ public class HelloApplication extends Application {
         TutorialImgV.setFitWidth(230); // set chiều rong
         Button TutorialButton = new Button();
         TutorialButton.setStyle("-fx-background-color: transparent;");
-        TutorialButton.setGraphic(TutorialImgV); // set ảnh
+        TutorialButton.setGraphic(TutorialImgV);
+        TutorialButton.setOnMouseExited(e-> TutorialImgV.setOpacity(1.0));
+        TutorialButton.setOnMouseEntered(e-> TutorialImgV.setOpacity(0.8));// set ảnh
         TutorialButton.setLayoutX(245); // tọa độ X của đầu nút
         TutorialButton.setLayoutY(420); // tọa độ Y của đầu nút
 
@@ -101,9 +112,15 @@ public class HelloApplication extends Application {
         ExitImg3.setFitWidth(230); // set chiều rong
         Button ExitButton = new Button();
         ExitButton.setStyle("-fx-background-color: transparent;");
-        ExitButton.setGraphic(ExitImg3); // set ảnh
+        ExitButton.setGraphic(ExitImg3);
+        ExitButton.setOnMouseExited(e-> ExitImg3.setOpacity(1.0));
+        ExitButton.setOnMouseEntered(e-> ExitImg3.setOpacity(0.8));// set ảnh
         ExitButton.setLayoutX(245); // tọa độ X của đầu nút
         ExitButton.setLayoutY(510); // tọa độ Y của đầu nút
+
+        ExitButton.setOnAction(e->{
+            System.exit(0);
+        });
 
 
         //tạo file để load ảnh nền
@@ -136,6 +153,10 @@ public class HelloApplication extends Application {
                 ex.printStackTrace();
             }
         });
+
+        TutorialButton.setOnAction(e->{
+            TutorialGame(stage,scene);
+        });
         stage.setTitle("Arkanoid Game - Team 6");
 
         stage.setScene(scene);
@@ -159,9 +180,16 @@ public class HelloApplication extends Application {
         LV1ImgV.setFitWidth(80); // set chiều rong
         Button LV1Button = new Button();
         LV1Button.setStyle("-fx-background-color: transparent;");
-        LV1Button.setGraphic(LV1ImgV); // set ảnh
+        LV1Button.setGraphic(LV1ImgV);
+        LV1Button.setOnMouseExited(e-> LV1ImgV.setOpacity(1.0));
+        LV1Button.setOnMouseEntered(e-> LV1ImgV.setOpacity(0.5));// set ảnh
         LV1Button.setLayoutX(110); // tọa độ X của đầu nút
         LV1Button.setLayoutY(260);
+
+        LV1Button.setOnAction(e -> {
+            Stage stage1 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 1);
+        });
 
         File LoadImgLV2 = new File("src/main/resources/com/example/arkanoid/images/Level2Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV2Img = new Image(LoadImgLV2.toURL().toString());
@@ -170,9 +198,16 @@ public class HelloApplication extends Application {
         LV2ImgV.setFitWidth(80); // set chiều rong
         Button LV2Button = new Button();
         LV2Button.setStyle("-fx-background-color: transparent;");
-        LV2Button.setGraphic(LV2ImgV); // set ảnh
+        LV2Button.setGraphic(LV2ImgV);
+        LV2Button.setOnMouseExited(e-> LV2Button.setOpacity(1.0));
+        LV2Button.setOnMouseEntered(e-> LV2Button.setOpacity(0.5));// set ảnh
         LV2Button.setLayoutX(250); // tọa độ X của đầu nút
         LV2Button.setLayoutY(260);
+
+        LV2Button.setOnAction(e -> {
+            Stage stage2 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 2);
+        });
 
         File LoadImgLV3 = new File("src/main/resources/com/example/arkanoid/images/Level3Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV3Img = new Image(LoadImgLV3.toURL().toString());
@@ -181,9 +216,16 @@ public class HelloApplication extends Application {
         LV3ImgV.setFitWidth(80); // set chiều rong
         Button LV3Button = new Button();
         LV3Button.setStyle("-fx-background-color: transparent;");
-        LV3Button.setGraphic(LV3ImgV); // set ảnh
+        LV3Button.setGraphic(LV3ImgV);
+        LV3Button.setOnMouseExited(e-> LV3Button.setOpacity(1.0));
+        LV3Button.setOnMouseEntered(e-> LV3Button.setOpacity(0.5));// set ảnh
         LV3Button.setLayoutX(390); // tọa độ X của đầu nút
         LV3Button.setLayoutY(260);
+
+        LV3Button.setOnAction(e -> {
+            Stage stage3 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 3);
+        });
 
         File LoadImgLV4 = new File("src/main/resources/com/example/arkanoid/images/Level4Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV4Img = new Image(LoadImgLV4.toURL().toString());
@@ -192,9 +234,16 @@ public class HelloApplication extends Application {
         LV4ImgV.setFitWidth(80); // set chiều rong
         Button LV4Button = new Button();
         LV4Button.setStyle("-fx-background-color: transparent;");
-        LV4Button.setGraphic(LV4ImgV); // set ảnh
+        LV4Button.setGraphic(LV4ImgV);
+        LV4Button.setOnMouseExited(e-> LV4ImgV.setOpacity(1.0));
+        LV4Button.setOnMouseEntered(e-> LV4ImgV.setOpacity(0.5));// set ảnh
         LV4Button.setLayoutX(530); // tọa độ X của đầu nút
         LV4Button.setLayoutY(260);
+
+        LV4Button.setOnAction(e -> {
+            Stage stage4 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 4);
+        });
 
         File LoadImgLV5 = new File("src/main/resources/com/example/arkanoid/images/Level5Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV5Img = new Image(LoadImgLV5.toURL().toString());
@@ -203,18 +252,27 @@ public class HelloApplication extends Application {
         LV5ImgV.setFitWidth(80); // set chiều rong
         Button LV5Button = new Button();
         LV5Button.setStyle("-fx-background-color: transparent;");
-        LV5Button.setGraphic(LV5ImgV); // set ảnh
+        LV5Button.setGraphic(LV5ImgV);
+        LV5Button.setOnMouseExited(e-> LV5ImgV.setOpacity(1.0));
+        LV5Button.setOnMouseEntered(e-> LV5ImgV.setOpacity(0.5));// set ảnh
         LV5Button.setLayoutX(320); // tọa độ X của đầu nút
         LV5Button.setLayoutY(400);
 
-        File LoadImg4 = new File("src/main/resources/com/example/arkanoid/images/MainMenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        LV5Button.setOnAction(e -> {
+            Stage stage5 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 5);
+        });
+
+        File LoadImg4 = new File("src/main/resources/com/example/arkanoid/images/BackButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenuImg = new Image(LoadImg4.toURL().toString());
         ImageView MainMenuImgV = new ImageView(MainMenuImg);
-        MainMenuImgV.setFitHeight(70); // set chieu cao
-        MainMenuImgV.setFitWidth(70); // set chiều rong
+        MainMenuImgV.setFitHeight(60); // set chieu cao
+        MainMenuImgV.setFitWidth(110); // set chiều rong
         Button MainMenuButton = new Button();
         MainMenuButton.setStyle("-fx-background-color: transparent;");
-        MainMenuButton.setGraphic(MainMenuImgV); // set ảnh
+        MainMenuButton.setGraphic(MainMenuImgV);
+        MainMenuButton.setOnMouseExited(e-> MainMenuImgV.setOpacity(1.0));
+        MainMenuButton.setOnMouseEntered(e-> MainMenuImgV.setOpacity(0.5));// set ảnh
         MainMenuButton.setLayoutX(20); // tọa độ X của đầu nút
         MainMenuButton.setLayoutY(20);
 
@@ -225,7 +283,6 @@ public class HelloApplication extends Application {
                 ex.printStackTrace();
             }
         });
-
         SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button, MainMenuButton);
         SelectLV.getChildren().addAll(pbgView, SelectLVButton);
         Scene lvScene = new Scene(SelectLV, 720, 800);
@@ -242,6 +299,8 @@ public class HelloApplication extends Application {
         Button RestartButton2 = new Button();
         RestartButton2.setStyle("-fx-background-color: transparent;");
         RestartButton2.setGraphic(RestartImgV);
+        RestartButton2.setOnMouseEntered(e-> RestartImgV.setOpacity(0.5));
+        RestartButton2.setOnMouseExited(e-> RestartImgV.setOpacity(1.0));
         RestartButton2.setLayoutX(245);
         RestartButton2.setLayoutY(330);
 
@@ -253,6 +312,8 @@ public class HelloApplication extends Application {
         Button MainMenuButton2 = new Button();
         MainMenuButton2.setStyle("-fx-background-color: transparent;");
         MainMenuButton2.setGraphic(MainmenuImgV2);
+        MainMenuButton2.setOnMouseExited(e-> MainmenuImgV2.setOpacity(1.0));
+        MainMenuButton2.setOnMouseEntered(e-> MainmenuImgV2.setOpacity(0.5));
         MainMenuButton2.setLayoutX(245);
         MainMenuButton2.setLayoutY(420);
 
@@ -267,4 +328,144 @@ public class HelloApplication extends Application {
         GameLosePane.getChildren().addAll(MainMenuButton2,RestartButton2);
         return GameLosePane;
     }
+
+    public void TutorialGame (Stage stage, Scene scene) {
+
+        File[] loadTutorial = {
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial1.png"),//nhap hinh vao day,
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial2.png"),// nhap dia chi vao day,
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial3.png"), // nhap dia chi file vao day
+        };
+        Image[] TutorialImg = new Image[loadTutorial.length];
+        for(int i=0; i<3;++i) {
+            TutorialImg[i] = new Image(loadTutorial[i].toURI().toString());
+        }
+
+        ImageView TutorialView = new ImageView(TutorialImg[0]);
+        TutorialView.setFitWidth(720);
+        TutorialView.setFitHeight(800);
+
+        File loadBackButton = new File("src/main/resources/com/example/arkanoid/images/BackButton.png");
+        Image backImg = new Image(loadBackButton.toURI().toString());
+        ImageView backImgV = new ImageView(backImg);
+        backImgV.setFitHeight(55);
+        backImgV.setFitWidth(110);
+        Button BackButton = new Button();
+        BackButton.setStyle("-fx-background-colo: transparent; -fx-padding: 0;");
+        BackButton.setGraphic(backImgV);
+        BackButton.setOnMouseEntered(e->backImgV.setOpacity(0.5));
+        BackButton.setOnMouseExited(e-> backImgV.setOpacity(1.0));
+        BackButton.setLayoutX(30);
+        BackButton.setLayoutY(5);
+
+        File loadNextButton = new File("src/main/resources/com/example/arkanoid/images/NextButton.png");
+        Image nextImg = new Image(loadNextButton.toURI().toString());
+        ImageView nextImgV = new ImageView(nextImg);
+        nextImgV.setFitHeight(55);
+        nextImgV.setFitWidth(110);
+        Button NextButton = new Button();
+        NextButton.setStyle("-fx-background-colo: transparent; -fx-padding: 0;");
+        NextButton.setGraphic(nextImgV);
+        NextButton.setOnMouseExited(e-> nextImgV.setOpacity(1.0));
+        NextButton.setOnMouseEntered(e-> nextImgV.setOpacity(0.5));
+        NextButton.setLayoutX(580);
+        NextButton.setLayoutY(710);
+
+        int[] CurrentPage = {0};
+
+        BackButton.setOnAction(e->{
+            CurrentPage[0] --;
+            if(CurrentPage[0] <0) {
+                CurrentPage[0] = 2;
+            }
+            TutorialView.setImage(TutorialImg[CurrentPage[0]]);
+        });
+        NextButton.setOnAction(e->{
+            CurrentPage[0] ++;
+            if(CurrentPage[0] == 3) {
+                CurrentPage[0] = 0;
+            }
+            TutorialView.setImage(TutorialImg[CurrentPage[0]]);
+        });
+        File LoadMainMenuT = new File("src/main/resources/com/example/arkanoid/images/BackToMenu.png");
+        Image BackToMenuImg = new Image(LoadMainMenuT.toURI().toString());
+        ImageView BackToMenuImgV = new ImageView(BackToMenuImg);
+        BackToMenuImgV.setFitWidth(300);
+        BackToMenuImgV.setFitHeight(60);
+        Button BackToMenu = new Button();
+        BackToMenu.setGraphic(BackToMenuImgV);
+        BackToMenu.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
+        BackToMenu.setOnMouseEntered(e -> BackToMenuImgV.setOpacity(0.5));
+        BackToMenu.setOnMouseExited(e -> BackToMenuImgV.setOpacity(1.0));
+        BackToMenu.setLayoutX(210);
+        BackToMenu.setLayoutY(700);
+
+        BackToMenu.setOnAction(e->{
+            try{
+                start(stage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        Pane TutorialPane = new Pane(TutorialView, BackButton, NextButton,BackToMenu);
+        Scene TutorialScene = new Scene(TutorialPane,720,800);
+        stage.setScene(TutorialScene);
+    }
+    public Pane GameWin(Stage stage, int Score) throws Exception{
+        Pane GameWinPane = new Pane();
+
+        File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
+        Image RestartImg = new Image(loadRestart.toURI().toString());
+        ImageView RestartImgV = new ImageView(RestartImg);
+        RestartImgV.setFitHeight(70);
+        RestartImgV.setFitWidth(230);
+        Button RestartBt = new Button();
+        RestartBt.setStyle("-fx-background-color: transparent;");
+        RestartBt.setGraphic(RestartImgV);
+        RestartBt.setOnMouseExited(e-> RestartImgV.setOpacity(1.0));
+        RestartBt.setOnMouseEntered(e-> RestartImgV.setOpacity(0.5));
+        RestartBt.setLayoutX(245);
+        RestartBt.setLayoutY(420);
+
+        File loadNextLV = new File("src/main/resources/com/example/arkanoid/images/NextLevelButton.png");
+        Image NextLVImg = new Image(loadNextLV.toURI().toString());
+        ImageView NextLVImgV = new ImageView(NextLVImg);
+        NextLVImgV.setFitHeight(70);
+        NextLVImgV.setFitWidth(230);
+        Button NextLevel = new Button();
+        NextLevel.setStyle("-fx-background-color: transparent");
+        NextLevel.setGraphic(NextLVImgV);
+        NextLevel.setOnMouseEntered(e-> NextLVImgV.setOpacity(0.8));
+        NextLevel.setOnMouseExited(e-> NextLVImgV.setOpacity(1.0));
+        NextLevel.setLayoutX(245);
+        NextLevel.setLayoutY(330);
+
+        File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
+        ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
+        MainMenu2ImgV.setFitHeight(70); // set chieu cao
+        MainMenu2ImgV.setFitWidth(230); // set chiều rong
+        Button MainMenu2Button = new Button();
+        MainMenu2Button.setStyle("-fx-background-color: transparent;");
+        MainMenu2Button.setGraphic(MainMenu2ImgV);
+        MainMenu2Button.setOnMouseExited(e-> MainMenu2ImgV.setOpacity(1.0));
+        MainMenu2Button.setOnMouseEntered(e-> MainMenu2ImgV.setOpacity(0.5));// set ảnh
+        MainMenu2Button.setLayoutX(245); // tọa độ X của đầu nút
+        MainMenu2Button.setLayoutY(510);
+
+        GameWinPane.getChildren().addAll(RestartBt,NextLevel,MainMenu2Button);
+        return GameWinPane;
+    }
+    private void startLevel(Stage stage, int levelNumber) {
+        Pane gamePane = new Pane();
+        GameManager gm = GameManager.getInstance();
+        gm.init(gamePane, this, levelNumber);
+
+        Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+        stage.setScene(gameScene);
+        stage.show();
+    }
+
+
 }

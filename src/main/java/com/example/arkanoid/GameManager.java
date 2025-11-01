@@ -1,20 +1,13 @@
 package com.example.arkanoid;
 
-import Game.Ball;
-import Game.GameObject;
-import Game.Paddle;
-import Game.Brick;
-//import Game.PowerUp;
-//import Game.NormalBrick;
-//import Game.StrongBrick;
-//import Game.ExpandPaddlePowerUp;
-//import Game.FastBallPowerUp;
-
+import com.example.arkanoid.Model.*;
+import com.example.arkanoid.Utils.SoundEffect;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import static Game.Paddle.PADDLE_HEIGHT;
-import static Game.Paddle.PADDLE_WIDTH;
-import static Game.Ball.*;
+import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
+import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
+import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
     public static final int SCREEN_WIDTH = 720;
@@ -45,14 +38,14 @@ public class GameManager {
     private static GameManager instance;
 
     private Paddle paddle;
+
     private List<Ball> balls;
     private List<Brick> bricks;
     private Pane gamePane;
-    //danh sach cac PowerUp co the sinh ra
-    private List<PowerUp> acPowerUp;
-    //danh sach cac PowerUp dang hoat dong trong chuong trinh
-    //cái này phải là danh sách các PowerUp ĐANG RƠI trên màn hình (chưa kích hoạt hiệu ứng)
-    private List<PowerUp> activePowerUp;
+    //danh sach cac PowerUp dang roi
+    private List<PowerUp> fallingPowerups;
+    //danh sach cac PowerUp da cham vao paddle va dang gay hieu ung
+    private List<PowerUp> activePowerups;
     //dung de sinh ngau nhien PowerUp
     private Random random = new Random();
     //text hien thi so diem ra man hinh voi dinh nghia : "Score : " + score
@@ -64,6 +57,14 @@ public class GameManager {
     private Arkanoid mainApp;
 
     /*====Getter/setter====*/
+    public List<Ball> getBalls() {
+        return balls;
+    }
+
+    public void setBalls(List<Ball> balls) {
+        this.balls = balls;
+    }
+
     public Paddle getPaddle() {
         return paddle;
     }
@@ -79,12 +80,6 @@ public class GameManager {
     public List<Brick> getBricks() {
         return bricks;
     }
-
-    // để cho FastBallPowerUp nhìn thấy
-    public List<Ball> getBalls() {
-        return balls;
-    }
-
 
     public void setBricks(List<Brick> bricks) {
         this.bricks = bricks;
@@ -143,8 +138,8 @@ public class GameManager {
         // Khởi tạo các danh sách
         balls = new ArrayList<>();
         bricks = new ArrayList<>();
-        acPowerUp = new ArrayList<>();
-        activePowerUp = new ArrayList<>();
+        activePowerups = new ArrayList<>();
+        fallingPowerups = new ArrayList<>();
 
         // Khởi tạo giá trị ban đầu
         score = 0;
@@ -163,7 +158,7 @@ public class GameManager {
         return instance;
     }
 
-    public void init(Pane gamePane, Arkanoid mainApp) {
+    public void init(Pane gamePane, Arkanoid mainApp, int LevelNumber) {
         this.gamePane = gamePane;
         this.mainApp = mainApp;
 
@@ -198,30 +193,43 @@ public class GameManager {
         gamePane.getChildren().addAll(scoreText, livesText);
 
         // Load level bricks
-        currentLevel = 1; // reset về level 1 khi bắt đầu game mới
-        loadLevel(currentLevel);
+        currentLevel = LevelNumber; // reset về level 1 khi bắt đầu game mới
+        loadLevel(LevelNumber);
     }
 
-    public void update() {
+    public void update() throws MalformedURLException {
         //  code cập nhật vị trí và va chạm
+
         paddle.update();
         for (Ball ball : balls) {
             ball.update();
         }
-        for (PowerUp aPowerUp : activePowerUp) {
+        for (PowerUp aPowerUp : fallingPowerups) {
             aPowerUp.update();
         }
         checkCollisions();
 
+        // di chuyển, cập nhật vị trí powerup rơi
+        for(PowerUp fPowerup : fallingPowerups) {
+            fPowerup.update();
+        }
+
+        // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
+        handleRemoveActivePowerUp();
 
         // xóa các viên gạch , vật phẩm đã bị phá hủy khỏi danh sách
-        activePowerUp.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT); // sao ở đây là visible mà trong gameobject la visiable
+        fallingPowerups.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT);
         bricks.removeIf(Brick::isDestroyed);
 
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
             System.out.println("Level " + currentLevel + " cleared!");
             currentLevel++; // tăng level
+
+            // Để tạm, vượt quá map tạo đc thì quay lại level đầu
+            if (currentLevel > MAP_NUMBERS) {
+                currentLevel = 1;
+            }
 
             // reset bóng và thanh đỡ cho màn mới
             paddle.reset();
@@ -232,10 +240,10 @@ public class GameManager {
             loadLevel(currentLevel);// tải màn chơi tiếp theo
             return;
         }
-//        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-//        paddle.update(); //có thể bỏ dòng trên
-//        balls.forEach(Ball::update);
-//        activePowerUp.forEach(GameObject::updateView);
+        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
+        paddle.update(); //có thể bỏ dòng trên
+        balls.forEach(Ball::update);
+        fallingPowerups.forEach(GameObject::updateView);
 
         //   cập nhật text
         scoreText.setText("Score: " + score);
@@ -244,7 +252,7 @@ public class GameManager {
     }
 
     // ====== KIỂM TRA VA CHẠM ======
-    public void checkCollisions() {
+    public void checkCollisions() throws MalformedURLException {
         for (Ball ball : balls) {
             ball.collideWithWall();
             ball.collideWithPaddle(this.getPaddle());
@@ -273,27 +281,69 @@ public class GameManager {
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
-                mainApp.GameLoseSc(score);
+                System.exit(0);
+                //mainApp.showEndGameScreen(score);
             }
         }
-        // Xử lý va chạm paddle với PowerUp (duyệt ngược)
-        for (int i = activePowerUp.size() - 1; i >= 0; i--) {
-            PowerUp p = activePowerUp.get(i);
 
-            // Kiểm tra va chạm giữa Paddle và PowerUp
+        // Xử lý va chạm paddle với fallingPowerUp (duyệt ngược)
+        for (int i = fallingPowerups.size() - 1; i >= 0; i--) {
+            PowerUp p = fallingPowerups.get(i);
+
+            // Nếu va chạm giữa Paddle và fallingPowerUp thêm fallingPowerUp vào list activePowerups
+            // Xóa fallingPowerUp chạm vào paddle khỏi danh sách hiển thị và list fallingPowerups
             if (p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
-                // Gọi Paddle xử lý hiệu ứng PowerUp
-                paddle.applyPowerUp(p);
+                handlePowerUpCollision(p);
+            }
+        }
+    }
 
-                // Xóa PowerUp khỏi màn hình và danh sách
-                gamePane.getChildren().remove(p.getView());
-                activePowerUp.remove(i);
+    public void handleRemoveActivePowerUp() {
+        for (int i = activePowerups.size() - 1; i >= 0; i--) {
+            PowerUp aPowerup = activePowerups.get(i);
+            long elapsed = System.currentTimeMillis() - aPowerup.getActivationTime();
+            long duration = aPowerup.getDuration();
+
+            // Làm mờ dần trong suốt thời gian hiệu ứng
+            double remaining = 1.0 - (double) elapsed / duration;
+            aPowerup.getView().setOpacity(Math.max(0.3, remaining));
+
+            if (elapsed > duration) {
+                aPowerup.removeEffect(this);
+                activePowerups.remove(i);
+            }
+        }
+    }
+
+    // xử lý khi fallingPowerups chạm vào paddle
+    private void handlePowerUpCollision(PowerUp p) {
+
+        p.setDy(0);
+        // kiểm tra trong danh sách activatePowerup có powerup cùng loại với p không
+        // Nếu có reset thời gian bắt đầu hiệu ứng của powerup có trong list activatePowerups
+
+        // Thời gian bắt đầu hiệu ứng
+        long now = System.currentTimeMillis();
+        p.setActivationTime(now);
+        boolean isDuplicate = false;
+        for (PowerUp iAcPowerup : activePowerups) {
+            if (iAcPowerup.getClass().equals(p.getClass())) {
+                isDuplicate = true;
+                iAcPowerup.setActivationTime(now);
+                break;
             }
         }
 
-        // Cập nhật ScoreText, liveText
-        scoreText.setText("Score: " + score);
-        livesText.setText("Lives: " + lives);
+        // Nếu không có thì thêm vào list activatePowerups, đặt hiệu ứng lên các đối tượng
+        if (!isDuplicate) {
+            activePowerups.add(p);
+            p.applyEffect(this);
+        }
+
+        // Xóa fallingPowerUp khỏi màn hình và danh sách
+        gamePane.getChildren().remove(p.getView());
+        fallingPowerups.remove(p);
+
     }
 
     private void spawnPowerUp(double x, double y) {
@@ -304,11 +354,13 @@ public class GameManager {
         } else {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-        activePowerUp.add(newPowerUp);
+        fallingPowerups.add(newPowerUp);
         gamePane.getChildren().add(newPowerUp.getView());
     }
 
-    public void loseLife() {
+    public void loseLife() throws MalformedURLException {
         lives = lives - 1;
+        SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
+        loseLifeSound.play(0.5);
     }
 }
