@@ -11,7 +11,7 @@ public class StrongBrick extends Brick{
     public StrongBrick(double x, double y, int width, int height) {
         super(x,y,width,height,HIT_POINT_STRONG_BRICK);
         //sửa màu
-        Image StrongBrickIMG = new Image(getClass().getResourceAsStream(""));
+        Image StrongBrickIMG = new Image(getClass().getResourceAsStream("/com/example/arkanoid/images/StrongBrick.jpg"));
 
         ((Rectangle) this.view).setFill(new ImagePattern(StrongBrickIMG));
     }

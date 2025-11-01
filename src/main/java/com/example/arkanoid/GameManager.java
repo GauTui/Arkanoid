@@ -99,7 +99,7 @@ public class GameManager {
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
             int brickWidth = 60;
-            int brickHeight = 20;
+            int brickHeight = 25;
             int currentY = 50; // tọa độ Y ban đầu cho hàng gạch đầu tiên
 
             String line;
