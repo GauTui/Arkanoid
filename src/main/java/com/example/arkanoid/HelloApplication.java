@@ -460,7 +460,7 @@ public class HelloApplication extends Application {
     private void startLevel(Stage stage, int levelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
-        gm.init(gamePane, this, levelNumber);
+        gm.init(gamePane, (Arkanoid) this, levelNumber);
 
         Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
         stage.setScene(gameScene);
