@@ -37,9 +37,6 @@ public class HelloApplication extends Application {
         ResumeBt.setLayoutX(245);
         ResumeBt.setLayoutY(330);
 
-        ResumeBt.setOnAction(e->{
-        });
-
         File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
         Image RestartImg = new Image(loadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg);
