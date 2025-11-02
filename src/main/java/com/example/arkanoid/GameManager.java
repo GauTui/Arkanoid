@@ -2,6 +2,7 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
+import javafx.application.Application;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -22,17 +23,19 @@ import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
+
+    private boolean isGameStarted = false;
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
     public static final int INITIAL_LIVES = 3;
     public static final int MAP_NUMBERS = 5;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 20;
+    public static final int SCORE_X = 560;
     public static final int SCORE_Y = 30;
 
-    public static final int LIVES_X = 20;
-    public static final int LIVES_Y = 60;
+    public static final int LIVES_X = 400;
+    public static final int LIVES_Y = 30;
 
     // Singleton GameManager
     private static GameManager instance;
@@ -57,6 +60,11 @@ public class GameManager {
     private Arkanoid mainApp;
 
     /*====Getter/setter====*/
+    public void launchBall() {
+        if (!isGameStarted) {
+            isGameStarted = true;
+        }
+    }
     public List<Ball> getBalls() {
         return balls;
     }
@@ -180,13 +188,13 @@ public class GameManager {
         // UI text
         scoreText = new Text("Score: " + score);
         scoreText.setFont(Font.font("Arial", 20));
-        scoreText.setFill(Color.WHITE);
+        scoreText.setFill(Color.DARKBLUE);
         scoreText.setX(SCORE_X);
         scoreText.setY(SCORE_Y);
 
         livesText = new Text("Lives: " + lives);
         livesText.setFont(Font.font("Arial", 20));
-        livesText.setFill(Color.WHITE);
+        livesText.setFill(Color.RED);
         livesText.setX(LIVES_X);
         livesText.setY(LIVES_Y);
 
@@ -197,8 +205,19 @@ public class GameManager {
         loadLevel(LevelNumber);
     }
 
+
     public void update() throws MalformedURLException {
-        //  code cập nhật vị trí và va chạm
+        // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
+        if (!isGameStarted) {
+            // Lấy quả bóng đầu tiên và cập nhật vị trí của nó theo paddle
+            if (!balls.isEmpty()) {
+                balls.get(0).reset(paddle);
+            }
+            // Không làm gì thêm cho đến khi game bắt đầu
+            return;
+        }
+
+        // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
 
         paddle.update();
         for (Ball ball : balls) {
@@ -224,31 +243,32 @@ public class GameManager {
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
             System.out.println("Level " + currentLevel + " cleared!");
-            currentLevel++; // tăng level
+            currentLevel++;
 
-            // Để tạm, vượt quá map tạo đc thì quay lại level đầu
             if (currentLevel > MAP_NUMBERS) {
                 currentLevel = 1;
             }
 
             // reset bóng và thanh đỡ cho màn mới
             paddle.reset();
+            // Reset trạng thái game để chờ phóng bóng ở màn tiếp theo
+            isGameStarted = false;
             for (Ball ball : balls) {
                 ball.reset(paddle);
             }
 
-            loadLevel(currentLevel);// tải màn chơi tiếp theo
+            loadLevel(currentLevel);
             return;
         }
+
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        paddle.update(); //có thể bỏ dòng trên
         balls.forEach(Ball::update);
         fallingPowerups.forEach(GameObject::updateView);
+        paddle.updateView(); // Cập nhật cả view của paddle
 
-        //   cập nhật text
+        // cập nhật text
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
-
     }
 
     // ====== KIỂM TRA VA CHẠM ======
@@ -268,7 +288,7 @@ public class GameManager {
                     score += INCREASE_POINTS;
 
                     // Có thể sinh power-up
-                    if (random.nextDouble() < 0.2) {
+                    if (random.nextDouble() < 0.5) {
                         spawnPowerUp(brick.getX(), brick.getY());
                     }
 
@@ -347,20 +367,65 @@ public class GameManager {
     }
 
     private void spawnPowerUp(double x, double y) {
+        // Lấy một số ngẫu nhiên từ 0.0 (bao gồm) đến 1.0 (không bao gồm)
+        double chance = random.nextDouble();
 
-        PowerUp newPowerUp;
-        if (random.nextBoolean()) {
+        PowerUp newPowerUp = null; // Khởi tạo là null
+
+        // --- ĐÂY LÀ NƠI CHÚNG TA ĐỊNH NGHĨA TỈ LỆ RƠI ---
+
+        // 5% cơ hội rơi ra Extra Life (khi chance < 0.05)
+        if (chance < 0.05) {
+            newPowerUp = new ExtraLifePowerUp(x, y);
+
+            // 10% cơ hội rơi ra Split Ball (khi chance >= 0.05 và < 0.15)
+        } else if (chance < 0.15) {
+            newPowerUp = new SplitBallPowerUp(x, y);
+
+            // 20% cơ hội rơi ra Expand Paddle (khi chance >= 0.15 và < 0.35)
+        } else if (chance < 0.35) {
             newPowerUp = new ExpandPaddlePowerUp(x, y);
-        } else {
+
+            // 20% cơ hội rơi ra Fast Ball (khi chance >= 0.35 và < 0.55)
+        } else if (chance < 0.55) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-        fallingPowerups.add(newPowerUp);
-        gamePane.getChildren().add(newPowerUp.getView());
+
+        // Nếu không rơi vào các trường hợp trên (chance >= 0.55), sẽ không có power-up nào được tạo ra.
+
+        // Chỉ thêm power-up vào game nếu nó đã được tạo (không phải là null)
+        if (newPowerUp != null) {
+            fallingPowerups.add(newPowerUp);
+            gamePane.getChildren().add(newPowerUp.getView());
+        }
     }
 
     public void loseLife() throws MalformedURLException {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
-        loseLifeSound.play(1);
+        loseLifeSound.play(0.5);
+    }
+
+    public void addBall(Ball ball) {
+        // Thêm đối tượng ball vào danh sách quản lý các quả bóng
+        this.balls.add(ball);
+
+        // Thêm hình ảnh của quả bóng vào Pane chính của game để nó được hiển thị
+        this.gamePane.getChildren().add(ball.getView());
+    }
+    public void increaseLives(int amount) {
+        this.lives += amount;
+
+        // Cập nhật giao diện người dùng (UI) để hiển thị số mạng mới
+        updateLivesDisplay();
+        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
+    }
+
+    // Một phương thức helper để cập nhật Text hiển thị số mạng
+    // Bạn cần gọi phương thức này ở hàm init() để hiển thị số mạng ban đầu
+    public void updateLivesDisplay() {
+        if (livesText != null) {
+            livesText.setText("Mạng: " + this.lives);
+        }
     }
 }
