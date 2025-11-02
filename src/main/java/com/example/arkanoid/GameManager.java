@@ -2,6 +2,7 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
+import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -244,6 +245,7 @@ public class GameManager {
             if (currentLevel > MAP_NUMBERS) {
                 Platform.runLater(() -> {
                     gameLoop.stop();
+                    SoundManager.stopBackgroundMusic();
                     try {
                         Stage stage = (Stage) gamePane.getScene().getWindow();
                         Pane winPane = mainApp.GameWin(stage, score);
@@ -410,6 +412,7 @@ public class GameManager {
     public void loseLife() throws MalformedURLException {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
+        SoundManager.stopBackgroundMusic();
         loseLifeSound.play(1);
     }
     //reset lai trang thai game tu ban dau, chu neu khong thi lai khoai:))

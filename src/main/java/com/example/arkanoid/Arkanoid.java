@@ -1,6 +1,8 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.Paddle;
+import com.example.arkanoid.Utils.BackgroundMusic;
+import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -90,6 +92,7 @@ public class Arkanoid extends Application {
                 Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
                 GameManager gm = GameManager.getInstance();
                 gm.reset();
+                SoundManager.stopBackgroundMusic();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
                 mainApp.start(newStage);
@@ -100,16 +103,19 @@ public class Arkanoid extends Application {
 
         ResumeBt.setOnAction(e -> {
             ((Pane) PauseGamePane.getParent()).getChildren().remove(PauseGamePane);
+            SoundManager.resumeMusic();
             GameManager.getInstance().getGameLoop().start();
         });
 
         RestartBt.setOnAction(e->{
-            try {// 💥 đóng hết mọi Stage đang mở
+            try {// đóng hết mọi Stage đang mở
+                String bgmFile = SoundManager.getCurrentBgmFile();
                 GameManager gm = GameManager.getInstance();
                 gm.reset();
                 Arkanoid.closeAllStages();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
+                SoundManager.playBackgroundMusic(bgmFile);
                 mainApp.startLevel(newStage,LevelNumber);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -236,6 +242,8 @@ public class Arkanoid extends Application {
 
         LV1Button.setOnAction(e -> {
             Stage stage1 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            SoundManager lv1sound = new SoundManager();
+            SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic1.wav");
             startLevel(stage, 1);
         });
 
@@ -254,6 +262,8 @@ public class Arkanoid extends Application {
 
         LV2Button.setOnAction(e -> {
             Stage stage2 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            SoundManager lv2sound = new SoundManager();
+            SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic2.wav");
             startLevel(stage, 2);
         });
 
@@ -272,6 +282,8 @@ public class Arkanoid extends Application {
 
         LV3Button.setOnAction(e -> {
             Stage stage3 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            SoundManager lv3sound = new SoundManager();
+            SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic3.wav");
             startLevel(stage, 3);
         });
 
@@ -290,6 +302,8 @@ public class Arkanoid extends Application {
 
         LV4Button.setOnAction(e -> {
             Stage stage4 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            SoundManager lv4sound = new SoundManager();
+            SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic4.wav");
             startLevel(stage, 4);
         });
 
@@ -308,6 +322,8 @@ public class Arkanoid extends Application {
 
         LV5Button.setOnAction(e -> {
             Stage stage5 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            SoundManager lv5sound = new SoundManager();
+            SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic5.wav");
             startLevel(stage, 5);
         });
 
@@ -326,6 +342,8 @@ public class Arkanoid extends Application {
 
         LV6Button.setOnAction(e -> {
             Stage stage6 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            SoundManager lv6sound = new SoundManager();
+            SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic1.wav");
             startLevel(stage, 6);
         });
 
@@ -370,10 +388,12 @@ public class Arkanoid extends Application {
         RestartButton2.setLayoutY(330);
 
         RestartButton2.setOnAction(e->{
-            try {// 💥 đóng hết mọi Stage đang mở
+            try {//  đóng hết mọi Stage đang mở
+                String bgmFile = SoundManager.getCurrentBgmFile();
                 Arkanoid.closeAllStages();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
+                SoundManager.playBackgroundMusic(bgmFile);
                 mainApp.startLevel(newStage,CurrentLV);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -396,7 +416,7 @@ public class Arkanoid extends Application {
         MainMenuButton2.setOnAction(e -> {
             try {
                 Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
-
+                SoundManager.stopBackgroundMusic();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
                 mainApp.start(newStage);
@@ -538,10 +558,11 @@ public class Arkanoid extends Application {
 
         MainMenu2Button.setOnAction(e -> {
             try {
-                Arkanoid.closeAllStages(); // 💥 đóng hết mọi Stage đang mở
+                Arkanoid.closeAllStages(); //
 
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
+                SoundManager.stopBackgroundMusic();
                 mainApp.start(newStage);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -610,6 +631,7 @@ public class Arkanoid extends Application {
                     gameLoop.stop(); // dừng game
                     Pane pausePane = PauseGame(stage,LevelNumber); // tạo menu pause
                     gamePane.getChildren().add(pausePane); // chồng menu lên game
+                    SoundManager.pauseMusic();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
