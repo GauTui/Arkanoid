@@ -474,6 +474,9 @@ public class HelloApplication extends Application {
         gm.init(gamePane, this, LevelNumber);
         Scene scene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 
+        gm.wireInput(scene);
+        gamePane.requestFocus();   // để bắt phím SPACE/chuột
+
         // Bắt tọa độ chuột
         scene.setOnMouseMoved(event -> {
             mouseX = event.getX();

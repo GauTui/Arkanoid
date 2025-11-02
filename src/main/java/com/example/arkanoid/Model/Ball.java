@@ -14,9 +14,14 @@ import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
 import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject {
+    private boolean attached = false;
+    private Paddle attachedTo = null;
+
     public static final int BALL_SIZE = 20;
     public static final double BALL_DX = 2;
     public static final double BALL_DY = -2;
+    public static final double DEFAULT_DX = BALL_DX;
+    public static final double DEFAULT_DY = BALL_DY;
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
@@ -41,6 +46,27 @@ public class Ball extends MovableObject {
         //Node view khoi tao la Rball
         this.view = Rball;
     }
+
+    public void attachTo(Paddle p) {
+        attached = true;
+        attachedTo = p;
+        setDx(0);
+        setDy(0);
+        // đặt bóng ở tâm paddle, ngay phía trên
+        setX(p.getX() + p.getWidth()/2.0 - getWidth()/2.0);
+        setY(p.getY() - getHeight());
+        updateView();
+    }
+
+    public void launch() {
+        if (!attached) return;
+        attached = false;
+        attachedTo = null;
+        setDx(DEFAULT_DX);
+        setDy(DEFAULT_DY < 0 ? DEFAULT_DY : -Math.abs(DEFAULT_DY)); // bay lên
+    }
+
+    public boolean isAttached() { return attached; }
 
     /**
      * phuong thuc lay so ngau nhien trong doan [a;b]
@@ -117,7 +143,7 @@ public class Ball extends MovableObject {
 
         GameManager gm = GameManager.getInstance();
         //Xử lý va chạm dưới rớt xuống khỏi màn hình, ngoài ra hàm này thực hiện việc giảm máu và gameOver.
-        if(this.getY() + this.getHeight() > SCREEN_HEIGHT) {
+        if(!attached && this.getY() + this.getHeight() > SCREEN_HEIGHT) {
             gm.loseLife();
             this.reset(gm.getPaddle());
         }
@@ -131,6 +157,8 @@ public class Ball extends MovableObject {
      */
     public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         // tránh trường hợp null của paddle và rectangle
+        if (attached) return;
+
         if(paddle == null|| paddle.getView() == null) {
             return;
         }
@@ -173,6 +201,8 @@ public class Ball extends MovableObject {
     public void collideWithBrick(Brick brick) throws MalformedURLException {
         /* tránh trường hợp null của brick và rectangle brick.
         khi ta xóa đi brick thì còn lưu trong Pane*/
+        if (attached) return;
+
         if(brick == null|| brick.getView() == null) {
             return;
         }
@@ -252,11 +282,12 @@ public class Ball extends MovableObject {
      * @param paddle thanh trượt để lấy vị trí tâm gậy
      */
     public void reset(Paddle paddle) {
-        this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
-        this.setY(paddle.getY() - this.getHeight());
-        this.setDx(BALL_DX);
-        this.setDy(BALL_DY);
-        updateView();
+//        this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
+//        this.setY(paddle.getY() - this.getHeight());
+//        this.setDx(BALL_DX);
+//        this.setDy(BALL_DY);
+//        updateView();
+          attachTo(paddle);   // <-- thay toàn bộ nội dung cũ bằng dòng này
     }
 
     /**
@@ -264,6 +295,13 @@ public class Ball extends MovableObject {
      */
     @Override
     public void update() {
+        if (attached && attachedTo != null) {
+            setX(attachedTo.getX() + attachedTo.getWidth()/2.0 - getWidth()/2.0);
+            setY(attachedTo.getY() - getHeight());
+            updateView();
+            return; // không chạy vật lý khi đang dính
+        }
+        // như cũ
         setX(getX() + getDx());
         setY(getY() + getDy());
         updateView();

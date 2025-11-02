@@ -16,6 +16,8 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 
 import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
 import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
@@ -360,6 +362,19 @@ public class GameManager {
         }
         fallingPowerups.add(newPowerUp);
         gamePane.getChildren().add(newPowerUp.getView());
+    }
+    // khi reset bóng thì nhấn space để bắn
+    public void wireInput(Scene scene) {
+        // Gắn 1 lần là đủ
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.SPACE) launchAllBalls();
+        });
+        scene.setOnMouseClicked(e -> launchAllBalls());
+        gamePane.requestFocus(); // để nhận phím
+    }
+
+    private void launchAllBalls() {
+        for (Ball b : balls) b.launch();
     }
 
     public void loseLife() throws MalformedURLException {
