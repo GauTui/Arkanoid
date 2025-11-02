@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -85,15 +86,19 @@ public class Arkanoid extends Application {
         MainMenu2Button.setLayoutY(510);
 
         MainMenu2Button.setOnAction(e->{
-            try{
-                start(stage);
-            }catch(IOException ex) {
+            try {
+                Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
+
+                Stage newStage = new Stage();
+                Arkanoid mainApp = new Arkanoid();
+                mainApp.start(newStage);
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
 
         ResumeBt.setOnAction(e->{
-
+            ((Pane) PauseGamePane.getParent()).getChildren().remove(PauseGamePane);
         });
 
         RestartBt.setOnAction(e->{
@@ -575,6 +580,7 @@ public class Arkanoid extends Application {
         });
 
         // Game loop
+
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -596,10 +602,21 @@ public class Arkanoid extends Application {
         gm.setGameLoop(gameLoop);
         gameLoop.start();
 
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                try {
+                    gameLoop.stop(); // dừng game
+                    Pane pausePane = PauseGame(stage,LevelNumber); // tạo menu pause
+                    gamePane.getChildren().add(pausePane); // chồng menu lên game
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         stage.setScene(scene);
         stage.show();
     }
-
     public Stage getPrimaryStage() {
         return getPrimaryStage();
     }
