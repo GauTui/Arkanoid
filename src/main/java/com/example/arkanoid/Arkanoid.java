@@ -3,7 +3,6 @@ package com.example.arkanoid;
 import com.example.arkanoid.Model.Paddle;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -11,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.event.ActionEvent;
 
 import java.io.File;
 
@@ -23,7 +21,7 @@ import java.net.MalformedURLException;
  * cái này là để chạy start game nhé ae!!!!!
  */
 
-public class HelloApplication extends Application {
+public class Arkanoid extends Application {
 
     private double mouseX;
     public Pane PauseGame(Stage stage) throws Exception {
@@ -240,8 +238,8 @@ public class HelloApplication extends Application {
         Button LV4Button = new Button();
         LV4Button.setStyle("-fx-background-color: transparent;");
         LV4Button.setGraphic(LV4ImgV);
-        LV4Button.setOnMouseExited(e-> LV4ImgV.setOpacity(1.0));
-        LV4Button.setOnMouseEntered(e-> LV4ImgV.setOpacity(0.5));// set ảnh
+        LV4Button.setOnMouseExited(e-> LV4Button.setOpacity(1.0));
+        LV4Button.setOnMouseEntered(e-> LV4Button.setOpacity(0.5));// set ảnh
         LV4Button.setLayoutX(530); // tọa độ X của đầu nút
         LV4Button.setLayoutY(260);
 
@@ -258,14 +256,32 @@ public class HelloApplication extends Application {
         Button LV5Button = new Button();
         LV5Button.setStyle("-fx-background-color: transparent;");
         LV5Button.setGraphic(LV5ImgV);
-        LV5Button.setOnMouseExited(e-> LV5ImgV.setOpacity(1.0));
-        LV5Button.setOnMouseEntered(e-> LV5ImgV.setOpacity(0.5));// set ảnh
-        LV5Button.setLayoutX(320); // tọa độ X của đầu nút
+        LV5Button.setOnMouseExited(e-> LV5Button.setOpacity(1.0));
+        LV5Button.setOnMouseEntered(e-> LV5Button.setOpacity(0.5));// set ảnh
+        LV5Button.setLayoutX(250); // tọa độ X của đầu nút
         LV5Button.setLayoutY(400);
 
         LV5Button.setOnAction(e -> {
             Stage stage5 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             startLevel(stage, 5);
+        });
+
+        File LoadImgLV6 = new File("src/main/resources/com/example/arkanoid/images/Level6Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        Image LV6Img = new Image(LoadImgLV6.toURL().toString());
+        ImageView LV6ImgV = new ImageView(LV6Img);
+        LV6ImgV.setFitHeight(80); // set chieu cao
+        LV6ImgV.setFitWidth(80); // set chiều rong
+        Button LV6Button = new Button();
+        LV6Button.setStyle("-fx-background-color: transparent;");
+        LV6Button.setGraphic(LV6ImgV);
+        LV6Button.setOnMouseExited(e-> LV6Button.setOpacity(1.0));
+        LV6Button.setOnMouseEntered(e-> LV6Button.setOpacity(0.5));// set ảnh
+        LV6Button.setLayoutX(390); // tọa độ X của đầu nút
+        LV6Button.setLayoutY(400);
+
+        LV6Button.setOnAction(e -> {
+            Stage stage6 = (Stage) ((Node)e.getSource()).getScene().getWindow();
+            startLevel(stage, 6);
         });
 
         File LoadImg4 = new File("src/main/resources/com/example/arkanoid/images/BackButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
@@ -288,7 +304,7 @@ public class HelloApplication extends Application {
                 ex.printStackTrace();
             }
         });
-        SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button, MainMenuButton);
+        SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button,LV6Button, MainMenuButton);
         SelectLV.getChildren().addAll(pbgView, SelectLVButton);
         Scene lvScene = new Scene(SelectLV, 720, 800);
         stage.setScene(lvScene);
@@ -463,7 +479,18 @@ public class HelloApplication extends Application {
         return GameWinPane;
     }
     //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
-    public void startLevel(Stage stage,int LevelNumber) {
+    //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
+    public void showGameWin(Stage stage, int score) {
+        try {
+            Pane winPane = GameWin(stage, score);
+            Scene winScene = new Scene(winPane, 800, 600); // hoặc SCREEN_WIDTH, SCREEN_HEIGHT nếu bạn có
+            stage.setScene(winScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void startLevel(Stage stage, int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
         File loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/NenInGame.png");
@@ -503,18 +530,6 @@ public class HelloApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
-    }
-
-    //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
-    public void showGameWin(Stage stage, int score) {
-        try {
-            Pane winPane = GameWin(stage, score);
-            Scene winScene = new Scene(winPane, 800, 600); // hoặc SCREEN_WIDTH, SCREEN_HEIGHT nếu bạn có
-            stage.setScene(winScene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public Stage getPrimaryStage() {

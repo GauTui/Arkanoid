@@ -58,7 +58,7 @@ public class GameManager {
     private int score;
     private int lives;
     private int currentLevel;
-    private HelloApplication mainApp;
+    private Arkanoid mainApp;
 
     /*====Getter/setter====*/
     public List<Ball> getBalls() {
@@ -162,7 +162,7 @@ public class GameManager {
         return instance;
     }
 
-    public void init(Pane gamePane, HelloApplication mainApp, int LevelNumber) {
+    public void init(Pane gamePane, Arkanoid mainApp, int LevelNumber) {
         this.gamePane = gamePane;
         this.mainApp = mainApp;
 
