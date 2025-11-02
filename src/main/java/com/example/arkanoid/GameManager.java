@@ -2,6 +2,7 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
+import javafx.application.Application;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -22,6 +23,8 @@ import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
+
+    private boolean isGameStarted = false;
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
     public static final int INITIAL_LIVES = 3;
@@ -54,9 +57,14 @@ public class GameManager {
     private int score;
     private int lives;
     private int currentLevel;
-    private Arkanoid mainApp;
+    private HelloApplication mainApp;
 
     /*====Getter/setter====*/
+    public void launchBall() {
+        if (!isGameStarted) {
+            isGameStarted = true;
+        }
+    }
     public List<Ball> getBalls() {
         return balls;
     }
@@ -158,7 +166,7 @@ public class GameManager {
         return instance;
     }
 
-    public void init(Pane gamePane, Arkanoid mainApp, int LevelNumber) {
+    public void init(Pane gamePane, HelloApplication mainApp, int LevelNumber) {
         this.gamePane = gamePane;
         this.mainApp = mainApp;
 
@@ -197,8 +205,19 @@ public class GameManager {
         loadLevel(LevelNumber);
     }
 
+
     public void update() throws MalformedURLException {
-        //  code cập nhật vị trí và va chạm
+        // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
+        if (!isGameStarted) {
+            // Lấy quả bóng đầu tiên và cập nhật vị trí của nó theo paddle
+            if (!balls.isEmpty()) {
+                balls.get(0).reset(paddle);
+            }
+            // Không làm gì thêm cho đến khi game bắt đầu
+            return;
+        }
+
+        // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
 
         paddle.update();
         for (Ball ball : balls) {
@@ -224,31 +243,32 @@ public class GameManager {
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
             System.out.println("Level " + currentLevel + " cleared!");
-            currentLevel++; // tăng level
+            currentLevel++;
 
-            // Để tạm, vượt quá map tạo đc thì quay lại level đầu
             if (currentLevel > MAP_NUMBERS) {
                 currentLevel = 1;
             }
 
             // reset bóng và thanh đỡ cho màn mới
             paddle.reset();
+            // Reset trạng thái game để chờ phóng bóng ở màn tiếp theo
+            isGameStarted = false;
             for (Ball ball : balls) {
                 ball.reset(paddle);
             }
 
-            loadLevel(currentLevel);// tải màn chơi tiếp theo
+            loadLevel(currentLevel);
             return;
         }
+
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        paddle.update(); //có thể bỏ dòng trên
         balls.forEach(Ball::update);
         fallingPowerups.forEach(GameObject::updateView);
+        paddle.updateView(); // Cập nhật cả view của paddle
 
-        //   cập nhật text
+        // cập nhật text
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
-
     }
 
     // ====== KIỂM TRA VA CHẠM ======

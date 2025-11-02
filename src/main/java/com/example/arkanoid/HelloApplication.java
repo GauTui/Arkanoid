@@ -10,6 +10,9 @@ import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
+import javafx.animation.AnimationTimer;
+import com.example.arkanoid.Model.Paddle;
+import java.net.MalformedURLException;
 
 import java.io.File;
 
@@ -21,6 +24,8 @@ import java.io.IOException;
  */
 
 public class HelloApplication extends Application {
+
+    private double mouseX;
     public Pane PauseGame(Stage stage) throws Exception {
         Pane PauseGamePane = new Pane();
 
@@ -460,9 +465,47 @@ public class HelloApplication extends Application {
     private void startLevel(Stage stage, int levelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
-        gm.init(gamePane, (Arkanoid) this, levelNumber);
+        // SỬA LỖI: Hãy chắc chắn bạn đã sửa lỗi phụ thuộc vòng ở đây
+        // Phương thức init trong GameManager cần nhận HelloApplication
+        gm.init(gamePane, this, levelNumber);
 
         Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+
+        // --- BẮT SỰ KIỆN CHUỘT ---
+        // 1. Khi chuột di chuyển
+        gameScene.setOnMouseMoved(event -> {
+            // Lấy vị trí X của chuột
+            mouseX = event.getX();
+        });
+
+        // 2. Khi chuột được click
+        gameScene.setOnMouseClicked(event -> {
+            // Gọi phương thức trong GameManager để báo rằng game đã bắt đầu
+            gm.launchBall();
+        });
+
+        // --- GAME LOOP (AnimationTimer) ---
+        AnimationTimer gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Cập nhật vị trí paddle theo chuột
+                Paddle paddle = gm.getPaddle();
+                // Giới hạn vị trí paddle trong màn hình
+                double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(), mouseX - paddle.getWidth() / 2.0));
+                paddle.setX(newX);
+
+                // Gọi phương thức update của GameManager để cập nhật toàn bộ game
+                try {
+                    gm.update();
+                } catch (MalformedURLException e) { // Chỉ bắt MalformedURLException cụ thể
+                    // Chuyển nó thành một lỗi runtime để chương trình dừng lại
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        // Bắt đầu vòng lặp game!
+        gameLoop.start();
+
         stage.setScene(gameScene);
         stage.show();
     }
