@@ -465,8 +465,13 @@ public class HelloApplication extends Application {
     public void startLevel(Stage stage,int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
+        File loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/NenInGame.png");
+        Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
+        ImageView loadBGImgV = new ImageView(loadBGImg);
+        loadBGImgV.setFitWidth(720);
+        loadBGImgV.setFitHeight(800);
+        gamePane.getChildren().add(loadBGImgV);
         gm.init(gamePane, this, LevelNumber);
-
         Scene scene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 
         // Bắt tọa độ chuột
