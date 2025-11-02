@@ -2,6 +2,9 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -16,6 +19,7 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
 import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
@@ -228,7 +232,12 @@ public class GameManager {
 
             // Để tạm, vượt quá map tạo đc thì quay lại level đầu
             if (currentLevel > MAP_NUMBERS) {
-                currentLevel = 1;
+                try{
+                    mainApp.showGameWin(mainApp.getPrimaryStage(), score);
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+                return;
             }
 
             // reset bóng và thanh đỡ cho màn mới

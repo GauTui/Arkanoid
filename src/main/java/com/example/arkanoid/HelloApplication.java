@@ -462,6 +462,7 @@ public class HelloApplication extends Application {
         GameWinPane.getChildren().addAll(RestartBt,NextLevel,MainMenu2Button);
         return GameWinPane;
     }
+    //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
     public void startLevel(Stage stage,int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
@@ -502,5 +503,21 @@ public class HelloApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
+    public void showGameWin(Stage stage, int score) {
+        try {
+            Pane winPane = GameWin(stage, score);
+            Scene winScene = new Scene(winPane, 800, 600); // hoặc SCREEN_WIDTH, SCREEN_HEIGHT nếu bạn có
+            stage.setScene(winScene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Stage getPrimaryStage() {
+        return getPrimaryStage();
     }
 }
