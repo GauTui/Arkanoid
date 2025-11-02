@@ -3,6 +3,7 @@ package com.example.arkanoid;
 import com.example.arkanoid.Model.Paddle;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Window;
 
 import java.io.File;
 
@@ -22,8 +24,24 @@ import java.net.MalformedURLException;
  */
 
 public class Arkanoid extends Application {
-
+    public static void closeAllStages() {
+        Platform.runLater(() -> {
+            for (Window window : Stage.getWindows()) {
+                if (window instanceof Stage) {
+                    ((Stage) window).close();
+                }
+            }
+        });
+    }
     private double mouseX;
+    private void switchToMainMenu(Stage stage) {
+        try {
+            stage.getScene().setRoot(new Pane()); // clear nodes cũ
+            start(stage);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
     public Pane PauseGame(Stage stage) throws Exception {
         Pane PauseGamePane = new Pane();
 
@@ -80,6 +98,9 @@ public class Arkanoid extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //set button 1 va tuong tu voi cac button con lai nhe!!!
+        if (stage.getScene() != null && stage.getScene().getRoot() instanceof Pane oldPane) {
+            oldPane.getChildren().clear();
+        }
         File LoadImg = new File("src/main/resources/com/example/arkanoid/images/StartGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image StartImg = new Image(LoadImg.toURL().toString());
         ImageView StartImgV = new ImageView(StartImg);
@@ -309,8 +330,7 @@ public class Arkanoid extends Application {
         Scene lvScene = new Scene(SelectLV, 720, 800);
         stage.setScene(lvScene);
     }
-    public Pane GameLoseSc(Stage stage) throws Exception {
-
+    public Pane GameLoseSc(Stage stage, int score,int CurrentLV) throws Exception {
         Pane GameLosePane = new Pane();
         File LoadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png"); // nem dia chi nut start
         Image RestartImg2 = new Image(LoadRestart.toURI().toString());
@@ -325,6 +345,17 @@ public class Arkanoid extends Application {
         RestartButton2.setLayoutX(245);
         RestartButton2.setLayoutY(330);
 
+        RestartButton2.setOnAction(e->{
+            try {// 💥 đóng hết mọi Stage đang mở
+                Arkanoid.closeAllStages();
+                Stage newStage = new Stage();
+                Arkanoid mainApp = new Arkanoid();
+                mainApp.startLevel(newStage,CurrentLV);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         File LoadMainmenu = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // nem dia chi nut start
         Image MainenuImg2 = new Image(LoadMainmenu.toURI().toString());
         ImageView MainmenuImgV2 = new ImageView(MainenuImg2);
@@ -338,10 +369,14 @@ public class Arkanoid extends Application {
         MainMenuButton2.setLayoutX(245);
         MainMenuButton2.setLayoutY(420);
 
-        MainMenuButton2.setOnAction(e->{
-            try{
-                start(stage);
-            }catch (IOException ex) {
+        MainMenuButton2.setOnAction(e -> {
+            try {
+                Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
+
+                Stage newStage = new Stage();
+                Arkanoid mainApp = new Arkanoid();
+                mainApp.start(newStage);
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
@@ -448,7 +483,7 @@ public class Arkanoid extends Application {
         RestartBt.setOnMouseEntered(e-> RestartImgV.setOpacity(0.5));
         RestartBt.setLayoutX(245);
         RestartBt.setLayoutY(420);
-
+        /*
         File loadNextLV = new File("src/main/resources/com/example/arkanoid/images/NextLevelButton.png");
         Image NextLVImg = new Image(loadNextLV.toURI().toString());
         ImageView NextLVImgV = new ImageView(NextLVImg);
@@ -461,6 +496,8 @@ public class Arkanoid extends Application {
         NextLevel.setOnMouseExited(e-> NextLVImgV.setOpacity(1.0));
         NextLevel.setLayoutX(245);
         NextLevel.setLayoutY(330);
+         */
+
 
         File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
@@ -475,20 +512,31 @@ public class Arkanoid extends Application {
         MainMenu2Button.setLayoutX(245); // tọa độ X của đầu nút
         MainMenu2Button.setLayoutY(510);
 
-        GameWinPane.getChildren().addAll(RestartBt,NextLevel,MainMenu2Button);
+        MainMenu2Button.setOnAction(e -> {
+            try {
+                Arkanoid.closeAllStages(); // 💥 đóng hết mọi Stage đang mở
+
+                Stage newStage = new Stage();
+                Arkanoid mainApp = new Arkanoid();
+                mainApp.start(newStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        RestartBt.setOnAction(e->{
+            try {// 💥 đóng hết mọi Stage đang mở
+                Arkanoid.closeAllStages();
+                Stage newStage = new Stage();
+                Arkanoid mainApp = new Arkanoid();
+                mainApp.startLevel(newStage,1);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        GameWinPane.getChildren().addAll(RestartBt,MainMenu2Button);
         return GameWinPane;
-    }
-    //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
-    //cai nay chuyen sang ArkAnoid(tao mainapp moi cx duoc nhe)
-    public void showGameWin(Stage stage, int score) {
-        try {
-            Pane winPane = GameWin(stage, score);
-            Scene winScene = new Scene(winPane, 800, 600); // hoặc SCREEN_WIDTH, SCREEN_HEIGHT nếu bạn có
-            stage.setScene(winScene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     public void startLevel(Stage stage, int LevelNumber) {
         Pane gamePane = new Pane();
@@ -514,7 +562,7 @@ public class Arkanoid extends Application {
                 // Cập nhật vị trí paddle theo chuột
                 Paddle paddle = gm.getPaddle();
                 double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(),
-                        mouseX - paddle.getWidth()/2.0));
+                        mouseX - paddle.getWidth() / 2.0));
                 paddle.setX(newX);
                 paddle.updateView();
 
@@ -526,6 +574,7 @@ public class Arkanoid extends Application {
                 }
             }
         };
+        gm.setGameLoop(gameLoop);
         gameLoop.start();
 
         stage.setScene(scene);

@@ -2,6 +2,8 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,7 +31,7 @@ public class GameManager {
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
     public static final int INITIAL_LIVES = 3;
-    public static final int MAP_NUMBERS = 5;
+    public static final int MAP_NUMBERS = 6;
     public static final int INCREASE_POINTS = 10;
 
     public static final int SCORE_X = 20;
@@ -40,6 +42,8 @@ public class GameManager {
 
     // Singleton GameManager
     private static GameManager instance;
+    private javafx.animation.AnimationTimer gameLoop;
+
 
     private Paddle paddle;
 
@@ -90,6 +94,10 @@ public class GameManager {
     }
     /*====phuong thuc====*/
 
+    //ho tro tam dung game khi nhan nut
+    public void setGameLoop(AnimationTimer gameLoop) {
+        this.gameLoop = gameLoop;
+    }
     //doc map
     public void loadLevel(int levelNumber) {
         //  dọn các viên gạch của màn cũ
@@ -227,16 +235,28 @@ public class GameManager {
 
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
-            System.out.println("Level " + currentLevel + " cleared!");
             currentLevel++; // tăng level
 
             // Để tạm, vượt quá map tạo đc thì quay lại level đầu
             if (currentLevel > MAP_NUMBERS) {
-                try{
-                    mainApp.showGameWin(mainApp.getPrimaryStage(), score);
-                }catch(Exception e) {
-                    e.printStackTrace();
-                }
+                Platform.runLater(() -> {
+                    gameLoop.stop();
+                    try {
+                        Stage stage = (Stage) gamePane.getScene().getWindow();
+                        Pane winPane = mainApp.GameWin(stage, score);
+                        winPane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
+                        Scene transparentScene = new Scene(winPane, SCREEN_WIDTH, SCREEN_HEIGHT);
+                        transparentScene.setFill(null);
+                        Stage overlayStage = new Stage();
+                        overlayStage.initOwner(stage);
+                        overlayStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
+                        overlayStage.setScene(transparentScene);
+                        overlayStage.show();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
                 return;
             }
 
@@ -290,7 +310,24 @@ public class GameManager {
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
-                System.exit(0);
+                gameLoop.stop();
+                Platform.runLater(() -> {
+                    try {
+                        Stage stage = (Stage) gamePane.getScene().getWindow();
+                        Pane losePane = mainApp.GameLoseSc(stage, score);
+                        losePane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
+                        Scene transparentScene = new Scene(losePane, SCREEN_WIDTH, SCREEN_HEIGHT);
+                        transparentScene.setFill(null);
+                        Stage overlayStage = new Stage();
+                        overlayStage.initOwner(stage);
+                        overlayStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
+                        overlayStage.setScene(transparentScene);
+                        overlayStage.show();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
                 //mainApp.showEndGameScreen(score);
             }
         }
