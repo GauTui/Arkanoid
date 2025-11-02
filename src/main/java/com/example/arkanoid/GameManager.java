@@ -209,10 +209,12 @@ public class GameManager {
         }
         checkCollisions();
 
-        // di chuyển, cập nhật vị trí powerup rơi
-        for(PowerUp fPowerup : fallingPowerups) {
-            fPowerup.update();
-        }
+        // dòng này nên bỏ vì fallingpowerup rơi 2 lần trong cùng 1 frame-> vận tốc rơi nhân đôi
+//        // di chuyển, cập nhật vị trí powerup rơi
+//        for(PowerUp fPowerup : fallingPowerups) {
+//            fPowerup.update();
+//        }
+
 
         // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
         handleRemoveActivePowerUp();
@@ -240,10 +242,12 @@ public class GameManager {
             loadLevel(currentLevel);// tải màn chơi tiếp theo
             return;
         }
-        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        paddle.update(); //có thể bỏ dòng trên
-        balls.forEach(Ball::update);
-        fallingPowerups.forEach(GameObject::updateView);
+        // bên trên đã gọi update rồi(vừa cập nhật trạng thái vật lý + update view) nên
+        // nếu gọi lần 2 trong cùng 1 frame thì đối tượng bị dịch chuyển gấp đôi->rơi nhanh gấp đôi
+//        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
+//        paddle.update(); //có thể bỏ dòng trên
+//        balls.forEach(Ball::update);
+//        fallingPowerups.forEach(GameObject::updateView);
 
         //   cập nhật text
         scoreText.setText("Score: " + score);
