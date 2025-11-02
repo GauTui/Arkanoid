@@ -1,5 +1,7 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Model.Paddle;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,6 +16,7 @@ import javafx.event.ActionEvent;
 import java.io.File;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 
 /**
@@ -21,6 +24,8 @@ import java.io.IOException;
  */
 
 public class HelloApplication extends Application {
+
+    private double mouseX;
     public Pane PauseGame(Stage stage) throws Exception {
         Pane PauseGamePane = new Pane();
 
@@ -457,15 +462,45 @@ public class HelloApplication extends Application {
         GameWinPane.getChildren().addAll(RestartBt,NextLevel,MainMenu2Button);
         return GameWinPane;
     }
-    private void startLevel(Stage stage, int levelNumber) {
+    public void startLevel(Stage stage,int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
-        gm.init(gamePane, this, levelNumber);
+        File loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/NenInGame.png");
+        Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
+        ImageView loadBGImgV = new ImageView(loadBGImg);
+        loadBGImgV.setFitWidth(720);
+        loadBGImgV.setFitHeight(800);
+        gamePane.getChildren().add(loadBGImgV);
+        gm.init(gamePane, this, LevelNumber);
+        Scene scene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 
-        Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
-        stage.setScene(gameScene);
+        // Bắt tọa độ chuột
+        scene.setOnMouseMoved(event -> {
+            mouseX = event.getX();
+        });
+
+        // Game loop
+        AnimationTimer gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Cập nhật vị trí paddle theo chuột
+                Paddle paddle = gm.getPaddle();
+                double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(),
+                        mouseX - paddle.getWidth()/2.0));
+                paddle.setX(newX);
+                paddle.updateView();
+
+                // Cập nhật toàn bộ game
+                try {
+                    gm.update();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        gameLoop.start();
+
+        stage.setScene(scene);
         stage.show();
     }
-
-
 }

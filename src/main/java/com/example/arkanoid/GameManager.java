@@ -28,11 +28,11 @@ public class GameManager {
     public static final int MAP_NUMBERS = 5;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 640;
-    public static final int SCORE_Y = 10;
+    public static final int SCORE_X = 20;
+    public static final int SCORE_Y = 30;
 
-    public static final int LIVES_X = 10;
-    public static final int LIVES_Y = 720;
+    public static final int LIVES_X = 20;
+    public static final int LIVES_Y = 60;
 
     // Singleton GameManager
     private static GameManager instance;
@@ -54,7 +54,7 @@ public class GameManager {
     private int score;
     private int lives;
     private int currentLevel;
-    private Arkanoid mainApp;
+    private HelloApplication mainApp;
 
     /*====Getter/setter====*/
     public List<Ball> getBalls() {
@@ -99,7 +99,7 @@ public class GameManager {
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
             int brickWidth = 60;
-            int brickHeight = 20;
+            int brickHeight = 25;
             int currentY = 50; // tọa độ Y ban đầu cho hàng gạch đầu tiên
 
             String line;
@@ -158,7 +158,7 @@ public class GameManager {
         return instance;
     }
 
-    public void init(Pane gamePane, Arkanoid mainApp, int LevelNumber) {
+    public void init(Pane gamePane, HelloApplication mainApp, int LevelNumber) {
         this.gamePane = gamePane;
         this.mainApp = mainApp;
 
@@ -361,6 +361,6 @@ public class GameManager {
     public void loseLife() throws MalformedURLException {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
-        loseLifeSound.play(0.5);
+        loseLifeSound.play(1);
     }
 }

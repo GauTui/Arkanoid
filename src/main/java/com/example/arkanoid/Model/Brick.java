@@ -1,6 +1,8 @@
 package com.example.arkanoid.Model;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Brick extends GameObject {
@@ -15,7 +17,9 @@ public class Brick extends GameObject {
         this.hitPoints = hitPoints;
         Rectangle rBrick= new Rectangle(x, y, width, height);
         //đặt màu mặc định
-        rBrick.setFill(Color.GREEN);
+        Image BrickImg = new Image(getClass().getResourceAsStream("/com/example/arkanoid/images/NormalBrick.png"));
+
+        rBrick.setFill(new ImagePattern(BrickImg));
         rBrick.setStroke(Color.BLACK);        // Màu viền: Đen
         rBrick.setStrokeWidth(2.0);           // Độ dày viền: 2.0 pixels
         this.view = rBrick;
