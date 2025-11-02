@@ -88,7 +88,8 @@ public class Arkanoid extends Application {
         MainMenu2Button.setOnAction(e->{
             try {
                 Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
-
+                GameManager gm = GameManager.getInstance();
+                gm.reset();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
                 mainApp.start(newStage);
@@ -97,8 +98,9 @@ public class Arkanoid extends Application {
             }
         });
 
-        ResumeBt.setOnAction(e->{
+        ResumeBt.setOnAction(e -> {
             ((Pane) PauseGamePane.getParent()).getChildren().remove(PauseGamePane);
+            GameManager.getInstance().getGameLoop().start();
         });
 
         RestartBt.setOnAction(e->{
