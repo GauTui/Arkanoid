@@ -1,10 +1,13 @@
 package com.example.arkanoid.Model;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.example.arkanoid.GameManager;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -17,8 +20,15 @@ public class FastBallPowerUp extends PowerUp {
 
     public FastBallPowerUp(double x, double y) {
         super(x, y); // dy = POWERUP_GRAVITY
-        // skin riêng (màu đỏ để phân biệt)
-        this.view = new Rectangle(POWERUP_WIDTH, POWERUP_HEIGHT, Color.ORANGERED);
+
+        // Đặt ảnh powerup
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/FastBallPowerUp.png").toURI().toString());
+        this.view = new ImageView(image);
+
+        // Ép kiểu để đặt kích thước cho ảnh
+        ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+        ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
+
         updateView();
     }
 

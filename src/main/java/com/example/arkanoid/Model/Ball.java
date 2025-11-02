@@ -115,12 +115,6 @@ public class Ball extends MovableObject {
             WallCollideSound.play(0.5);
         }
 
-        GameManager gm = GameManager.getInstance();
-        //Xử lý va chạm dưới rớt xuống khỏi màn hình, ngoài ra hàm này thực hiện việc giảm máu và gameOver.
-        if(this.getY() + this.getHeight() > SCREEN_HEIGHT) {
-            gm.loseLife();
-            this.reset(gm.getPaddle());
-        }
     }
 
     /**

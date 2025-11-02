@@ -2,6 +2,7 @@ package com.example.arkanoid.Model;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
 public abstract class GameObject {
     protected double x;

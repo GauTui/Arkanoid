@@ -228,6 +228,9 @@ public class GameManager {
         }
         checkCollisions();
 
+        //xử lý bóng rơi khỏi đáy màn hình
+        handleBallFallingBottom();
+
         // di chuyển, cập nhật vị trí powerup rơi
         for(PowerUp fPowerup : fallingPowerups) {
             fPowerup.update();
@@ -269,6 +272,25 @@ public class GameManager {
         // cập nhật text
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
+    }
+
+    private void handleBallFallingBottom() throws MalformedURLException {
+
+        for (int i = balls.size() - 1; i >= 0; i--) {
+            Ball b = balls.get(i);
+            if (b.getY() + b.getHeight() > SCREEN_HEIGHT) {
+                gamePane.getChildren().remove(b.getView());
+                balls.remove(i); // ✅ an toàn khi duyệt ngược
+            }
+        }
+        if (balls.isEmpty()) {
+            loseLife();
+            // Ball
+            Ball newBall = new Ball(0, 0, BALL_DX, BALL_DY);
+            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            newBall.reset(this.getPaddle());
+            addBall(newBall);
+        }
     }
 
     // ====== KIỂM TRA VA CHẠM ======

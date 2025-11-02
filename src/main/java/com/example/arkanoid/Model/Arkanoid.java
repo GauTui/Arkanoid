@@ -25,6 +25,13 @@ public class Arkanoid extends Application {
             mouseX = event.getX();
         });
 
+        // Bấm phím cách để thả bóng
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case SPACE -> gm.launchBall();
+            }
+        });
+
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
