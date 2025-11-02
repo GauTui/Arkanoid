@@ -98,6 +98,9 @@ public class GameManager {
     public void setGameLoop(AnimationTimer gameLoop) {
         this.gameLoop = gameLoop;
     }
+    public AnimationTimer getGameLoop() {
+        return this.gameLoop;
+    }
     //doc map
     public void loadLevel(int levelNumber) {
         //  dọn các viên gạch của màn cũ
