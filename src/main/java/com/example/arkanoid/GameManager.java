@@ -314,7 +314,7 @@ public class GameManager {
                 Platform.runLater(() -> {
                     try {
                         Stage stage = (Stage) gamePane.getScene().getWindow();
-                        Pane losePane = mainApp.GameLoseSc(stage, score);
+                        Pane losePane = mainApp.GameLoseSc(stage, score,currentLevel);
                         losePane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
                         Scene transparentScene = new Scene(losePane, SCREEN_WIDTH, SCREEN_HEIGHT);
                         transparentScene.setFill(null);
@@ -408,5 +408,19 @@ public class GameManager {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
         loseLifeSound.play(1);
+    }
+    //reset lai trang thai game tu ban dau, chu neu khong thi lai khoai:))
+
+    public void reset() {
+        if (gameLoop != null) {
+            gameLoop.stop();
+        }
+        if (gamePane != null) {
+            gamePane.getChildren().clear();
+        }
+        balls.clear();
+        bricks.clear();
+        score = 0;
+        lives = 3;
     }
 }

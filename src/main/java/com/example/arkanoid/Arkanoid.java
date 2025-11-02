@@ -42,7 +42,7 @@ public class Arkanoid extends Application {
             ex.printStackTrace();
         }
     }
-    public Pane PauseGame(Stage stage) throws Exception {
+    public Pane PauseGame(Stage stage,int LevelNumber) throws Exception {
         Pane PauseGamePane = new Pane();
 
         File loadResume = new File("src/main/resources/com/example/arkanoid/images/ResumeButton.png");
@@ -88,6 +88,23 @@ public class Arkanoid extends Application {
             try{
                 start(stage);
             }catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        ResumeBt.setOnAction(e->{
+
+        });
+
+        RestartBt.setOnAction(e->{
+            try {// 💥 đóng hết mọi Stage đang mở
+                GameManager gm = GameManager.getInstance();
+                gm.reset();
+                Arkanoid.closeAllStages();
+                Stage newStage = new Stage();
+                Arkanoid mainApp = new Arkanoid();
+                mainApp.startLevel(newStage,LevelNumber);
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
@@ -526,6 +543,8 @@ public class Arkanoid extends Application {
 
         RestartBt.setOnAction(e->{
             try {// 💥 đóng hết mọi Stage đang mở
+                GameManager gm = GameManager.getInstance();
+                gm.reset();
                 Arkanoid.closeAllStages();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
