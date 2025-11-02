@@ -6,6 +6,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import java.util.concurrent.ThreadLocalRandom;
 
 import java.net.MalformedURLException;
 import java.util.Random;
@@ -16,6 +17,12 @@ import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 public class Ball extends MovableObject {
     private boolean attached = false;
     private Paddle attachedTo = null;
+// cái này để cho thêm phần anti-dead-horizontal
+    // min_vy: biên dưới cho độ lớn vận tốc dọc, sau khi chạm paddle, nếu vy nhỏ hơn
+    // ngưỡng đã đặt thì ta đẩy nó lên 2.0 để quỹ đạo ko bị phẳng
+    //max speed để game ko mất kiểm soát
+    private static final double MIN_VY = 2.0;
+    private static final double MAX_SPEED = 9.5;
 
     public static final double LAUNCH_SPEED = 4.5;
     public static final int BALL_SIZE = 20;
@@ -23,6 +30,10 @@ public class Ball extends MovableObject {
     public static final double BALL_DY = -2;
 //    public static final double DEFAULT_DX = BALL_DX;
     public static final double DEFAULT_DY = BALL_DY;
+
+    private static double rand(double a, double b) {
+        return ThreadLocalRandom.current().nextDouble(a, b); // [a, b)
+    }
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
@@ -173,7 +184,10 @@ public class Ball extends MovableObject {
             this.setDy(-this.getDy());
 
             //cho dx > 1.5
-            double rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
+            //mỗi lần va chạm sẽ tạo object mới(new Random())-> tốn cấp phát
+            //sửa để tăng hiệu năng, giảm xác suất lặp, góc bật đa dạng hơn
+            //double rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
+            double rdx = rand(BALL_DX - 1.5, BALL_DX + 1.0);
             // Cho qua bong di chuyen sang trai hay phai (dx) dua tren diem va cham voi thanh paddle.
             // Neu va cham nua phai paddle thi ta cho bong di chuyen phai(dx<0), va nguoc lai (dx>0)
 
@@ -190,12 +204,29 @@ public class Ball extends MovableObject {
 
             // Đặt vận tốc dx cho bóng
             this.setDx(rdx);
+            //gọi hàm để tránh bóng chạy ngang
+            stabilizeAfterPaddleBounce();
 
             // Hiển thị âm thanh
             SoundEffect PaddleCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
             PaddleCollideSound.play(0.5);
         }
 
+    }
+    // --- Anti-dead-horizontal sau khi nảy paddle ---
+    private void stabilizeAfterPaddleBounce() {
+        // ép |vy| tối thiểu
+        if (Math.abs(getDy()) < MIN_VY) {
+            setDy(Math.copySign(MIN_VY, getDy()));
+        }
+        // clamp tốc độ tổng
+        double vx = getDx(), vy = getDy();
+        double sp = Math.hypot(vx, vy);
+        if (sp > MAX_SPEED) {
+            double k = MAX_SPEED / sp;
+            setDx(vx * k);
+            setDy(vy * k);
+        }
     }
 
     /**
@@ -211,6 +242,10 @@ public class Ball extends MovableObject {
         if(brick == null|| brick.getView() == null) {
             return;
         }
+        // 🚫 Nếu không giao nhau thì thoát ngay
+        Bounds ballB  = this.view.getBoundsInParent();
+        Bounds brickB = brick.getView().getBoundsInParent();
+        if (!ballB.intersects(brickB)) return;
 
         // 1. Xác định hướng va chạm (dựa trên vị trí tương đối)
         double ballCenterX = this.getX() + this.getWidth() / 2.0;
@@ -225,7 +260,6 @@ public class Ball extends MovableObject {
         // Xác định tỷ lệ xâm nhập theo X và Y
         double ratioX = Math.abs(deltaX) / (brick.getWidth() / 2.0 + this.getWidth() / 2.0);
         double ratioY = Math.abs(deltaY) / (brick.getHeight() / 2.0 + this.getHeight() / 2.0);
-
 
         // 2. Xử lý Phản xạ và Đẩy bóng ra khỏi gạch
         if (ratioX > ratioY) {

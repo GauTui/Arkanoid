@@ -18,6 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.geometry.Bounds;
 
 import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
 import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
@@ -266,22 +267,30 @@ public class GameManager {
             // Xử lý va chạm bóng với gạch
             for (int i = 0; i < bricks.size(); i++) {
                 Brick brick = bricks.get(i);
-                if (brick.isDestroyed()) continue;
+                if (brick == null || brick.getView() == null || brick.isDestroyed()) continue;
 
-                if (ball.checkCollision(brick)) {
-                    //xu ly va cham voi bong, xoa brick ra list va ra pane, tang diem,.
-                    ball.collideWithBrick(brick);
-                    score += INCREASE_POINTS;
+                // Lấy bounds một lần cho nhanh & chính xác
+                Bounds ballB  = ball.getView().getBoundsInParent();
+                Bounds brickB = brick.getView().getBoundsInParent();
 
-                    // Có thể sinh power-up
-                    if (random.nextDouble() < 0.2) {
-                        spawnPowerUp(brick.getX(), brick.getY());
-                    }
+                // Chỉ khi thật sự giao nhau mới xử lý
+                if (!ballB.intersects(brickB)) continue;
 
-                    if (brick.isDestroyed()) {
-                        gamePane.getChildren().remove(brick.getView());
-                    }
+                // Thực sự va chạm: phản xạ + đẩy ra + nắn 1px (đã làm trong Ball.collideWithBrick)
+                ball.collideWithBrick(brick);
+                score += INCREASE_POINTS;
+
+                // sinh Power-up (nếu có)
+                if (random.nextDouble() < 0.2) {
+                    spawnPowerUp(brick.getX(), brick.getY());
                 }
+
+                // Gỡ view nếu brick đã bị phá
+                if (brick.isDestroyed()) {
+                    gamePane.getChildren().remove(brick.getView());
+                }
+
+                break;
             }
 
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
