@@ -465,46 +465,44 @@ public class HelloApplication extends Application {
     private void startLevel(Stage stage, int levelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
-        // SỬA LỖI: Hãy chắc chắn bạn đã sửa lỗi phụ thuộc vòng ở đây
-        // Phương thức init trong GameManager cần nhận HelloApplication
-        gm.init(gamePane, this, levelNumber);
+        gm.init(gamePane, this, levelNumber); // Đảm bảo đã sửa lỗi phụ thuộc vòng
 
         Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 
-        // --- BẮT SỰ KIỆN CHUỘT ---
-        // 1. Khi chuột di chuyển
+        // --- BẮT SỰ KIỆN INPUT CỦA NGƯỜI CHƠI ---
+
+        // 1. Khi chuột DI CHUYỂN, cập nhật vị trí logic của paddle
         gameScene.setOnMouseMoved(event -> {
-            // Lấy vị trí X của chuột
             mouseX = event.getX();
+            // Cập nhật vị trí logic của paddle ngay lập tức
+            Paddle paddle = gm.getPaddle();
+            if (paddle != null) {
+                double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(), mouseX - paddle.getWidth() / 2.0));
+                paddle.setX(newX);
+            }
         });
 
-        // 2. Khi chuột được click
+        // 2. Khi người chơi CLICK CHUỘT, phóng bóng đi
         gameScene.setOnMouseClicked(event -> {
-            // Gọi phương thức trong GameManager để báo rằng game đã bắt đầu
-            gm.launchBall();
+            gm.launchBall(); // Báo cho GameManager biết game đã bắt đầu
         });
 
-        // --- GAME LOOP (AnimationTimer) ---
+
+        // --- GAME LOOP ---
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Cập nhật vị trí paddle theo chuột
-                Paddle paddle = gm.getPaddle();
-                // Giới hạn vị trí paddle trong màn hình
-                double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(), mouseX - paddle.getWidth() / 2.0));
-                paddle.setX(newX);
-
-                // Gọi phương thức update của GameManager để cập nhật toàn bộ game
+                // Trong mỗi khung hình, chỉ cần gọi update() của GameManager.
+                // GameManager sẽ tự quyết định phải làm gì dựa trên trạng thái isGameStarted.
                 try {
                     gm.update();
-                } catch (MalformedURLException e) { // Chỉ bắt MalformedURLException cụ thể
-                    // Chuyển nó thành một lỗi runtime để chương trình dừng lại
-                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    stop();
                 }
             }
         };
-        // Bắt đầu vòng lặp game!
-        gameLoop.start();
+        gameLoop.start(); // Bắt đầu vòng lặp!
 
         stage.setScene(gameScene);
         stage.show();

@@ -208,6 +208,7 @@ public class GameManager {
 
     public void update() throws MalformedURLException {
         // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
+        paddle.updateView();
         if (!isGameStarted) {
             // Lấy quả bóng đầu tiên và cập nhật vị trí của nó theo paddle
             if (!balls.isEmpty()) {
