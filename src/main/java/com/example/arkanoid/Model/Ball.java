@@ -17,10 +17,11 @@ public class Ball extends MovableObject {
     private boolean attached = false;
     private Paddle attachedTo = null;
 
+    public static final double LAUNCH_SPEED = 4.5;
     public static final int BALL_SIZE = 20;
     public static final double BALL_DX = 2;
     public static final double BALL_DY = -2;
-    public static final double DEFAULT_DX = BALL_DX;
+//    public static final double DEFAULT_DX = BALL_DX;
     public static final double DEFAULT_DY = BALL_DY;
 
     /**
@@ -62,8 +63,12 @@ public class Ball extends MovableObject {
         if (!attached) return;
         attached = false;
         attachedTo = null;
-        setDx(DEFAULT_DX);
-        setDy(DEFAULT_DY < 0 ? DEFAULT_DY : -Math.abs(DEFAULT_DY)); // bay lên
+        // bấm space/chuột thì bóng bay thẳng lên
+        setDx(0);                      // ← thẳng đứng
+        setDy(-Math.abs(LAUNCH_SPEED)); // ← bay lên
+        // đẩy bóng lên cao hơn 1px để tránh "dính" paddle khung đầu
+        setY(getY() - 1);
+        updateView();
     }
 
     public boolean isAttached() { return attached; }
@@ -164,7 +169,7 @@ public class Ball extends MovableObject {
         }
 
         // Xử lý va chạm khi quả bóng đi xuống (dy>0), ở đây chỉ coi va chạm là chạm trên
-        if(checkCollision(paddle)) {
+        if(getDy() > 0 && checkCollision(paddle)) {
             this.setDy(-this.getDy());
 
             //cho dx > 1.5
