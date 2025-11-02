@@ -11,14 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-<<<<<<<< HEAD:src/main/java/com/example/arkanoid/HelloApplication.java
-import javafx.event.ActionEvent;
-import javafx.animation.AnimationTimer;
-import com.example.arkanoid.Model.Paddle;
-import java.net.MalformedURLException;
-========
 import javafx.stage.Window;
->>>>>>>> 8b5263b56aebdfa232164743baa2c46944092a99:src/main/java/com/example/arkanoid/Arkanoid.java
 
 import java.io.File;
 
@@ -30,12 +23,6 @@ import java.net.MalformedURLException;
  * cái này là để chạy start game nhé ae!!!!!
  */
 
-<<<<<<<< HEAD:src/main/java/com/example/arkanoid/HelloApplication.java
-public class HelloApplication extends Application {
-
-    private double mouseX;
-    public Pane PauseGame(Stage stage) throws Exception {
-========
 public class Arkanoid extends Application {
     public static void closeAllStages() {
         Platform.runLater(() -> {
@@ -56,7 +43,6 @@ public class Arkanoid extends Application {
         }
     }
     public Pane PauseGame(Stage stage,int LevelNumber) throws Exception {
->>>>>>>> 8b5263b56aebdfa232164743baa2c46944092a99:src/main/java/com/example/arkanoid/Arkanoid.java
         Pane PauseGamePane = new Pane();
 
         File loadResume = new File("src/main/resources/com/example/arkanoid/images/ResumeButton.png");
@@ -574,48 +560,6 @@ public class Arkanoid extends Application {
     public void startLevel(Stage stage, int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
-<<<<<<<< HEAD:src/main/java/com/example/arkanoid/HelloApplication.java
-        gm.init(gamePane, this, levelNumber); // Đảm bảo đã sửa lỗi phụ thuộc vòng
-
-        Scene gameScene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
-
-        // --- BẮT SỰ KIỆN INPUT CỦA NGƯỜI CHƠI ---
-
-        // 1. Khi chuột DI CHUYỂN, cập nhật vị trí logic của paddle
-        gameScene.setOnMouseMoved(event -> {
-            mouseX = event.getX();
-            // Cập nhật vị trí logic của paddle ngay lập tức
-            Paddle paddle = gm.getPaddle();
-            if (paddle != null) {
-                double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(), mouseX - paddle.getWidth() / 2.0));
-                paddle.setX(newX);
-            }
-        });
-
-        // 2. Khi người chơi CLICK CHUỘT, phóng bóng đi
-        gameScene.setOnMouseClicked(event -> {
-            gm.launchBall(); // Báo cho GameManager biết game đã bắt đầu
-        });
-
-
-        // --- GAME LOOP ---
-        AnimationTimer gameLoop = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                // Trong mỗi khung hình, chỉ cần gọi update() của GameManager.
-                // GameManager sẽ tự quyết định phải làm gì dựa trên trạng thái isGameStarted.
-                try {
-                    gm.update();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    stop();
-                }
-            }
-        };
-        gameLoop.start(); // Bắt đầu vòng lặp!
-
-        stage.setScene(gameScene);
-========
         File loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/NenInGame.png");
         Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
         ImageView loadBGImgV = new ImageView(loadBGImg);
@@ -653,7 +597,6 @@ public class Arkanoid extends Application {
         gameLoop.start();
 
         stage.setScene(scene);
->>>>>>>> 8b5263b56aebdfa232164743baa2c46944092a99:src/main/java/com/example/arkanoid/Arkanoid.java
         stage.show();
     }
 

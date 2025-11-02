@@ -2,87 +2,82 @@ package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView; // Import thêm ImageView
+import javafx.scene.image.ImageView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Power-up này có chức năng chia mỗi quả bóng hiện có thành ba.
- * Một quả bóng giữ nguyên hướng, và hai quả bóng mới được tạo ra bay theo góc lệch.
+ * Power-up chia mỗi quả bóng thành 3 (1 gốc + 2 lệch góc)
  */
 public class SplitBallPowerUp extends PowerUp {
 
-    // Hằng số góc lệch cho các quả bóng mới (tính bằng radian)
     private static final double SPLIT_ANGLE = Math.PI / 6; // 30 độ
+    private static final double BALL_SIZE = 20.0; // Đồng bộ với Ball.java
 
-    // Hằng số kích thước cho các quả bóng mới
-    private static final double NEW_BALL_SIZE = 15.0; // Bạn có thể chỉnh lại kích thước này cho phù hợp
+    private static final Image IMAGE = new Image(
+            SplitBallPowerUp.class.getResourceAsStream("/com/example/arkanoid/images/split_powerup.png")
+    );
 
     public SplitBallPowerUp(double x, double y) {
-
-        super(x, y);
-
-        try {
-            Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/split_powerup.png").toURI().toString());
-            this.view = new ImageView(image); // Gán ImageView mới cho view
-            ((ImageView) this.view).setFitWidth(40);
-            ((ImageView) this.view).setFitHeight(40);
-            updateView(); // Gọi phương thức để cập nhật vị trí của view
-        } catch (Exception e) {
-            System.err.println("Không thể tải ảnh cho SplitBallPowerUp: " + e.getMessage());
-        }
+        super(x, y, 40, 40); // width, height của PowerUp
+        this.view = new ImageView(IMAGE);
+        ((ImageView) this.view).setFitWidth(40);
+        ((ImageView) this.view).setFitHeight(40);
+        this.dy = 2; // Tốc độ rơi
+        updateView();
     }
 
-    /**
-     * khi paddle thu thập được power-up.
-     * Đây là nơi chứa logic chính của power-up.
-     * @param gm Instance của GameManager để truy cập các thành phần trong game.
-     */
     @Override
     public void applyEffect(GameManager gm) {
+        List<Ball> currentBalls = new ArrayList<>(gm.getBalls());
         List<Ball> newBalls = new ArrayList<>();
 
-        for (Ball originalBall : new ArrayList<>(gm.getBalls())) {
-            double originalDx = originalBall.getDx();
-            double originalDy = originalBall.getDy();
+        for (Ball original : currentBalls) {
+            if (!original.isVisible()) continue;
 
-            // --- Tạo quả bóng mới thứ nhất (lệch sang trái) ---
-            double cosAngle1 = Math.cos(SPLIT_ANGLE);
-            double sinAngle1 = Math.sin(SPLIT_ANGLE);
-            double dx1 = originalDx * cosAngle1 - originalDy * sinAngle1;
-            double dy1 = originalDx * sinAngle1 + originalDy * cosAngle1;
+            double dx = original.getDx();
+            double dy = original.getDy();
 
-            Ball ball1 = new Ball(originalBall.getX(), originalBall.getY(), NEW_BALL_SIZE, NEW_BALL_SIZE);
-            ball1.setDx(dx1);
-            ball1.setDy(dy1);
+            // Tính tốc độ mới theo góc lệch
+            double speed = Math.sqrt(dx * dx + dy * dy);
+            double baseAngle = Math.atan2(dy, dx);
+
+            // Bóng 1: lệch +30 độ
+            double angle1 = baseAngle + SPLIT_ANGLE;
+            Ball ball1 = createSplitBall(original, angle1, speed);
             newBalls.add(ball1);
 
-            // --- Tạo quả bóng mới thứ hai (lệch sang phải) ---
-            double cosAngle2 = Math.cos(-SPLIT_ANGLE);
-            double sinAngle2 = Math.sin(-SPLIT_ANGLE);
-            double dx2 = originalDx * cosAngle2 - originalDy * sinAngle2;
-            double dy2 = originalDx * sinAngle2 + originalDy * cosAngle2;
-
-            Ball ball2 = new Ball(originalBall.getX(), originalBall.getY(), NEW_BALL_SIZE, NEW_BALL_SIZE);
-            ball2.setDx(dx2);
-            ball2.setDy(dy2);
+            // Bóng 2: lệch -30 độ
+            double angle2 = baseAngle - SPLIT_ANGLE;
+            Ball ball2 = createSplitBall(original, angle2, speed);
             newBalls.add(ball2);
         }
 
+        // Thêm bóng mới vào game
         for (Ball ball : newBalls) {
             gm.addBall(ball);
         }
     }
 
-    /**
-     * LỖI ĐÃ SỬA: Bắt buộc phải override phương thức này từ lớp cha PowerUp.
-     * Vì đây là hiệu ứng tức thời, chúng ta không cần làm gì khi nó "hết hạn".
-     * @param gm Instance của GameManager.
-     */
+    private Ball createSplitBall(Ball original, double angle, double speed) {
+        Ball newBall = new Ball(
+                original.getX() + original.getWidth() / 2 - BALL_SIZE / 2,
+                original.getY() + original.getHeight() / 2 - BALL_SIZE / 2,
+                BALL_SIZE, BALL_SIZE
+        );
+        newBall.setDx(speed * Math.cos(angle));
+        newBall.setDy(speed * Math.sin(angle));
+        return newBall;
+    }
+
     @Override
     public void removeEffect(GameManager gm) {
+        // Hiệu ứng tức thì → không cần xóa
+    }
 
+    @Override
+    public long getDuration() {
+        return 0; // Tức thì
     }
 }
