@@ -300,7 +300,7 @@ public class GameManager {
                     score += INCREASE_POINTS;
 
                     // Có thể sinh power-up
-                    if (random.nextDouble() < 0.2) {
+                    if (random.nextDouble() < 0.8) {
                         spawnPowerUp(brick.getX(), brick.getY());
                     }
 
@@ -366,48 +366,64 @@ public class GameManager {
 
     // xử lý khi fallingPowerups chạm vào paddle
     private void handlePowerUpCollision(PowerUp p) {
+
         p.setDy(0);
-        gamePane.getChildren().remove(p.getView());
-        fallingPowerups.remove(p);
+        // kiểm tra trong danh sách activatePowerup có powerup cùng loại với p không
+        // Nếu có reset thời gian bắt đầu hiệu ứng của powerup có trong list activatePowerups
 
-        // Hiệu ứng tức thì
-        if (p.getDuration() <= 0) {
-            p.applyEffect(this);
-            return;
-        }
-
-        // Hiệu ứng kéo dài (Expand, FastBall,...)
+        // Thời gian bắt đầu hiệu ứng
         long now = System.currentTimeMillis();
         p.setActivationTime(now);
         boolean isDuplicate = false;
-
-        for (PowerUp active : activePowerups) {
-            if (active.getClass().equals(p.getClass())) {
-                active.setActivationTime(now);
+        for (PowerUp iAcPowerup : activePowerups) {
+            if (iAcPowerup.getClass().equals(p.getClass())) {
                 isDuplicate = true;
+                iAcPowerup.setActivationTime(now);
                 break;
             }
         }
 
+        // Nếu không có thì thêm vào list activatePowerups, đặt hiệu ứng lên các đối tượng
         if (!isDuplicate) {
             activePowerups.add(p);
             p.applyEffect(this);
         }
+
+        // Xóa fallingPowerUp khỏi màn hình và danh sách
+        gamePane.getChildren().remove(p.getView());
+        fallingPowerups.remove(p);
+
     }
 
     private void spawnPowerUp(double x, double y) {
-        PowerUp newPowerUp;
-        int rand = random.nextInt(3); // 0,1,2
 
-        switch (rand) {
-            case 0 -> newPowerUp = new ExpandPaddlePowerUp(x + 15, y + 10);
-            case 1 -> newPowerUp = new FastBallPowerUp(x + 15, y + 10);
-            case 2 -> newPowerUp = new SplitBallPowerUp(x + 15, y + 10);
-            default -> newPowerUp = new ExpandPaddlePowerUp(x + 15, y + 10);
+        PowerUp newPowerUp;
+
+        // Tạo một số nguyên ngẫu nhiên từ 0 đến 2 (bao gồm 0, 1, 2)
+        int choice = random.nextInt(3);
+
+        // Dựa vào số ngẫu nhiên để quyết định tạo power-up nào
+        if (choice == 0) {
+            // Trường hợp 1: Tạo ExtraLifePowerUp
+            newPowerUp = new ExtraLifePowerUp(x, y);
+        } else if (choice == 1) {
+            // Trường hợp 2: Tạo ExpandPaddlePowerUp
+            newPowerUp = new ExpandPaddlePowerUp(x, y);
+        } else { // choice == 2
+            // Trường hợp 3: Tạo FastBallPowerUp
+            newPowerUp = new FastBallPowerUp(x, y);
         }
 
+        // Thêm power-up vừa tạo vào danh sách và hiển thị ra màn hình
         fallingPowerups.add(newPowerUp);
         gamePane.getChildren().add(newPowerUp.getView());
+    }
+
+    public void increaseLives(int amount) {
+        this.lives += amount;
+
+
+        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
     }
 
     public void loseLife() throws MalformedURLException {
@@ -416,26 +432,6 @@ public class GameManager {
         loseLifeSound.play(1);
     }
     //reset lai trang thai game tu ban dau, chu neu khong thi lai khoai:))
-    public void addBall(Ball ball) {
-        // Thêm đối tượng ball vào danh sách quản lý các quả bóng
-        this.balls.add(ball);
-
-        // Thêm hình ảnh của quả bóng vào Pane chính của game để nó được hiển thị
-        this.gamePane.getChildren().add(ball.getView());
-    }
-    public void increaseLives(int amount) {
-        this.lives += amount;
-
-        // Cập nhật giao diện người dùng (UI) để hiển thị số mạng mới
-        updateLivesDisplay();
-        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
-    }
-
-    public void updateLivesDisplay() {
-        if (livesText != null) {
-            livesText.setText("Mạng: " + this.lives);
-        }
-    }
 
     public void reset() {
         if (gameLoop != null) {
