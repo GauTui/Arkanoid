@@ -400,7 +400,7 @@ public class GameManager {
         PowerUp newPowerUp;
 
         // Tạo một số nguyên ngẫu nhiên từ 0 đến 2 (bao gồm 0, 1, 2)
-        int choice = random.nextInt(3);
+        int choice = random.nextInt(4);
 
         // Dựa vào số ngẫu nhiên để quyết định tạo power-up nào
         if (choice == 0) {
@@ -409,14 +409,28 @@ public class GameManager {
         } else if (choice == 1) {
             // Trường hợp 2: Tạo ExpandPaddlePowerUp
             newPowerUp = new ExpandPaddlePowerUp(x, y);
-        } else { // choice == 2
+        } else if (choice == 2){ // choice == 2
             // Trường hợp 3: Tạo FastBallPowerUp
             newPowerUp = new FastBallPowerUp(x, y);
+        } else {
+            newPowerUp = new SplitBallPowerUp(x, y);
         }
 
         // Thêm power-up vừa tạo vào danh sách và hiển thị ra màn hình
         fallingPowerups.add(newPowerUp);
         gamePane.getChildren().add(newPowerUp.getView());
+    }
+    public void addBall(Ball ball) {
+        // 1. Thêm đối tượng ball vào danh sách quản lý các quả bóng của game
+        if (this.balls != null) {
+            this.balls.add(ball);
+        }
+
+        // 2. Thêm hình ảnh đại diện (view) của quả bóng vào Pane chính của game
+        //    để người chơi có thể nhìn thấy nó trên màn hình.
+        if (this.gamePane != null) {
+            this.gamePane.getChildren().add(ball.getView());
+        }
     }
 
     public void increaseLives(int amount) {

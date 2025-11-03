@@ -1,9 +1,8 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
+import javafx.scene.paint.Color;      // SỬA: Thêm import cho Color
+import javafx.scene.shape.Rectangle;  // SỬA: Thêm import cho Rectangle
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,16 +14,33 @@ public class SplitBallPowerUp extends PowerUp {
     private static final double SPLIT_ANGLE = Math.PI / 6; // 30 độ
     private static final double BALL_SIZE = 20.0; // Đồng bộ với Ball.java
 
-    private static final Image IMAGE = new Image(
-            SplitBallPowerUp.class.getResourceAsStream("/com/example/arkanoid/images/split_powerup.png")
-    );
 
     public SplitBallPowerUp(double x, double y) {
-        super(x, y, 40, 40); // width, height của PowerUp
-        this.view = new ImageView(IMAGE);
-        ((ImageView) this.view).setFitWidth(40);
-        ((ImageView) this.view).setFitHeight(40);
-        this.dy = 2; // Tốc độ rơi
+        super(x, y);
+
+        // --- BẮT ĐẦU THAY ĐỔI: TẠO HÌNH VUÔNG MÀU ĐỎ ---
+
+        // Kích thước cạnh của hình vuông (kiểu int để tránh lỗi)
+        int size = 40;
+
+        // Tạo một đối tượng Rectangle mới
+        Rectangle powerUpShape = new Rectangle(size, size);
+
+        // Tô MÀU ĐỎ cho hình vuông
+        powerUpShape.setFill(Color.BROWN);
+
+        // (Tùy chọn) Thêm viền màu trắng cho nổi bật
+        powerUpShape.setStroke(Color.WHITE);
+        powerUpShape.setStrokeWidth(2);
+
+        // Gán hình vuông này làm "view" (hình ảnh đại diện) của power-up
+        this.view = powerUpShape;
+
+        // Cập nhật lại chiều rộng và chiều cao của GameObject để va chạm chính xác
+        this.width = size;
+        this.height = size;
+
+        // Gọi phương thức của lớp cha để đặt vị trí hiển thị của hình vuông
         updateView();
     }
 
