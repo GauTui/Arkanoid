@@ -224,7 +224,7 @@ public class GameManager {
 
         // xóa các viên gạch , vật phẩm đã bị phá hủy khỏi danh sách
         fallingPowerups.removeIf(pu -> !pu.isVisible() || pu.getY() > SCREEN_HEIGHT);
-        bricks.removeIf(Brick::isDestroyed);
+//        bricks.removeIf(Brick::isDestroyed);
 
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
@@ -262,12 +262,30 @@ public class GameManager {
     public void checkCollisions() throws MalformedURLException {
         for (Ball ball : balls) {
             ball.collideWithWall();
-            ball.collideWithPaddle(this.getPaddle());
 
+            boolean hitBrick = false;
             // Xử lý va chạm bóng với gạch
             for (int i = 0; i < bricks.size(); i++) {
                 Brick brick = bricks.get(i);
-                if (brick == null || brick.getView() == null || brick.isDestroyed()) continue;
+
+                // Kiểm tra hợp lệ TRƯỚC
+                if (brick == null || brick.getView() == null || brick.isDestroyed()) {
+                    // Dọn dẹp brick không hợp lệ ngay
+                    if (brick != null && brick.getView() != null) {
+                        gamePane.getChildren().remove(brick.getView());
+                    }
+                    bricks.remove(i);
+                    continue;
+                }
+                // Kiểm tra view có visible không
+                if (!brick.getView().isVisible()) {
+                    gamePane.getChildren().remove(brick.getView());
+                    bricks.remove(i);
+                    continue;
+                }
+
+
+//                if (brick == null || brick.isDestroyed() || brick.getView() == null) continue;
 
                 // Lấy bounds một lần cho nhanh & chính xác
                 Bounds ballB  = ball.getView().getBoundsInParent();
@@ -288,9 +306,13 @@ public class GameManager {
                 // Gỡ view nếu brick đã bị phá
                 if (brick.isDestroyed()) {
                     gamePane.getChildren().remove(brick.getView());
+                    bricks.remove(i);
                 }
 
-                break;
+                break; // chỉ xử lí 1 brick mỗi frame
+            }
+            if (!hitBrick) {
+                ball.collideWithPaddle(this.getPaddle());
             }
 
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.

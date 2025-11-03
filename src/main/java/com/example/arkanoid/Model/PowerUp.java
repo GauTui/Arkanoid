@@ -45,6 +45,11 @@ public abstract class PowerUp extends MovableObject {
         super(x, y, POWERUP_WIDTH, POWERUP_HEIGHT, dx, dy);
         // hình chữ nhật vàng là hiển thị của powerup
         Rectangle rect = new Rectangle(POWERUP_WIDTH, POWERUP_HEIGHT, Color.GOLD);
+
+        // === FIX: QUAN TRỌNG - Làm PowerUp "vô hình" với collision detection ===
+        rect.setMouseTransparent(true);  // Không chặn mouse events
+
+
         this.view = rect;
         updateView();
     }
@@ -54,6 +59,10 @@ public abstract class PowerUp extends MovableObject {
     public void update() {
         // MovableObject.update(): x += dx; y += dy; updateView();
         super.update();
+        // Đảm bảo không va chạm với các object khác bằng cách set pickOnBounds = false
+        if (view != null) {
+            view.setPickOnBounds(false);
+        }
     }
 
     // ====== Hai phương thức trừu tượng (các class con sẽ định nghĩa sau) ======

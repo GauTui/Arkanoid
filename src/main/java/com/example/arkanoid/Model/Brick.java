@@ -15,7 +15,10 @@ public class Brick extends GameObject {
     public Brick(double x, double y, int width, int height, int hitPoints) {
         super(x, y, width, height);
         this.hitPoints = hitPoints;
-        Rectangle rBrick= new Rectangle(x, y, width, height);
+
+        // FIX: Không set vị trí trong constructor của Rectangle, chỉ set kích thước
+//        Rectangle rBrick= new Rectangle(x, y, width, height);
+        Rectangle rBrick = new Rectangle(width, height);
         //đặt màu mặc định
         Image BrickImg = new Image(getClass().getResourceAsStream("/com/example/arkanoid/images/NormalBrick.png"));
 
@@ -23,11 +26,18 @@ public class Brick extends GameObject {
         rBrick.setStroke(Color.BLACK);        // Màu viền: Đen
         rBrick.setStrokeWidth(2.0);           // Độ dày viền: 2.0 pixels
         this.view = rBrick;
+
+        // Set vị trí thông qua updateView() để nhất quán
+        updateView();
     }
     public void takeHit() {
         hitPoints--;
         if(hitPoints <= 0) {
             isDestroyed = true;
+            // FIX: Ẩn view ngay lập tức khi destroyed
+            if (view != null) {
+                view.setVisible(false);
+            }
         }
     }
     public boolean isDestroyed() {
