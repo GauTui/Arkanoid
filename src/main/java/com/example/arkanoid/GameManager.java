@@ -240,7 +240,6 @@ public class GameManager {
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
             currentLevel++; // tăng level
-
             // Để tạm, vượt quá map tạo đc thì quay lại level đầu
             if (currentLevel > MAP_NUMBERS) {
                 Platform.runLater(() -> {

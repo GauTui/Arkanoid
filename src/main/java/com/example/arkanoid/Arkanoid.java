@@ -390,6 +390,8 @@ public class Arkanoid extends Application {
         RestartButton2.setOnAction(e->{
             try {//  đóng hết mọi Stage đang mở
                 String bgmFile = SoundManager.getCurrentBgmFile();
+                GameManager gm = GameManager.getInstance();
+                gm.reset();
                 Arkanoid.closeAllStages();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
@@ -415,6 +417,8 @@ public class Arkanoid extends Application {
 
         MainMenuButton2.setOnAction(e -> {
             try {
+                GameManager gm = GameManager.getInstance();
+                gm.reset();
                 Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
                 SoundManager.stopBackgroundMusic();
                 Stage newStage = new Stage();
@@ -559,7 +563,8 @@ public class Arkanoid extends Application {
         MainMenu2Button.setOnAction(e -> {
             try {
                 Arkanoid.closeAllStages(); //
-
+                GameManager gm = GameManager.getInstance();
+                gm.reset();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
                 SoundManager.stopBackgroundMusic();
@@ -570,7 +575,7 @@ public class Arkanoid extends Application {
         });
 
         RestartBt.setOnAction(e->{
-            try {// 💥 đóng hết mọi Stage đang mở
+            try {//  đóng hết mọi Stage đang mở
                 GameManager gm = GameManager.getInstance();
                 gm.reset();
                 Arkanoid.closeAllStages();
