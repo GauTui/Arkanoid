@@ -20,13 +20,14 @@ public class Ball extends MovableObject {
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
-     * @param x toa do theo truc x
-     * @param y toa do theo truc y
-     * @param dx van toc ban dau dx
-     * @param dy van toc ban dau dy
+     *
+     * @param x      toa do theo truc x
+     * @param y      toa do theo truc y
+     * @param ballDx
+     * @param ballDy
      */
-    public Ball(double x, double y, double dx, double dy) {
-        super(x, y, BALL_SIZE, BALL_SIZE, dx, dy);
+    public Ball(double x, double y, double ballDx, double ballDy) {
+        super(x, y, BALL_SIZE, BALL_SIZE, BALL_DX, BALL_DY);
 
         //khởi tạo hình chữ nhật chứa ball
         Rectangle Rball = new Rectangle(BALL_SIZE, BALL_SIZE);

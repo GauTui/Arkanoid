@@ -267,11 +267,15 @@ public class GameManager {
             // reset bóng và thanh đỡ cho màn mới
             balls.clear();
             paddle.reset();
-            for (Ball ball : balls) {
-                ball.reset(paddle);
-            }
 
-            loadLevel(currentLevel);// tải màn chơi tiếp theo
+            // tạo lại bóng mới
+            Ball newBall = new Ball(0, 0, BALL_DX, BALL_DY);
+            newBall.reset(paddle);
+            balls.add(newBall);
+            gamePane.getChildren().add(newBall.getView());
+
+            // tải màn chơi tiếp theo
+            loadLevel(currentLevel);
             return;
         }
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
