@@ -265,6 +265,7 @@ public class GameManager {
             }
 
             // reset bóng và thanh đỡ cho màn mới
+            balls.clear();
             paddle.reset();
             for (Ball ball : balls) {
                 ball.reset(paddle);
