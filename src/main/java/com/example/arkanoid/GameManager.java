@@ -30,7 +30,7 @@ import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
     public static final int SCREEN_WIDTH = 720;
-    public static final int SCREEN_HEIGHT = 800;
+    public static final int SCREEN_HEIGHT = 720;
     public static final int INITIAL_LIVES = 3;
     public static final int MAP_NUMBERS = 6;
     public static final int INCREASE_POINTS = 10;

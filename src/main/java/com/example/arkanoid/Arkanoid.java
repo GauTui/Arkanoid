@@ -4,6 +4,7 @@ import com.example.arkanoid.Model.Paddle;
 import com.example.arkanoid.Utils.BackgroundMusic;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
+import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -141,8 +143,21 @@ public class Arkanoid extends Application {
         StartButton.setGraphic(StartImgV);
         StartButton.setOnMouseExited(e-> StartButton.setOpacity(1.0));
         StartButton.setOnMouseEntered(e-> StartButton.setOpacity(0.8));
-        StartButton.setLayoutX(245); // tọa độ X của đầu nút
+        StartButton.setLayoutX(345); // tọa độ X của đầu nút
         StartButton.setLayoutY(330); // tọa độ Y của đầu nút
+        StartButton.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartButton);
+            st.setToX(1.1);
+            st.setToY(1.1);
+            st.play();
+        });
+
+        StartButton.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartButton);
+            st.setToX(1.0);
+            st.setToY(1.0);
+            st.play();
+        });
         //chuc nang cho start button
 
         File LoadImg2 = new File("src/main/resources/com/example/arkanoid/images/TutorialBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
@@ -155,8 +170,21 @@ public class Arkanoid extends Application {
         TutorialButton.setGraphic(TutorialImgV);
         TutorialButton.setOnMouseExited(e-> TutorialButton.setOpacity(1.0));
         TutorialButton.setOnMouseEntered(e-> TutorialButton.setOpacity(0.8));// set ảnh
-        TutorialButton.setLayoutX(245); // tọa độ X của đầu nút
+        TutorialButton.setLayoutX(345); // tọa độ X của đầu nút
         TutorialButton.setLayoutY(420); // tọa độ Y của đầu nút
+        TutorialButton.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialButton);
+            st.setToX(1.1);
+            st.setToY(1.1);
+            st.play();
+        });
+
+        TutorialButton.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialButton);
+            st.setToX(1.0);
+            st.setToY(1.0);
+            st.play();
+        });
 
 
         File LoadImg3 = new File("src/main/resources/com/example/arkanoid/images/ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
@@ -169,8 +197,21 @@ public class Arkanoid extends Application {
         ExitButton.setGraphic(ExitImg3);
         ExitButton.setOnMouseExited(e-> ExitButton.setOpacity(1.0));
         ExitButton.setOnMouseEntered(e-> ExitButton.setOpacity(0.8));// set ảnh
-        ExitButton.setLayoutX(245); // tọa độ X của đầu nút
+        ExitButton.setLayoutX(345); // tọa độ X của đầu nút
         ExitButton.setLayoutY(510); // tọa độ Y của đầu nút
+        ExitButton.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitButton);
+            st.setToX(1.1);
+            st.setToY(1.1);
+            st.play();
+        });
+
+        ExitButton.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitButton);
+            st.setToX(1.0);
+            st.setToY(1.0);
+            st.play();
+        });
 
         ExitButton.setOnAction(e->{
             System.exit(0);
@@ -184,8 +225,8 @@ public class Arkanoid extends Application {
         Image anhnen = new Image(StartBackground.toURL().toString());
         ImageView bgView = new ImageView(anhnen);
         //set độ dài rộng của ảnh nền
-        bgView.setFitWidth(720);
-        bgView.setFitHeight(800);
+        bgView.setFitWidth(660);
+        bgView.setFitHeight(720);
         //dòng này để chọn xem có bóp méo ảnh để lấy đúng tỷ lệ hay không!!
         bgView.setPreserveRatio(false);
         //
@@ -198,7 +239,7 @@ public class Arkanoid extends Application {
         root.getChildren().addAll(bgView, bt);
 
         //load khung hình start game với từng tỷ lệ
-        Scene scene = new Scene(root, 720, 800);
+        Scene scene = new Scene(root, 920, 720);
         // tiêu đề của game
         StartButton.setOnAction(e -> {
             try {
@@ -223,22 +264,22 @@ public class Arkanoid extends Application {
         File PauseBackground = new File("src/main/resources/com/example/arkanoid/images/SelectLVBG.png");// nhap dia chi;
         Image anhpause = new Image(PauseBackground.toURL().toString());
         ImageView pbgView = new ImageView(anhpause);
-        pbgView.setFitWidth(720);
-        pbgView.setFitHeight(800);
+        pbgView.setFitWidth(920);
+        pbgView.setFitHeight(720);
 
 
         File LoadImgLV1 = new File("src/main/resources/com/example/arkanoid/images/Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV1Img = new Image(LoadImgLV1.toURL().toString());
         ImageView LV1ImgV = new ImageView(LV1Img);
-        LV1ImgV.setFitHeight(80); // set chieu cao
-        LV1ImgV.setFitWidth(80); // set chiều rong
+        LV1ImgV.setFitHeight(60); // set chieu cao
+        LV1ImgV.setFitWidth(310); // set chiều rong
         Button LV1Button = new Button();
         LV1Button.setStyle("-fx-background-color: transparent;");
         LV1Button.setGraphic(LV1ImgV);
         LV1Button.setOnMouseExited(e-> LV1Button.setOpacity(1.0));
         LV1Button.setOnMouseEntered(e-> LV1Button.setOpacity(0.5));// set ảnh
-        LV1Button.setLayoutX(110); // tọa độ X của đầu nút
-        LV1Button.setLayoutY(260);
+        LV1Button.setLayoutX(30); // tọa độ X của đầu nút
+        LV1Button.setLayoutY(180);
 
         LV1Button.setOnAction(e -> {
             Stage stage1 = (Stage) ((Node)e.getSource()).getScene().getWindow();
@@ -250,14 +291,14 @@ public class Arkanoid extends Application {
         File LoadImgLV2 = new File("src/main/resources/com/example/arkanoid/images/Level2Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV2Img = new Image(LoadImgLV2.toURL().toString());
         ImageView LV2ImgV = new ImageView(LV2Img);
-        LV2ImgV.setFitHeight(80); // set chieu cao
-        LV2ImgV.setFitWidth(80); // set chiều rong
+        LV2ImgV.setFitHeight(60); // set chieu cao
+        LV2ImgV.setFitWidth(310); // set chiều rong
         Button LV2Button = new Button();
         LV2Button.setStyle("-fx-background-color: transparent;");
         LV2Button.setGraphic(LV2ImgV);
         LV2Button.setOnMouseExited(e-> LV2Button.setOpacity(1.0));
         LV2Button.setOnMouseEntered(e-> LV2Button.setOpacity(0.5));// set ảnh
-        LV2Button.setLayoutX(250); // tọa độ X của đầu nút
+        LV2Button.setLayoutX(30); // tọa độ X của đầu nút
         LV2Button.setLayoutY(260);
 
         LV2Button.setOnAction(e -> {
@@ -270,15 +311,15 @@ public class Arkanoid extends Application {
         File LoadImgLV3 = new File("src/main/resources/com/example/arkanoid/images/Level3Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV3Img = new Image(LoadImgLV3.toURL().toString());
         ImageView LV3ImgV = new ImageView(LV3Img);
-        LV3ImgV.setFitHeight(80); // set chieu cao
-        LV3ImgV.setFitWidth(80); // set chiều rong
+        LV3ImgV.setFitHeight(60); // set chieu cao
+        LV3ImgV.setFitWidth(310); // set chiều rong
         Button LV3Button = new Button();
         LV3Button.setStyle("-fx-background-color: transparent;");
         LV3Button.setGraphic(LV3ImgV);
         LV3Button.setOnMouseExited(e-> LV3Button.setOpacity(1.0));
         LV3Button.setOnMouseEntered(e-> LV3Button.setOpacity(0.5));// set ảnh
-        LV3Button.setLayoutX(390); // tọa độ X của đầu nút
-        LV3Button.setLayoutY(260);
+        LV3Button.setLayoutX(30); // tọa độ X của đầu nút
+        LV3Button.setLayoutY(340);
 
         LV3Button.setOnAction(e -> {
             Stage stage3 = (Stage) ((Node)e.getSource()).getScene().getWindow();
@@ -290,15 +331,15 @@ public class Arkanoid extends Application {
         File LoadImgLV4 = new File("src/main/resources/com/example/arkanoid/images/Level4Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV4Img = new Image(LoadImgLV4.toURL().toString());
         ImageView LV4ImgV = new ImageView(LV4Img);
-        LV4ImgV.setFitHeight(80); // set chieu cao
-        LV4ImgV.setFitWidth(80); // set chiều rong
+        LV4ImgV.setFitHeight(60); // set chieu cao
+        LV4ImgV.setFitWidth(310); // set chiều rong
         Button LV4Button = new Button();
         LV4Button.setStyle("-fx-background-color: transparent;");
         LV4Button.setGraphic(LV4ImgV);
         LV4Button.setOnMouseExited(e-> LV4Button.setOpacity(1.0));
         LV4Button.setOnMouseEntered(e-> LV4Button.setOpacity(0.5));// set ảnh
-        LV4Button.setLayoutX(530); // tọa độ X của đầu nút
-        LV4Button.setLayoutY(260);
+        LV4Button.setLayoutX(30); // tọa độ X của đầu nút
+        LV4Button.setLayoutY(420);
 
         LV4Button.setOnAction(e -> {
             Stage stage4 = (Stage) ((Node)e.getSource()).getScene().getWindow();
@@ -310,15 +351,15 @@ public class Arkanoid extends Application {
         File LoadImgLV5 = new File("src/main/resources/com/example/arkanoid/images/Level5Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV5Img = new Image(LoadImgLV5.toURL().toString());
         ImageView LV5ImgV = new ImageView(LV5Img);
-        LV5ImgV.setFitHeight(80); // set chieu cao
-        LV5ImgV.setFitWidth(80); // set chiều rong
+        LV5ImgV.setFitHeight(60); // set chieu cao
+        LV5ImgV.setFitWidth(310); // set chiều rong
         Button LV5Button = new Button();
         LV5Button.setStyle("-fx-background-color: transparent;");
         LV5Button.setGraphic(LV5ImgV);
         LV5Button.setOnMouseExited(e-> LV5Button.setOpacity(1.0));
         LV5Button.setOnMouseEntered(e-> LV5Button.setOpacity(0.5));// set ảnh
-        LV5Button.setLayoutX(250); // tọa độ X của đầu nút
-        LV5Button.setLayoutY(400);
+        LV5Button.setLayoutX(30); // tọa độ X của đầu nút
+        LV5Button.setLayoutY(500);
 
         LV5Button.setOnAction(e -> {
             Stage stage5 = (Stage) ((Node)e.getSource()).getScene().getWindow();
@@ -330,15 +371,15 @@ public class Arkanoid extends Application {
         File LoadImgLV6 = new File("src/main/resources/com/example/arkanoid/images/Level6Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image LV6Img = new Image(LoadImgLV6.toURL().toString());
         ImageView LV6ImgV = new ImageView(LV6Img);
-        LV6ImgV.setFitHeight(80); // set chieu cao
-        LV6ImgV.setFitWidth(80); // set chiều rong
+        LV6ImgV.setFitHeight(60); // set chieu cao
+        LV6ImgV.setFitWidth(310); // set chiều rong
         Button LV6Button = new Button();
         LV6Button.setStyle("-fx-background-color: transparent;");
         LV6Button.setGraphic(LV6ImgV);
         LV6Button.setOnMouseExited(e-> LV6Button.setOpacity(1.0));
         LV6Button.setOnMouseEntered(e-> LV6Button.setOpacity(0.5));// set ảnh
-        LV6Button.setLayoutX(390); // tọa độ X của đầu nút
-        LV6Button.setLayoutY(400);
+        LV6Button.setLayoutX(30); // tọa độ X của đầu nút
+        LV6Button.setLayoutY(580);
 
         LV6Button.setOnAction(e -> {
             Stage stage6 = (Stage) ((Node)e.getSource()).getScene().getWindow();
@@ -369,7 +410,7 @@ public class Arkanoid extends Application {
         });
         SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button,LV6Button, MainMenuButton);
         SelectLV.getChildren().addAll(pbgView, SelectLVButton);
-        Scene lvScene = new Scene(SelectLV, 720, 800);
+        Scene lvScene = new Scene(SelectLV, 920, 720);
         stage.setScene(lvScene);
     }
     public Pane GameLoseSc(Stage stage, int score,int CurrentLV) throws Exception {
@@ -384,7 +425,7 @@ public class Arkanoid extends Application {
         RestartButton2.setGraphic(RestartImgV);
         RestartButton2.setOnMouseEntered(e-> RestartButton2.setOpacity(0.5));
         RestartButton2.setOnMouseExited(e-> RestartButton2.setOpacity(1.0));
-        RestartButton2.setLayoutX(245);
+        RestartButton2.setLayoutX(345);
         RestartButton2.setLayoutY(330);
 
         RestartButton2.setOnAction(e->{
@@ -412,7 +453,7 @@ public class Arkanoid extends Application {
         MainMenuButton2.setGraphic(MainmenuImgV2);
         MainMenuButton2.setOnMouseExited(e-> MainMenuButton2.setOpacity(1.0));
         MainMenuButton2.setOnMouseEntered(e-> MainMenuButton2.setOpacity(0.5));
-        MainMenuButton2.setLayoutX(245);
+        MainMenuButton2.setLayoutX(345);
         MainMenuButton2.setLayoutY(420);
 
         MainMenuButton2.setOnAction(e -> {
@@ -446,8 +487,8 @@ public class Arkanoid extends Application {
         }
 
         ImageView TutorialView = new ImageView(TutorialImg[0]);
-        TutorialView.setFitWidth(720);
-        TutorialView.setFitHeight(800);
+        TutorialView.setFitWidth(920);
+        TutorialView.setFitHeight(720);
 
         File loadBackButton = new File("src/main/resources/com/example/arkanoid/images/BackButton.png");
         Image backImg = new Image(loadBackButton.toURI().toString());
@@ -472,8 +513,8 @@ public class Arkanoid extends Application {
         NextButton.setGraphic(nextImgV);
         NextButton.setOnMouseExited(e-> NextButton.setOpacity(1.0));
         NextButton.setOnMouseEntered(e-> NextButton.setOpacity(0.5));
-        NextButton.setLayoutX(580);
-        NextButton.setLayoutY(710);
+        NextButton.setLayoutX(790);
+        NextButton.setLayoutY(650);
 
         int[] CurrentPage = {0};
 
@@ -501,8 +542,8 @@ public class Arkanoid extends Application {
         BackToMenu.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
         BackToMenu.setOnMouseEntered(e -> BackToMenu.setOpacity(0.5));
         BackToMenu.setOnMouseExited(e -> BackToMenu.setOpacity(1.0));
-        BackToMenu.setLayoutX(210);
-        BackToMenu.setLayoutY(700);
+        BackToMenu.setLayoutX(310);
+        BackToMenu.setLayoutY(650);
 
         BackToMenu.setOnAction(e->{
             try{
@@ -513,7 +554,7 @@ public class Arkanoid extends Application {
         });
 
         Pane TutorialPane = new Pane(TutorialView, BackButton, NextButton,BackToMenu);
-        Scene TutorialScene = new Scene(TutorialPane,720,800);
+        Scene TutorialScene = new Scene(TutorialPane,920,720);
         stage.setScene(TutorialScene);
     }
     public Pane GameWin(Stage stage, int Score) throws Exception{
@@ -529,7 +570,7 @@ public class Arkanoid extends Application {
         RestartBt.setGraphic(RestartImgV);
         RestartBt.setOnMouseExited(e-> RestartBt.setOpacity(1.0));
         RestartBt.setOnMouseEntered(e-> RestartBt.setOpacity(0.5));
-        RestartBt.setLayoutX(245);
+        RestartBt.setLayoutX(345);
         RestartBt.setLayoutY(420);
         /*
         File loadNextLV = new File("src/main/resources/com/example/arkanoid/images/NextLevelButton.png");
@@ -557,7 +598,7 @@ public class Arkanoid extends Application {
         MainMenu2Button.setGraphic(MainMenu2ImgV);
         MainMenu2Button.setOnMouseExited(e-> MainMenu2Button.setOpacity(1.0));
         MainMenu2Button.setOnMouseEntered(e-> MainMenu2Button.setOpacity(0.5));// set ảnh
-        MainMenu2Button.setLayoutX(245); // tọa độ X của đầu nút
+        MainMenu2Button.setLayoutX(345); // tọa độ X của đầu nút
         MainMenu2Button.setLayoutY(510);
 
         MainMenu2Button.setOnAction(e -> {
@@ -600,7 +641,8 @@ public class Arkanoid extends Application {
         loadBGImgV.setFitHeight(800);
         gamePane.getChildren().add(loadBGImgV);
         gm.init(gamePane, this, LevelNumber);
-        Scene scene = new Scene(gamePane, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+        Scene scene = new Scene(gamePane, 920, GameManager.SCREEN_HEIGHT);
+        loadBGImgV.setPreserveRatio(false);
 
         // Bắt tọa độ chuột
         scene.setOnMouseMoved(event -> {
@@ -645,6 +687,7 @@ public class Arkanoid extends Application {
 
         stage.setScene(scene);
         stage.show();
+        Platform.runLater(() -> stage.centerOnScreen());
     }
     public Stage getPrimaryStage() {
         return getPrimaryStage();
