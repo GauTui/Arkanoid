@@ -23,7 +23,6 @@ import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
-
     private boolean isGameStarted = false;
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
@@ -292,6 +291,7 @@ public class GameManager {
             addBall(newBall);
         }
     }
+
 
     // ====== KIỂM TRA VA CHẠM ======
     public void checkCollisions() throws MalformedURLException {

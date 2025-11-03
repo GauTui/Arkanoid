@@ -123,40 +123,59 @@ public class Ball extends MovableObject {
      * Hướng bật phụ thuộc vào vùng bóng tác động bên trái hay phải paddle.
      * @param paddle thanh trượt
      */
-    public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
-        // tránh trường hợp null của paddle và rectangle
-        if(paddle == null|| paddle.getView() == null) {
+public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
+        // Kiểm tra paddle có tồn tại không
+        if (paddle == null || paddle.getView() == null || !checkCollision(paddle)) {
             return;
         }
 
-        // Xử lý va chạm khi quả bóng đi xuống (dy>0), ở đây chỉ coi va chạm là chạm trên
-        if(checkCollision(paddle)) {
-            this.setDy(-this.getDy());
+        // Tính toán vị trí tâm của bóng và paddle
+        double ballCenterX = this.getX() + this.getWidth() / 2.0;
+        double ballCenterY = this.getY() + this.getHeight() / 2.0;
+        double paddleCenterX = paddle.getX() + paddle.getWidth() / 2.0;
+        double paddleCenterY = paddle.getY() + paddle.getHeight() / 2.0;
 
-            //cho dx > 1.5
-            double rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
-            // Cho qua bong di chuyen sang trai hay phai (dx) dua tren diem va cham voi thanh paddle.
-            // Neu va cham nua phai paddle thi ta cho bong di chuyen phai(dx<0), va nguoc lai (dx>0)
+        // Tính khoảng cách tương đối
+        double deltaX = ballCenterX - paddleCenterX;
+        double deltaY = ballCenterY - paddleCenterY;
 
-            // Diem va cham xet voi tam qua bong theo truc x
-            double pointCollision = this.getX() + this.getWidth()/2.0;
+        // Tính tỷ lệ va chạm theo cạnh X và Y
+        double ratioX = Math.abs(deltaX) / (paddle.getWidth() / 2.0 + this.getWidth() / 2.0);
+        double ratioY = Math.abs(deltaY) / (paddle.getHeight() / 2.0 + this.getHeight() / 2.0);
 
-            // Diem dua thanh paddle
-            double midPaddle = paddle.getX() + paddle.getWidth()/2.0;
-
-            // Neu bong nam ben trai ta dat lai van toc qua bong dx âm. TH còn lại giữ nguyên
-            if(pointCollision < midPaddle) {
-                rdx = -rdx;
+        // Xử lý va chạm theo hướng gần nhất
+        if (ratioX > ratioY) {
+            // Va chạm từ bên trái hoặc phải paddle
+            this.setDx(-this.getDx());
+            if (deltaX > 0) {
+                this.setX(paddle.getX() + paddle.getWidth());
+            } else {
+                this.setX(paddle.getX() - this.getWidth());
             }
-
-            // Đặt vận tốc dx cho bóng
-            this.setDx(rdx);
-
-            // Hiển thị âm thanh
-            SoundEffect PaddleCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
-            PaddleCollideSound.play(0.5);
+        } else {
+            // Va chạm từ trên hoặc dưới paddle
+            this.setDy(-this.getDy());
+            if (deltaY > 0) {
+                this.setY(paddle.getY() + paddle.getHeight());
+            } else {
+                this.setY(paddle.getY() - this.getHeight());
+            }
         }
 
+        // Điều chỉnh góc nảy khi va chạm từ trên
+        if (deltaY < 0) {
+            double relativeIntersectX = ballCenterX - paddleCenterX;
+            double normalizedIntersect = relativeIntersectX / (paddle.getWidth() / 2);
+            double angle = normalizedIntersect * 60; // Góc tối đa 60 độ
+            double velocity = Math.sqrt(this.getDx() * this.getDx() + this.getDy() * this.getDy());
+
+            this.setDx(velocity * Math.sin(Math.toRadians(angle)));
+            this.setDy(-velocity * Math.cos(Math.toRadians(angle)));
+        }
+
+        // Phát âm thanh va chạm
+        SoundEffect paddleCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
+        paddleCollideSound.play(0.5);
     }
 
     /**
@@ -247,7 +266,7 @@ public class Ball extends MovableObject {
      */
     public void reset(Paddle paddle) {
         this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
-        this.setY(paddle.getY() - this.getHeight());
+        this.setY(paddle.getY() - this.getHeight()-1);
         this.setDx(BALL_DX);
         this.setDy(BALL_DY);
         updateView();
