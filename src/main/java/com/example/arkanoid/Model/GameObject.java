@@ -70,8 +70,8 @@ public abstract class GameObject {
     }
 
     public void updateView() {
-        view.setLayoutX(x);
-        view.setLayoutY(y);
+        view.setTranslateX(x);
+        view.setTranslateY(y);
     }
 
 }

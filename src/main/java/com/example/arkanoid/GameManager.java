@@ -3,6 +3,7 @@ package com.example.arkanoid;
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -230,11 +231,6 @@ public class GameManager {
         //xử lý bóng rơi khỏi đáy màn hình
         handleBallFallingBottom();
 
-        // di chuyển, cập nhật vị trí powerup rơi
-        for(PowerUp fPowerup : fallingPowerups) {
-            fPowerup.update();
-        }
-
         // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
         handleRemoveActivePowerUp();
 
@@ -255,6 +251,25 @@ public class GameManager {
             paddle.reset();
             // Reset trạng thái game để chờ phóng bóng ở màn tiếp theo
             isGameStarted = false;
+
+            //màn mới chỉ nên có 1 bóng, xóa các bóng còn thừa
+            for (int i = balls.size() - 1; i >= 1; i--) {
+                removeBall(balls.get(i));
+            }
+
+            //xóa tất cả powerup rơi còn thừa trên màn hình
+            for (PowerUp pu : fallingPowerups) {
+                gamePane.getChildren().remove(pu.getView());
+            }
+            fallingPowerups.clear();
+
+            //xóa tất cả powerup đang hoạt động
+            for (PowerUp apu : activePowerups) {
+                apu.removeEffect(this);
+            }
+            activePowerups.clear();
+
+            // đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
             for (Ball ball : balls) {
                 ball.reset(paddle);
             }
@@ -264,7 +279,7 @@ public class GameManager {
         }
 
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        balls.forEach(Ball::update);
+        balls.forEach(Ball::updateView);
         fallingPowerups.forEach(GameObject::updateView);
         paddle.updateView(); // Cập nhật cả view của paddle
 
@@ -317,6 +332,8 @@ public class GameManager {
                     if (brick.isDestroyed()) {
                         gamePane.getChildren().remove(brick.getView());
                     }
+                    // chỉ xử lý một va chạm gạch mỗi khung hình cho mỗi quả bóng
+                    break;
                 }
             }
 
@@ -334,7 +351,8 @@ public class GameManager {
 
             // Nếu va chạm giữa Paddle và fallingPowerUp thêm fallingPowerUp vào list activePowerups
             // Xóa fallingPowerUp chạm vào paddle khỏi danh sách hiển thị và list fallingPowerups
-            if (p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
+            if (p.getView() != null && paddle.getView() != null &&
+                    p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
                 handlePowerUpCollision(p);
             }
         }
@@ -428,12 +446,35 @@ public class GameManager {
         loseLifeSound.play(0.5);
     }
 
-    public void addBall(Ball ball) {
-        // Thêm đối tượng ball vào danh sách quản lý các quả bóng
-        this.balls.add(ball);
 
-        // Thêm hình ảnh của quả bóng vào Pane chính của game để nó được hiển thị
-        this.gamePane.getChildren().add(ball.getView());
+    public void addBall(Ball ball) {
+        if (ball == null) return;
+        if (this.balls != null) {
+            this.balls.add(ball);
+        }
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().add(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().add(ball.getView()));
+            }
+        }
+    }
+
+    public void removeBall(Ball ball) {
+        if (ball == null) return;
+
+        if (this.balls != null) {
+            this.balls.remove(ball);
+        }
+
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().remove(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().remove(ball.getView()));
+            }
+        }
     }
     public void increaseLives(int amount) {
         this.lives += amount;

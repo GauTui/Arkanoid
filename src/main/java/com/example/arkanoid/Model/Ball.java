@@ -60,24 +60,23 @@ public class Ball extends MovableObject {
      * @return tra ve true neu va cham, ko thi false
      */
     public boolean checkCollision(GameObject other) {
-        if (other == null || other.getView() == null) return false;
-        // Lấy ranh giới hiển thị thực tế của bóng : viền của node chứa bóng
-        Bounds ballBounds = this.view.getBoundsInParent();
+        if (other == null) return false;
 
-        if (other instanceof Brick) {
-            if (ballBounds.intersects(other.getView().getBoundsInParent())) {
-                return true;
-            }
-        }
+        // hinh chữ nhật của đối tượng ball
+        double bx = this.getX();
+        double by = this.getY();
+        double bw = this.getWidth();
+        double bh = this.getHeight();
 
-        //kiem tra va cham voi paddle
-        if (other instanceof Paddle) {
-            if (ballBounds.intersects(other.getView().getBoundsInParent())) {
-                return true;
-            }
-        }
+        // hình chữ nhật của đối tượng khác
+        double ox = other.getX();
+        double oy = other.getY();
+        double ow = other.getWidth();
+        double oh = other.getHeight();
 
-        return false;
+        // Kiểm tra va chạm AABB
+        boolean intersects = bx < ox + ow && bx + bw > ox && by < oy + oh && by + bh > oy;
+        return intersects;
     }
 
     /**
@@ -124,7 +123,7 @@ public class Ball extends MovableObject {
      * @param paddle thanh trượt
      */
 public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
-        // Kiểm tra paddle có tồn tại không
+        // Kiểm tra paddle có tồn tại không, hoặc va chạm không
         if (paddle == null || paddle.getView() == null || !checkCollision(paddle)) {
             return;
         }
@@ -249,36 +248,16 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
     }
 
     /**
-     * Hàm cập nhật điểm hiện thị node view chứa quả bóng.
-     * điểm hiện thị cập nhật thông qua thuộc tính x, y do class quản lý
-     */
-    public void updateView() {
-        // hiện thị tại tọa độ theo kiểu (rectangle ball). getX() + this.getX()
-        // nghĩa là di chuyển tại tọa độ gốc x và cộng thêm 1 đoạn this.getX()
-        this.view.setTranslateX(this.getX());
-        this.view.setTranslateY(this.getY());
-    }
-
-    /**
      * Hàm reset lại vị trí, vận tốc quả bóng khi bóng rơi ra khỏi đáy màn hình.
      * vị trí ở giữa thanh trượt paddle.
      * @param paddle thanh trượt để lấy vị trí tâm gậy
      */
     public void reset(Paddle paddle) {
         this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
-        this.setY(paddle.getY() - this.getHeight()-1);
+        this.setY(paddle.getY() - this.getHeight());
         this.setDx(BALL_DX);
         this.setDy(BALL_DY);
         updateView();
     }
 
-    /**
-     * Cap nhat vi tri theo van toc, diem hien thi cua rectangle chua ball.
-     */
-    @Override
-    public void update() {
-        setX(getX() + getDx());
-        setY(getY() + getDy());
-        updateView();
-    }
 }
