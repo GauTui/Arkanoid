@@ -753,7 +753,14 @@ public class Arkanoid extends Application {
     public void startLevel(Stage stage, int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
-        File loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/NenInGame.png");
+        File loadBackGroundImg;
+        switch (LevelNumber) {
+            case 1 -> loadBackGroundImg = new File("src/main/resources/bg_level1.png");
+            case 2 -> loadBackGroundImg = new File("src/main/resources/bg_level2.png");
+            case 3 -> loadBackGroundImg = new File("src/main/resources/bg_level3.png");
+            case 4 -> loadBackGroundImg = new File("src/main/resources/bg_level4.png");
+            default -> loadBackGroundImg = new File("src/main/resources/bg_level5.png");
+        }
         Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
         ImageView loadBGImgV = new ImageView(loadBGImg);
         loadBGImgV.setFitWidth(720);
