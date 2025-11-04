@@ -113,7 +113,7 @@ public class Ball extends MovableObject {
             SoundEffect WallCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
             WallCollideSound.play(0.5);
         }
-
+        System.out.println("collide with wall " + this.getDx() + " , " + this.getDy());
     }
 
     /**
@@ -165,7 +165,7 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         if (deltaY < 0) {
             double relativeIntersectX = ballCenterX - paddleCenterX;
             double normalizedIntersect = relativeIntersectX / (paddle.getWidth() / 2);
-            double angle = normalizedIntersect * 60; // Góc tối đa 60 độ
+            double angle = normalizedIntersect * 30; // Góc tối đa 60 độ
             double velocity = Math.sqrt(this.getDx() * this.getDx() + this.getDy() * this.getDy());
 
             this.setDx(velocity * Math.sin(Math.toRadians(angle)));
@@ -175,6 +175,7 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         // Phát âm thanh va chạm
         SoundEffect paddleCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
         paddleCollideSound.play(0.5);
+        System.out.println("collide with paddle " + this.getDx() + " , " + this.getDy());
     }
 
     /**
@@ -245,6 +246,7 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         //hiển thị âm thanh
         SoundEffect BrickCollideSound = new SoundEffect("/com/example/arkanoid/sounds/collision.wav");
         BrickCollideSound.play(2);
+        System.out.println("collide with brick " + this.getDx() + " , " + this.getDy());
     }
 
     /**

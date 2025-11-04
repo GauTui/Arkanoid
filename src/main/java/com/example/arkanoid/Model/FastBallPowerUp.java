@@ -64,6 +64,7 @@ public class FastBallPowerUp extends PowerUp {
             b.setDx(newDx);
             b.setDy(newDy);
         }
+        System.out.println("FastBallPowerUp effect applied, speeds increased.");
     }
 
     @Override
@@ -89,5 +90,6 @@ public class FastBallPowerUp extends PowerUp {
             }
         }
         originalSpeedMagnitudes.clear();
+        System.out.println("FastBallPowerUp effect removed, speeds restored.");
     }
 }
