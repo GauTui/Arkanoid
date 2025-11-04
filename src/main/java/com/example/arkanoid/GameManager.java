@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -58,6 +59,7 @@ public class GameManager {
     private int lives;
     private int currentLevel;
     private Arkanoid mainApp;
+    private List<LaserBeam> laserBeams = new ArrayList<>();
 
     /*====Getter/setter====*/
     public void launchBall() {
@@ -356,6 +358,29 @@ public class GameManager {
                 handlePowerUpCollision(p);
             }
         }
+        // Trong checkCollisions()
+
+        Iterator<LaserBeam> laserIterator = laserBeams.iterator();
+        while (laserIterator.hasNext()) {
+            LaserBeam beam = laserIterator.next();
+            boolean laserHit = false;
+
+            Iterator<Brick> brickIterator = bricks.iterator();
+            while (brickIterator.hasNext()) {
+                Brick brick = brickIterator.next();
+
+                if (beam.checkCollision(brick)) {
+                    // Nếu vào được đây, có nghĩa là va chạm đã được phát hiện
+                    System.out.println(">>> VA CHẠM: Laser đã trúng một viên gạch!");
+
+                    brick.takeHit();
+                    // ... (code xử lý gạch vỡ) ...
+                    laserHit = true;
+                    break;
+                }
+            }
+            // ... (code xóa laser) ...
+        }
     }
 
     public void handleRemoveActivePowerUp() {
@@ -430,6 +455,9 @@ public class GameManager {
         } else if (chance < 0.55) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
+        else if (chance < 0.85) {
+            newPowerUp = new LaserPaddlePowerUp(x, y);
+        }
 
         // Nếu không rơi vào các trường hợp trên (chance >= 0.55), sẽ không có power-up nào được tạo ra.
 
@@ -491,4 +519,18 @@ public class GameManager {
             livesText.setText("Mạng: " + this.lives);
         }
     }
+    private void updateLaserBeams() {
+        // Duyệt ngược danh sách để có thể xóa phần tử một cách an toàn
+        for (int i = laserBeams.size() - 1; i >= 0; i--) {
+            LaserBeam beam = laserBeams.get(i);
+            beam.update(); // Di chuyển tia laser
+
+            // Xóa tia laser nếu nó bay ra khỏi màn hình
+            if (beam.getY() < 0) {
+                gamePane.getChildren().remove(beam.getView());
+                laserBeams.remove(i); // Xóa bằng chỉ số i
+            }
+        }
+    }
+
 }

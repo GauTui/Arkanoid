@@ -21,6 +21,33 @@ public class Paddle extends MovableObject{
     private static final double PADDLE_SPEED = 8.0;
     public static final Color PADDLE_COLOR = Color.AQUAMARINE;
 
+    private boolean hasLaser = false;
+
+    /**
+     * Bật hoặc tắt trạng thái bắn laser của paddle.
+     * Đồng thời thay đổi màu sắc để người chơi nhận biết.
+     * @param hasLaser true để bật, false để tắt.
+     */
+    public void setHasLaser(boolean hasLaser) {
+        this.hasLaser = hasLaser;
+
+        // Đảm bảo rằng 'view' của paddle là một Rectangle để có thể đổi màu
+        if (this.view instanceof javafx.scene.shape.Rectangle) {
+            if (hasLaser) {
+                // Khi có laser, đổi paddle sang màu vàng
+                ((javafx.scene.shape.Rectangle) this.view).setFill(javafx.scene.paint.Color.YELLOW);
+            } else {
+                // Khi hết laser, trả về màu gốc.
+                // HÃY THAY THẾ 'Color.CYAN' BẰNG MÀU GỐC CỦA PADDLE BẠN.
+                ((javafx.scene.shape.Rectangle) this.view).setFill(javafx.scene.paint.Color.CYAN);
+            }
+        }
+    }
+
+    public boolean getHasLaser() {
+        return this.hasLaser;
+    }
+
 
     public Paddle(double x, double y){
         super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0);
