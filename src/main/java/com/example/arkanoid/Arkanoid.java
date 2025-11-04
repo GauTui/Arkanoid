@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.Paddle;
+import com.example.arkanoid.Utils.AnimationGame;
 import com.example.arkanoid.Utils.BackgroundMusic;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
@@ -19,7 +20,9 @@ import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.awt.*;
+import javafx.geometry.Rectangle2D;
 import java.io.File;
+
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -277,11 +280,11 @@ public class Arkanoid extends Application {
     public void openLevelSelect(Stage stage, Scene menuScene) throws IOException {
         Pane SelectLVButton = new Pane();
         StackPane SelectLV = new StackPane();
-        File PauseBackground = new File("src/main/resources/com/example/arkanoid/images/SelectLVBG.png");// nhap dia chi;
-        Image anhpause = new Image(PauseBackground.toURL().toString());
-        ImageView pbgView = new ImageView(anhpause);
-        pbgView.setFitWidth(920);
-        pbgView.setFitHeight(720);
+        Image image = new Image("file:src/main/resources/com/example/arkanoid/images/SelectLVImg.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setViewport(new Rectangle2D(0, 0, 920, 863));
+        AnimationGame anim = new AnimationGame(imageView, 4, 920, 863, 600);
+        anim.play();
 
 
         File LoadImgLV1 = new File("src/main/resources/com/example/arkanoid/images/Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
@@ -489,7 +492,7 @@ public class Arkanoid extends Application {
             }
         });
         SelectLVButton.getChildren().addAll(LV1ImgV, LV2ImgV, LV3ImgV, LV4ImgV, LV5ImgV,LV6ImgV, MainMenuImgV);
-        SelectLV.getChildren().addAll(pbgView, SelectLVButton);
+        SelectLV.getChildren().addAll(imageView, SelectLVButton);
         Scene lvScene = new Scene(SelectLV, 920, 720);
         stage.setScene(lvScene);
     }
@@ -835,4 +838,5 @@ public class Arkanoid extends Application {
     public Stage getPrimaryStage() {
         return getPrimaryStage();
     }
+
 }
