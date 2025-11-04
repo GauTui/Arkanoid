@@ -14,7 +14,7 @@ public class FastBallPowerUp extends PowerUp {
     private static final double MAX_SPEED = 9.5; // GIỚI HẠN TỐC ĐỘ TỐI ĐA
 
     // Lưu vận tốc gốc để hoàn tác: Ball -> {dx, dy}
-    private final Map<Ball, double[]> originalSpeeds = new HashMap<>();
+    private final Map<Ball, Double> originalSpeedMagnitudes = new HashMap<>();
 
     public FastBallPowerUp(double x, double y) {
         super(x, y); // dy = POWERUP_GRAVITY
@@ -31,22 +31,25 @@ public class FastBallPowerUp extends PowerUp {
         // cần GameManager.getBalls()
         List<Ball> balls = gm.getBalls();
 
-        originalSpeeds.clear();
+        originalSpeedMagnitudes.clear();
+
         for (Ball b : balls) {
-            double dx0 = b.getDx();
-            double dy0 = b.getDy();
-            originalSpeeds.put(b, new double[]{dx0, dy0});
+            double dx = b.getDx();
+            double dy = b.getDy();
 
-            // Tăng tốc nhưng GIỚI HẠN tốc độ tối đa
-            double newDx = dx0 * SPEED_MULTIPLIER;
-            double newDy = dy0 * SPEED_MULTIPLIER;
+            // Lưu tốc độ gốc (magnitude)
+            double originalSpeed = Math.sqrt(dx * dx + dy * dy);
+            originalSpeedMagnitudes.put(b, originalSpeed);
 
-            // Tính tốc độ tổng
-            double speed = Math.sqrt(newDx * newDx + newDy * newDy);
+            // Tăng tốc độ
+            double newDx = dx * SPEED_MULTIPLIER;
+            double newDy = dy * SPEED_MULTIPLIER;
+
+            double newSpeed = Math.sqrt(newDx * newDx + newDy * newDy);
 
             // Nếu vượt quá MAX_SPEED, scale lại
-            if (speed > MAX_SPEED) {
-                double scale = MAX_SPEED / speed;
+            if (newSpeed > MAX_SPEED) {
+                double scale = MAX_SPEED / newSpeed;
                 newDx *= scale;
                 newDy *= scale;
             }
@@ -61,14 +64,23 @@ public class FastBallPowerUp extends PowerUp {
         if (!isActive()) return;
         setActive(false);
 
-        // phục hồi vận tốc cũ
-        for (Map.Entry<Ball, double[]> e : originalSpeeds.entrySet()) {
+        // GIỮ NGUYÊN HƯỚNG, CHỈ GIẢM TỐC ĐỘ
+        for (Map.Entry<Ball, Double> e : originalSpeedMagnitudes.entrySet()) {
             Ball b = e.getKey();
-            double[] v = e.getValue();
-            b.setDx(v[0]);
-            b.setDy(v[1]);
+            double originalSpeed = e.getValue();
+
+            // Lấy hướng HIỆN TẠI
+            double currentDx = b.getDx();
+            double currentDy = b.getDy();
+            double currentSpeed = Math.sqrt(currentDx * currentDx + currentDy * currentDy);
+
+            if (currentSpeed > 0) {
+                // Giữ nguyên hướng, scale về tốc độ gốc
+                double scale = originalSpeed / currentSpeed;
+                b.setDx(currentDx * scale);
+                b.setDy(currentDy * scale);
+            }
         }
-        originalSpeeds.clear();
+        originalSpeedMagnitudes.clear();
     }
 }
-

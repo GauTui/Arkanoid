@@ -22,7 +22,7 @@ public class Ball extends MovableObject {
     // ngưỡng đã đặt thì ta đẩy nó lên 2.0 để quỹ đạo ko bị phẳng
     //max speed để game ko mất kiểm soát
     private static final double MIN_VY = 2.0;
-    private static final double MAX_SPEED = 9.5;
+    private static final double MAX_SPEED = 10.0;
 
     public static final double LAUNCH_SPEED = 4.5;
     public static final int BALL_SIZE = 20;
@@ -90,11 +90,11 @@ public class Ball extends MovableObject {
      * @param b so b
      * @return so thuc ngau nhien thuoc [a;b]
      */
-    public static double getRandomNumber(double a, double b) {
-        Random rand = new Random();
-        // Công thức chuẩn: a + (b - a) * rand.nextDouble()
-        return a + (b - a) * rand.nextDouble();
-    }
+//    public static double getRandomNumber(double a, double b) {
+//        Random rand = new Random();
+//        // Công thức chuẩn: a + (b - a) * rand.nextDouble()
+//        return a + (b - a) * rand.nextDouble();
+//    }
 
     /**
      * Ham kiem tra va cham voi cac object brick, paddle, ko co powerup....
@@ -128,17 +128,21 @@ public class Ball extends MovableObject {
      * Đối tượng GameManager gm quản lý trò chơi
      */
     public void collideWithWall() throws MalformedURLException {
+        if (attached) return;
+
         boolean sound = false;
 
         //Va cham trai va phai
         if(this.getX() < 0) {
             sound = true;
             //Đảo ngược hướng di chuyển ngang
+            System.out.println(">>> WALL HIT LEFT - Ball pos: (" + getX() + ", " + getY() + ")");
             this.setDx(-this.getDx());
             //Đặt lại ball mép trái màn hình
             this.setX(0);
         } else if(this.getX() + this.getWidth() >SCREEN_WIDTH){
             sound = true;
+            System.out.println(">>> WALL HIT RIGHT - Ball pos: (" + getX() + ", " + getY() + ")");
             this.setDx(-this.getDx());
             //Đặt ball ở mép phải màn hình
             this.setX(SCREEN_WIDTH - this.getWidth());
@@ -147,12 +151,14 @@ public class Ball extends MovableObject {
         //Va cham tren
         if(this.getY() < 0) {
             sound = true;
+            System.out.println(">>> WALL HIT TOP - Ball pos: (" + getX() + ", " + getY() + ")");
             this.setDy(-this.getDy());
             this.setY(0);
         }
 
         //hien thi am thanh
         if(sound) {
+            System.out.println(">>> Playing wall sound!");
             SoundEffect WallCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
             WallCollideSound.play(0.5);
         }
@@ -235,16 +241,19 @@ public class Ball extends MovableObject {
      * @param brick gach
      */
     public void collideWithBrick(Brick brick) throws MalformedURLException {
-        /* tránh trường hợp null của brick và rectangle brick.
-        khi ta xóa đi brick thì còn lưu trong Pane*/
         if (attached) return;
 
-        if(brick == null|| brick.getView() == null) {
+        if(brick == null|| brick.getView() == null || brick.isDestroyed()) {
             return;
         }
-        // 🚫 Nếu không giao nhau thì thoát ngay
+        //Kiểm tra view có visible không
+        if (!brick.getView().isVisible()) {
+            return;
+        }
+        //Lấy bounds MỚI NHẤT
         Bounds ballB  = this.view.getBoundsInParent();
         Bounds brickB = brick.getView().getBoundsInParent();
+        // Nếu không giao nhau thì thoát
         if (!ballB.intersects(brickB)) return;
 
         // 1. Xác định hướng va chạm (dựa trên vị trí tương đối)
@@ -261,32 +270,32 @@ public class Ball extends MovableObject {
         double ratioX = Math.abs(deltaX) / (brick.getWidth() / 2.0 + this.getWidth() / 2.0);
         double ratioY = Math.abs(deltaY) / (brick.getHeight() / 2.0 + this.getHeight() / 2.0);
 
+        // === Quyết định trục phản xạ có xét "đập góc" (corner-aware) ===
+        boolean hitX = ratioX > ratioY;
+        if (Math.abs(ratioX - ratioY) < 0.08) {   // ví dụ 0.08
+            // Tie-break bằng vận tốc hiện tại: trục nào mạnh hơn → phản xạ theo trục đó
+            hitX = Math.abs(getDx()) > Math.abs(getDy());
+        }
         // 2. Xử lý Phản xạ và Đẩy bóng ra khỏi gạch
-        if (ratioX > ratioY) {
-            // Va chạm Ngang (Trái/Phải)
-
-            // Đảo dx
-            this.setDx(-this.getDx());
-            // Cho ball ra khỏi brick
-            if (deltaX > 0) {
-                this.setDx(Math.abs(this.getDx()));// đảm bảo đúng hướng ko có thì vẫn chạy đc
-                this.setX(brick.getX() + brick.getWidth());
-            } else {
-                this.setDx(-Math.abs(this.getDx()));// đảm bảo đúng hướng
-                this.setX(brick.getX() - this.getWidth());
+        if (hitX) {
+            // Va chạm NGANG → đảo dx + đẩy ra theo X
+            setDx(-getDx());
+            if (deltaX > 0) { // bóng đang ở bên phải viên gạch
+                setDx(Math.abs(getDx()));                          // đảm bảo đi sang phải
+                setX(brick.getX() + brick.getWidth());             // đặt ngay mép phải gạch
+            } else {           // bóng đang ở bên trái viên gạch
+                setDx(-Math.abs(getDx()));                         // đảm bảo đi sang trái
+                setX(brick.getX() - getWidth());                   // đặt ngay mép trái gạch
             }
         } else {
-            // Va chạm Dọc (Trên/Dưới)
-
-            // Đảo dy
-            this.setDy(-this.getDy());
-            // Cho ball ra khỏi brick
-            if (deltaY > 0) {
-                this.setDy(Math.abs(this.getDy()));// đảm bảo đúng hướng
-                this.setY(brick.getY() + brick.getHeight());
-            } else {
-                this.setDy(-Math.abs(this.getDy()));// đảm bảo đúng hướng
-                this.setY(brick.getY() - this.getHeight());
+            // Va chạm DỌC → đảo dy + đẩy ra theo Y
+            setDy(-getDy());
+            if (deltaY > 0) { // bóng đang ở phía dưới viên gạch
+                setDy(Math.abs(getDy()));                          // đảm bảo đi xuống
+                setY(brick.getY() + brick.getHeight());            // đặt ngay mép dưới gạch
+            } else {           // bóng đang ở phía trên viên gạch
+                setDy(-Math.abs(getDy()));                         // đảm bảo đi lên
+                setY(brick.getY() - getHeight());                  // đặt ngay mép trên gạch
             }
         }
 
@@ -297,6 +306,7 @@ public class Ball extends MovableObject {
         if(brick.isDestroyed()) {
             GameManager gm = GameManager.getInstance();
             gm.getGamePane().getChildren().remove(brick.getView());
+            brick.getView().setVisible(false);
         }
 
         //hiển thị âm thanh
