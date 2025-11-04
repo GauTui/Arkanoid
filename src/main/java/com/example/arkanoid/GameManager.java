@@ -3,6 +3,7 @@ package com.example.arkanoid;
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -23,7 +24,6 @@ import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
-
     private boolean isGameStarted = false;
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
@@ -31,11 +31,11 @@ public class GameManager {
     public static final int MAP_NUMBERS = 5;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 640;
-    public static final int SCORE_Y = 10;
+    public static final int SCORE_X = 560;
+    public static final int SCORE_Y = 30;
 
-    public static final int LIVES_X = 10;
-    public static final int LIVES_Y = 720;
+    public static final int LIVES_X = 400;
+    public static final int LIVES_Y = 30;
 
     // Singleton GameManager
     private static GameManager instance;
@@ -57,7 +57,7 @@ public class GameManager {
     private int score;
     private int lives;
     private int currentLevel;
-    private HelloApplication mainApp;
+    private Arkanoid mainApp;
 
     /*====Getter/setter====*/
     public void launchBall() {
@@ -166,7 +166,7 @@ public class GameManager {
         return instance;
     }
 
-    public void init(Pane gamePane, HelloApplication mainApp, int LevelNumber) {
+    public void init(Pane gamePane, Arkanoid mainApp, int LevelNumber) {
         this.gamePane = gamePane;
         this.mainApp = mainApp;
 
@@ -188,13 +188,13 @@ public class GameManager {
         // UI text
         scoreText = new Text("Score: " + score);
         scoreText.setFont(Font.font("Arial", 20));
-        scoreText.setFill(Color.WHITE);
+        scoreText.setFill(Color.DARKBLUE);
         scoreText.setX(SCORE_X);
         scoreText.setY(SCORE_Y);
 
         livesText = new Text("Lives: " + lives);
         livesText.setFont(Font.font("Arial", 20));
-        livesText.setFill(Color.WHITE);
+        livesText.setFill(Color.RED);
         livesText.setX(LIVES_X);
         livesText.setY(LIVES_Y);
 
@@ -228,10 +228,8 @@ public class GameManager {
         }
         checkCollisions();
 
-        // di chuyển, cập nhật vị trí powerup rơi
-        for(PowerUp fPowerup : fallingPowerups) {
-            fPowerup.update();
-        }
+        //xử lý bóng rơi khỏi đáy màn hình
+        handleBallFallingBottom();
 
         // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
         handleRemoveActivePowerUp();
@@ -253,6 +251,25 @@ public class GameManager {
             paddle.reset();
             // Reset trạng thái game để chờ phóng bóng ở màn tiếp theo
             isGameStarted = false;
+
+            //màn mới chỉ nên có 1 bóng, xóa các bóng còn thừa
+            for (int i = balls.size() - 1; i >= 1; i--) {
+                removeBall(balls.get(i));
+            }
+
+            //xóa tất cả powerup rơi còn thừa trên màn hình
+            for (PowerUp pu : fallingPowerups) {
+                gamePane.getChildren().remove(pu.getView());
+            }
+            fallingPowerups.clear();
+
+            //xóa tất cả powerup đang hoạt động
+            for (PowerUp apu : activePowerups) {
+                apu.removeEffect(this);
+            }
+            activePowerups.clear();
+
+            // đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
             for (Ball ball : balls) {
                 ball.reset(paddle);
             }
@@ -262,7 +279,7 @@ public class GameManager {
         }
 
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        balls.forEach(Ball::update);
+        balls.forEach(Ball::updateView);
         fallingPowerups.forEach(GameObject::updateView);
         paddle.updateView(); // Cập nhật cả view của paddle
 
@@ -270,6 +287,26 @@ public class GameManager {
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
     }
+
+    private void handleBallFallingBottom() throws MalformedURLException {
+
+        for (int i = balls.size() - 1; i >= 0; i--) {
+            Ball b = balls.get(i);
+            if (b.getY() + b.getHeight() > SCREEN_HEIGHT) {
+                gamePane.getChildren().remove(b.getView());
+                balls.remove(i); // ✅ an toàn khi duyệt ngược
+            }
+        }
+        if (balls.isEmpty()) {
+            loseLife();
+            // Ball
+            Ball newBall = new Ball(0, 0, BALL_DX, BALL_DY);
+            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            newBall.reset(this.getPaddle());
+            addBall(newBall);
+        }
+    }
+
 
     // ====== KIỂM TRA VA CHẠM ======
     public void checkCollisions() throws MalformedURLException {
@@ -288,13 +325,15 @@ public class GameManager {
                     score += INCREASE_POINTS;
 
                     // Có thể sinh power-up
-                    if (random.nextDouble() < 0.2) {
+                    if (random.nextDouble() < 0.5) {
                         spawnPowerUp(brick.getX(), brick.getY());
                     }
 
                     if (brick.isDestroyed()) {
                         gamePane.getChildren().remove(brick.getView());
                     }
+                    // chỉ xử lý một va chạm gạch mỗi khung hình cho mỗi quả bóng
+                    break;
                 }
             }
 
@@ -312,7 +351,8 @@ public class GameManager {
 
             // Nếu va chạm giữa Paddle và fallingPowerUp thêm fallingPowerUp vào list activePowerups
             // Xóa fallingPowerUp chạm vào paddle khỏi danh sách hiển thị và list fallingPowerups
-            if (p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
+            if (p.getView() != null && paddle.getView() != null &&
+                    p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
                 handlePowerUpCollision(p);
             }
         }
@@ -406,12 +446,35 @@ public class GameManager {
         loseLifeSound.play(0.5);
     }
 
-    public void addBall(Ball ball) {
-        // Thêm đối tượng ball vào danh sách quản lý các quả bóng
-        this.balls.add(ball);
 
-        // Thêm hình ảnh của quả bóng vào Pane chính của game để nó được hiển thị
-        this.gamePane.getChildren().add(ball.getView());
+    public void addBall(Ball ball) {
+        if (ball == null) return;
+        if (this.balls != null) {
+            this.balls.add(ball);
+        }
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().add(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().add(ball.getView()));
+            }
+        }
+    }
+
+    public void removeBall(Ball ball) {
+        if (ball == null) return;
+
+        if (this.balls != null) {
+            this.balls.remove(ball);
+        }
+
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().remove(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().remove(ball.getView()));
+            }
+        }
     }
     public void increaseLives(int amount) {
         this.lives += amount;

@@ -25,12 +25,12 @@ public class ExtraLifePowerUp extends PowerUp {
         try {
             // Nhớ tạo một file ảnh tên là "extra_life_powerup.png" (ví dụ: hình trái tim)
             // và đặt nó vào thư mục images nhé!
-            Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/extra_life_powerup.png").toURI().toString());
+            Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/ExtraLifePowerUp.png").toURI().toString());
             this.view = new ImageView(image);
 
             // Ép kiểu để đặt kích thước cho ảnh
-            ((ImageView) this.view).setFitWidth(40);
-            ((ImageView) this.view).setFitHeight(40);
+            ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+            ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
 
             updateView(); // Cập nhật vị trí hiển thị
         } catch (Exception e) {
