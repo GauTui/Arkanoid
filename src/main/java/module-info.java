@@ -13,6 +13,7 @@ module com.example.arkanoid {
     requires javafx.graphics;
     requires jdk.jfr;
     requires javafx.media;
+    requires java.desktop;
     //requires com.example.arkanoid;
     //requires com.example.arkanoid;
 

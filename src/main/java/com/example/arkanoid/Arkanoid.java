@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.File;
 
 import java.io.IOException;
@@ -55,20 +56,18 @@ public class Arkanoid extends Application {
         ImageView ResumeImgV = new ImageView(ResumeImg);
         ResumeImgV.setFitHeight(70);
         ResumeImgV.setFitWidth(230);
-        Button ResumeBt = new Button();
-        ResumeBt.setStyle("-fx-background-color: transparent;");
-        ResumeBt.setGraphic(ResumeImgV);
-        ResumeBt.setLayoutX(245);
-        ResumeBt.setLayoutY(330);
-        ResumeBt.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), ResumeBt);
+        ResumeImgV.setPickOnBounds(false);
+        ResumeImgV.setLayoutX(245);
+        ResumeImgV.setLayoutY(330);
+        ResumeImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), ResumeImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        ResumeBt.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), ResumeBt);
+        ResumeImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), ResumeImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -79,20 +78,18 @@ public class Arkanoid extends Application {
         ImageView RestartImgV = new ImageView(RestartImg);
         RestartImgV.setFitHeight(70);
         RestartImgV.setFitWidth(230);
-        Button RestartBt = new Button();
-        RestartBt.setStyle("-fx-background-color: transparent;");
-        RestartBt.setGraphic(RestartImgV);
-        RestartBt.setLayoutX(245);
-        RestartBt.setLayoutY(420);
-        RestartBt.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartBt);
+        RestartImgV.setPickOnBounds(false);
+        RestartImgV.setLayoutX(245);
+        RestartImgV.setLayoutY(420);
+        RestartImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        RestartBt.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartBt);
+        RestartImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -103,26 +100,24 @@ public class Arkanoid extends Application {
         ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
         MainMenu2ImgV.setFitHeight(70); // set chieu cao
         MainMenu2ImgV.setFitWidth(230); // set chiều rong
-        Button MainMenu2Button = new Button();
-        MainMenu2Button.setStyle("-fx-background-color: transparent;");
-        MainMenu2Button.setGraphic(MainMenu2ImgV);
-        MainMenu2Button.setLayoutX(245); // tọa độ X của đầu nút
-        MainMenu2Button.setLayoutY(510);
-        MainMenu2Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2Button);
+        MainMenu2ImgV.setPickOnBounds(false);
+        MainMenu2ImgV.setLayoutX(245); // tọa độ X của đầu nút
+        MainMenu2ImgV.setLayoutY(510);
+        MainMenu2ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        MainMenu2Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2Button);
+        MainMenu2ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        MainMenu2Button.setOnAction(e->{
+        MainMenu2ImgV.setOnMouseClicked(e->{
             try {
                 Arkanoid.closeAllStages(); // đóng hết mọi Stage đang mở
                 GameManager gm = GameManager.getInstance();
@@ -136,13 +131,13 @@ public class Arkanoid extends Application {
             }
         });
 
-        ResumeBt.setOnAction(e -> {
+        ResumeImgV.setOnMouseClicked(e -> {
             ((Pane) PauseGamePane.getParent()).getChildren().remove(PauseGamePane);
             SoundManager.resumeMusic();
             GameManager.getInstance().getGameLoop().start();
         });
 
-        RestartBt.setOnAction(e->{
+        RestartImgV.setOnMouseClicked(e->{
             try {// đóng hết mọi Stage đang mở
                 String bgmFile = SoundManager.getCurrentBgmFile();
                 GameManager gm = GameManager.getInstance();
@@ -157,7 +152,7 @@ public class Arkanoid extends Application {
             }
         });
 
-        PauseGamePane.getChildren().addAll(MainMenu2Button,RestartBt,ResumeBt);
+        PauseGamePane.getChildren().addAll(MainMenu2ImgV,RestartImgV,ResumeImgV);
         return PauseGamePane;
     }
     @Override
@@ -171,20 +166,18 @@ public class Arkanoid extends Application {
         ImageView StartImgV = new ImageView(StartImg);
         StartImgV.setFitHeight(70); // set chieu cao
         StartImgV.setFitWidth(230); // set chiều rong
-        Button StartButton = new Button();
-        StartButton.setStyle("-fx-background-color: transparent;");
-        StartButton.setGraphic(StartImgV);
-        StartButton.setLayoutX(345); // tọa độ X của đầu nút
-        StartButton.setLayoutY(330); // tọa độ Y của đầu nút
-        StartButton.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartButton);
+        StartImgV.setPickOnBounds(false);
+        StartImgV.setLayoutX(345); // tọa độ X của đầu nút
+        StartImgV.setLayoutY(330); // tọa độ Y của đầu nút
+        StartImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        StartButton.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartButton);
+        StartImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -196,20 +189,18 @@ public class Arkanoid extends Application {
         ImageView TutorialImgV = new ImageView(TutorialImg);
         TutorialImgV.setFitHeight(70); // set chieu cao
         TutorialImgV.setFitWidth(230); // set chiều rong
-        Button TutorialButton = new Button();
-        TutorialButton.setStyle("-fx-background-color: transparent;");
-        TutorialButton.setGraphic(TutorialImgV);
-        TutorialButton.setLayoutX(345); // tọa độ X của đầu nút
-        TutorialButton.setLayoutY(420); // tọa độ Y của đầu nút
-        TutorialButton.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialButton);
+        TutorialImgV.setPickOnBounds(false);
+        TutorialImgV.setLayoutX(345); // tọa độ X của đầu nút
+        TutorialImgV.setLayoutY(420); // tọa độ Y của đầu nút
+        TutorialImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        TutorialButton.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialButton);
+        TutorialImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -221,26 +212,24 @@ public class Arkanoid extends Application {
         ImageView ExitImg3 = new ImageView(ExitImg);
         ExitImg3.setFitHeight(70); // set chieu cao
         ExitImg3.setFitWidth(230); // set chiều rong
-        Button ExitButton = new Button();
-        ExitButton.setStyle("-fx-background-color: transparent;");
-        ExitButton.setGraphic(ExitImg3);
-        ExitButton.setLayoutX(345); // tọa độ X của đầu nút
-        ExitButton.setLayoutY(510); // tọa độ Y của đầu nút
-        ExitButton.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitButton);
+        ExitImg3.setPickOnBounds(false);
+        ExitImg3.setLayoutX(345); // tọa độ X của đầu nút
+        ExitImg3.setLayoutY(510); // tọa độ Y của đầu nút
+        ExitImg3.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitImg3);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        ExitButton.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitButton);
+        ExitImg3.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitImg3);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        ExitButton.setOnAction(e->{
+        ExitImg3.setOnMouseClicked(e->{
             System.exit(0);
         });
 
@@ -261,14 +250,14 @@ public class Arkanoid extends Application {
         StackPane root = new StackPane();
         Pane bt = new Pane();
         //thêm các nút button làm con của bt
-        bt.getChildren().addAll(StartButton, TutorialButton, ExitButton);
+        bt.getChildren().addAll(StartImgV, TutorialImgV, ExitImg3);
         //thêm bt làm con của root để chỉ cần chạy root
         root.getChildren().addAll(bgView, bt);
 
         //load khung hình start game với từng tỷ lệ
         Scene scene = new Scene(root, 920, 720);
         // tiêu đề của game
-        StartButton.setOnAction(e -> {
+        StartImgV.setOnMouseClicked(e -> {
             try {
                 openLevelSelect(stage, scene);
             } catch (IOException ex) {
@@ -276,7 +265,7 @@ public class Arkanoid extends Application {
             }
         });
 
-        TutorialButton.setOnAction(e->{
+        TutorialImgV.setOnMouseClicked(e->{
             TutorialGame(stage,scene);
         });
         stage.setTitle("Arkanoid Game - Team 6");
@@ -300,26 +289,24 @@ public class Arkanoid extends Application {
         ImageView LV1ImgV = new ImageView(LV1Img);
         LV1ImgV.setFitHeight(60); // set chieu cao
         LV1ImgV.setFitWidth(310); // set chiều rong
-        Button LV1Button = new Button();
-        LV1Button.setStyle("-fx-background-color: transparent;");
-        LV1Button.setGraphic(LV1ImgV);
-        LV1Button.setLayoutX(30); // tọa độ X của đầu nút
-        LV1Button.setLayoutY(180);
-        LV1Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV1Button);
+        LV1ImgV.setPickOnBounds(false);
+        LV1ImgV.setLayoutX(30); // tọa độ X của đầu nút
+        LV1ImgV.setLayoutY(180);
+        LV1ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV1ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        LV1Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV1Button);
+        LV1ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV1ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        LV1Button.setOnAction(e -> {
+        LV1ImgV.setOnMouseClicked(e -> {
             Stage stage1 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             SoundManager lv1sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic1.wav");
@@ -331,27 +318,25 @@ public class Arkanoid extends Application {
         ImageView LV2ImgV = new ImageView(LV2Img);
         LV2ImgV.setFitHeight(60); // set chieu cao
         LV2ImgV.setFitWidth(310); // set chiều rong
-        Button LV2Button = new Button();
-        LV2Button.setStyle("-fx-background-color: transparent;");
-        LV2Button.setGraphic(LV2ImgV);
-        LV2Button.setLayoutX(30); // tọa độ X của đầu nút
-        LV2Button.setLayoutY(260);
+        LV2ImgV.setPickOnBounds(false);
+        LV2ImgV.setLayoutX(30); // tọa độ X của đầu nút
+        LV2ImgV.setLayoutY(260);
 
-        LV2Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV2Button);
+        LV2ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV2ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        LV2Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV2Button);
+        LV2ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV2ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        LV2Button.setOnAction(e -> {
+        LV2ImgV.setOnMouseClicked(e -> {
             Stage stage2 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             SoundManager lv2sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic2.wav");
@@ -363,26 +348,24 @@ public class Arkanoid extends Application {
         ImageView LV3ImgV = new ImageView(LV3Img);
         LV3ImgV.setFitHeight(60); // set chieu cao
         LV3ImgV.setFitWidth(310); // set chiều rong
-        Button LV3Button = new Button();
-        LV3Button.setStyle("-fx-background-color: transparent;");
-        LV3Button.setGraphic(LV3ImgV);
-        LV3Button.setLayoutX(30); // tọa độ X của đầu nút
-        LV3Button.setLayoutY(340);
-        LV3Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV3Button);
+        LV3ImgV.setPickOnBounds(false);
+        LV3ImgV.setLayoutX(30); // tọa độ X của đầu nút
+        LV3ImgV.setLayoutY(340);
+        LV3ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV3ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        LV3Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV3Button);
+        LV3ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV3ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        LV3Button.setOnAction(e -> {
+        LV3ImgV.setOnMouseClicked(e -> {
             Stage stage3 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             SoundManager lv3sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic3.wav");
@@ -394,26 +377,24 @@ public class Arkanoid extends Application {
         ImageView LV4ImgV = new ImageView(LV4Img);
         LV4ImgV.setFitHeight(60); // set chieu cao
         LV4ImgV.setFitWidth(310); // set chiều rong
-        Button LV4Button = new Button();
-        LV4Button.setStyle("-fx-background-color: transparent;");
-        LV4Button.setGraphic(LV4ImgV);
-        LV4Button.setLayoutX(30); // tọa độ X của đầu nút
-        LV4Button.setLayoutY(420);
-        LV4Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV4Button);
+        LV4ImgV.setPickOnBounds(false);
+        LV4ImgV.setLayoutX(30); // tọa độ X của đầu nút
+        LV4ImgV.setLayoutY(420);
+        LV4ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV4ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        LV4Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV4Button);
+        LV4ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV4ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        LV4Button.setOnAction(e -> {
+        LV4ImgV.setOnMouseClicked(e -> {
             Stage stage4 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             SoundManager lv4sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic4.wav");
@@ -425,26 +406,24 @@ public class Arkanoid extends Application {
         ImageView LV5ImgV = new ImageView(LV5Img);
         LV5ImgV.setFitHeight(60); // set chieu cao
         LV5ImgV.setFitWidth(310); // set chiều rong
-        Button LV5Button = new Button();
-        LV5Button.setStyle("-fx-background-color: transparent;");
-        LV5Button.setGraphic(LV5ImgV);
-        LV5Button.setLayoutX(30); // tọa độ X của đầu nút
-        LV5Button.setLayoutY(500);
-        LV5Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV5Button);
+        LV5ImgV.setPickOnBounds(false);
+        LV5ImgV.setLayoutX(30); // tọa độ X của đầu nút
+        LV5ImgV.setLayoutY(500);
+        LV5ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV5ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        LV5Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV5Button);
+        LV5ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV5ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        LV5Button.setOnAction(e -> {
+        LV5ImgV.setOnMouseClicked(e -> {
             Stage stage5 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             SoundManager lv5sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic5.wav");
@@ -456,28 +435,24 @@ public class Arkanoid extends Application {
         ImageView LV6ImgV = new ImageView(LV6Img);
         LV6ImgV.setFitHeight(60); // set chieu cao
         LV6ImgV.setFitWidth(310); // set chiều rong
-        Button LV6Button = new Button();
-        LV6Button.setStyle("-fx-background-color: transparent;");
-        LV6Button.setGraphic(LV6ImgV);
-        LV6Button.setOnMouseExited(e-> LV6Button.setOpacity(1.0));
-        LV6Button.setOnMouseEntered(e-> LV6Button.setOpacity(0.5));// set ảnh
-        LV6Button.setLayoutX(30); // tọa độ X của đầu nút
-        LV6Button.setLayoutY(580);
-        LV6Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV6Button);
+        LV6ImgV.setPickOnBounds(false);
+        LV6ImgV.setLayoutX(30); // tọa độ X của đầu nút
+        LV6ImgV.setLayoutY(580);
+        LV6ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV6ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        LV6Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV6Button);
+        LV6ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV6ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        LV6Button.setOnAction(e -> {
+        LV6ImgV.setOnMouseClicked(e -> {
             Stage stage6 = (Stage) ((Node)e.getSource()).getScene().getWindow();
             SoundManager lv6sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic1.wav");
@@ -489,33 +464,31 @@ public class Arkanoid extends Application {
         ImageView MainMenuImgV = new ImageView(MainMenuImg);
         MainMenuImgV.setFitHeight(60); // set chieu cao
         MainMenuImgV.setFitWidth(110); // set chiều rong
-        Button MainMenuButton = new Button();
-        MainMenuButton.setStyle("-fx-background-color: transparent;");
-        MainMenuButton.setGraphic(MainMenuImgV);
-        MainMenuButton.setLayoutX(20); // tọa độ X của đầu nút
-        MainMenuButton.setLayoutY(20);
-        MainMenuButton.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuButton);
+        MainMenuImgV.setPickOnBounds(false);
+        MainMenuImgV.setLayoutX(20); // tọa độ X của đầu nút
+        MainMenuImgV.setLayoutY(20);
+        MainMenuImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        MainMenuButton.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuButton);
+        MainMenuImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        MainMenuButton.setOnAction(e -> {
+        MainMenuImgV.setOnMouseClicked(e -> {
             try {
                 start(stage);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
-        SelectLVButton.getChildren().addAll(LV1Button, LV2Button, LV3Button, LV4Button, LV5Button,LV6Button, MainMenuButton);
+        SelectLVButton.getChildren().addAll(LV1ImgV, LV2ImgV, LV3ImgV, LV4ImgV, LV5ImgV,LV6ImgV, MainMenuImgV);
         SelectLV.getChildren().addAll(pbgView, SelectLVButton);
         Scene lvScene = new Scene(SelectLV, 920, 720);
         stage.setScene(lvScene);
@@ -527,26 +500,24 @@ public class Arkanoid extends Application {
         ImageView RestartImgV = new ImageView(RestartImg2);
         RestartImgV.setFitHeight(70);
         RestartImgV.setFitWidth(230);
-        Button RestartButton2 = new Button();
-        RestartButton2.setStyle("-fx-background-color: transparent;");
-        RestartButton2.setGraphic(RestartImgV);
-        RestartButton2.setLayoutX(345);
-        RestartButton2.setLayoutY(330);
-        RestartButton2.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartButton2);
+        RestartImgV.setPickOnBounds(false);
+        RestartImgV.setLayoutX(345);
+        RestartImgV.setLayoutY(330);
+        RestartImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        RestartButton2.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartButton2);
+        RestartImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        RestartButton2.setOnAction(e->{
+        RestartImgV.setOnMouseClicked(e->{
             try {//  đóng hết mọi Stage đang mở
                 String bgmFile = SoundManager.getCurrentBgmFile();
                 GameManager gm = GameManager.getInstance();
@@ -566,26 +537,24 @@ public class Arkanoid extends Application {
         ImageView MainmenuImgV2 = new ImageView(MainenuImg2);
         MainmenuImgV2.setFitHeight(70);
         MainmenuImgV2.setFitWidth(230);
-        Button MainMenuButton2 = new Button();
-        MainMenuButton2.setStyle("-fx-background-color: transparent;");
-        MainMenuButton2.setGraphic(MainmenuImgV2);
-        MainMenuButton2.setLayoutX(345);
-        MainMenuButton2.setLayoutY(420);
-        MainMenuButton2.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuButton2);
+        MainmenuImgV2.setPickOnBounds(false);
+        MainmenuImgV2.setLayoutX(345);
+        MainmenuImgV2.setLayoutY(420);
+        MainmenuImgV2.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainmenuImgV2);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        MainMenuButton2.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuButton2);
+        MainmenuImgV2.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainmenuImgV2);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        MainMenuButton2.setOnAction(e -> {
+        MainmenuImgV2.setOnMouseClicked(e -> {
             try {
                 GameManager gm = GameManager.getInstance();
                 gm.reset();
@@ -599,7 +568,7 @@ public class Arkanoid extends Application {
             }
         });
 
-        GameLosePane.getChildren().addAll(MainMenuButton2,RestartButton2);
+        GameLosePane.getChildren().addAll(MainmenuImgV2,RestartImgV);
         return GameLosePane;
     }
 
@@ -624,20 +593,18 @@ public class Arkanoid extends Application {
         ImageView backImgV = new ImageView(backImg);
         backImgV.setFitHeight(55);
         backImgV.setFitWidth(110);
-        Button BackButton = new Button();
-        BackButton.setStyle("-fx-background-colo: transparent; -fx-padding: 0;");
-        BackButton.setGraphic(backImgV);
-        BackButton.setLayoutX(30);
-        BackButton.setLayoutY(5);
-        BackButton.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackButton);
+        backImgV.setPickOnBounds(false);
+        backImgV.setLayoutX(30);
+        backImgV.setLayoutY(5);
+        backImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), backImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        BackButton.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackButton);
+        backImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), backImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -648,20 +615,18 @@ public class Arkanoid extends Application {
         ImageView nextImgV = new ImageView(nextImg);
         nextImgV.setFitHeight(55);
         nextImgV.setFitWidth(110);
-        Button NextButton = new Button();
-        NextButton.setStyle("-fx-background-colo: transparent; -fx-padding: 0;");
-        NextButton.setGraphic(nextImgV);
-        NextButton.setLayoutX(790);
-        NextButton.setLayoutY(650);
-        NextButton.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), NextButton);
+        nextImgV.setPickOnBounds(false);
+        nextImgV.setLayoutX(790);
+        nextImgV.setLayoutY(650);
+        nextImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), nextImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        NextButton.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), NextButton);
+        nextImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), nextImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -669,14 +634,14 @@ public class Arkanoid extends Application {
 
         int[] CurrentPage = {0};
 
-        BackButton.setOnAction(e->{
+        backImgV.setOnMouseClicked(e->{
             CurrentPage[0] --;
             if(CurrentPage[0] <0) {
                 CurrentPage[0] = 2;
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
         });
-        NextButton.setOnAction(e->{
+        nextImgV.setOnMouseClicked(e->{
             CurrentPage[0] ++;
             if(CurrentPage[0] == 3) {
                 CurrentPage[0] = 0;
@@ -688,26 +653,24 @@ public class Arkanoid extends Application {
         ImageView BackToMenuImgV = new ImageView(BackToMenuImg);
         BackToMenuImgV.setFitWidth(300);
         BackToMenuImgV.setFitHeight(60);
-        Button BackToMenu = new Button();
-        BackToMenu.setGraphic(BackToMenuImgV);
-        BackToMenu.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
-        BackToMenu.setLayoutX(310);
-        BackToMenu.setLayoutY(650);
-        BackToMenu.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackToMenu);
+        BackToMenuImgV.setPickOnBounds(false);
+        BackToMenuImgV.setLayoutX(310);
+        BackToMenuImgV.setLayoutY(650);
+        BackToMenuImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackToMenuImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        BackToMenu.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackToMenu);
+        BackToMenuImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackToMenuImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        BackToMenu.setOnAction(e->{
+        BackToMenuImgV.setOnMouseClicked(e->{
             try{
                 start(stage);
             } catch (IOException ex) {
@@ -715,7 +678,7 @@ public class Arkanoid extends Application {
             }
         });
 
-        Pane TutorialPane = new Pane(TutorialView, BackButton, NextButton,BackToMenu);
+        Pane TutorialPane = new Pane(TutorialView, backImgV, nextImgV,BackToMenuImgV);
         Scene TutorialScene = new Scene(TutorialPane,920,720);
         stage.setScene(TutorialScene);
     }
@@ -727,20 +690,18 @@ public class Arkanoid extends Application {
         ImageView RestartImgV = new ImageView(RestartImg);
         RestartImgV.setFitHeight(70);
         RestartImgV.setFitWidth(230);
-        Button RestartBt = new Button();
-        RestartBt.setStyle("-fx-background-color: transparent;");
-        RestartBt.setGraphic(RestartImgV);
-        RestartBt.setLayoutX(345);
-        RestartBt.setLayoutY(420);
-        RestartBt.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartBt);
+        RestartImgV.setPickOnBounds(false);
+        RestartImgV.setLayoutX(345);
+        RestartImgV.setLayoutY(420);
+        RestartImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        RestartBt.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartBt);
+        RestartImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
@@ -766,26 +727,24 @@ public class Arkanoid extends Application {
         ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
         MainMenu2ImgV.setFitHeight(70); // set chieu cao
         MainMenu2ImgV.setFitWidth(230); // set chiều rong
-        Button MainMenu2Button = new Button();
-        MainMenu2Button.setStyle("-fx-background-color: transparent;");
-        MainMenu2Button.setGraphic(MainMenu2ImgV);
-        MainMenu2Button.setLayoutX(345); // tọa độ X của đầu nút
-        MainMenu2Button.setLayoutY(510);
-        MainMenu2Button.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2Button);
+        MainMenu2ImgV.setPickOnBounds(false);
+        MainMenu2ImgV.setLayoutX(345); // tọa độ X của đầu nút
+        MainMenu2ImgV.setLayoutY(510);
+        MainMenu2ImgV.setOnMouseEntered(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
         });
 
-        MainMenu2Button.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2Button);
+        MainMenu2ImgV.setOnMouseExited(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
         });
 
-        MainMenu2Button.setOnAction(e -> {
+        MainMenu2ImgV.setOnMouseClicked(e -> {
             try {
                 Arkanoid.closeAllStages(); //
                 GameManager gm = GameManager.getInstance();
@@ -799,20 +758,20 @@ public class Arkanoid extends Application {
             }
         });
 
-        RestartBt.setOnAction(e->{
+        RestartImgV.setOnMouseClicked(e -> {
             try {//  đóng hết mọi Stage đang mở
                 GameManager gm = GameManager.getInstance();
                 gm.reset();
                 Arkanoid.closeAllStages();
                 Stage newStage = new Stage();
                 Arkanoid mainApp = new Arkanoid();
-                mainApp.startLevel(newStage,1);
+                mainApp.startLevel(newStage, 1);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
 
-        GameWinPane.getChildren().addAll(RestartBt,MainMenu2Button);
+        GameWinPane.getChildren().addAll(RestartImgV,MainMenu2ImgV);
         return GameWinPane;
     }
     public void startLevel(Stage stage, int LevelNumber) {
