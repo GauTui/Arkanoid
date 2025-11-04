@@ -69,7 +69,7 @@ public class Ball extends MovableObject {
             double radians = Math.toRadians(angle);
             double speed = Math.sqrt(BALL_DX * BALL_DX + BALL_DY * BALL_DY);
 
-            this.setDx(speed * Math.sin(radians));
+            this.setDx(0);
             this.setDy(-speed * Math.cos(radians)); // Luôn hướng lên trên
 
             launched = true;
