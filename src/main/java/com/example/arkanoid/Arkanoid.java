@@ -161,14 +161,14 @@ public class Arkanoid extends Application {
         if (stage.getScene() != null && stage.getScene().getRoot() instanceof Pane oldPane) {
             oldPane.getChildren().clear();
         }
-        File LoadImg = new File("src/main/resources/com/example/arkanoid/images/StartGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
+        File LoadImg = new File("src/main/resources/com/example/arkanoid/images/StartButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image StartImg = new Image(LoadImg.toURL().toString());
         ImageView StartImgV = new ImageView(StartImg);
-        StartImgV.setFitHeight(70); // set chieu cao
-        StartImgV.setFitWidth(230); // set chiều rong
+        StartImgV.setFitHeight(200); // set chieu cao
+        StartImgV.setFitWidth(270); // set chiều rong
         StartImgV.setPickOnBounds(false);
-        StartImgV.setLayoutX(345); // tọa độ X của đầu nút
-        StartImgV.setLayoutY(330); // tọa độ Y của đầu nút
+        StartImgV.setLayoutX(325); // tọa độ X của đầu nút
+        StartImgV.setLayoutY(230); // tọa độ Y của đầu nút
         StartImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), StartImgV);
             st.setToX(1.1);
@@ -187,11 +187,11 @@ public class Arkanoid extends Application {
         File LoadImg2 = new File("src/main/resources/com/example/arkanoid/images/TutorialBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image TutorialImg = new Image(LoadImg2.toURL().toString());
         ImageView TutorialImgV = new ImageView(TutorialImg);
-        TutorialImgV.setFitHeight(70); // set chieu cao
-        TutorialImgV.setFitWidth(230); // set chiều rong
+        TutorialImgV.setFitHeight(200); // set chieu cao
+        TutorialImgV.setFitWidth(270); // set chiều rong
         TutorialImgV.setPickOnBounds(false);
-        TutorialImgV.setLayoutX(345); // tọa độ X của đầu nút
-        TutorialImgV.setLayoutY(420); // tọa độ Y của đầu nút
+        TutorialImgV.setLayoutX(325); // tọa độ X của đầu nút
+        TutorialImgV.setLayoutY(340); // tọa độ Y của đầu nút
         TutorialImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialImgV);
             st.setToX(1.1);
@@ -210,11 +210,11 @@ public class Arkanoid extends Application {
         File LoadImg3 = new File("src/main/resources/com/example/arkanoid/images/ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image ExitImg = new Image(LoadImg3.toURL().toString());
         ImageView ExitImg3 = new ImageView(ExitImg);
-        ExitImg3.setFitHeight(70); // set chieu cao
-        ExitImg3.setFitWidth(230); // set chiều rong
+        ExitImg3.setFitHeight(200); // set chieu cao
+        ExitImg3.setFitWidth(270); // set chiều rong
         ExitImg3.setPickOnBounds(false);
-        ExitImg3.setLayoutX(345); // tọa độ X của đầu nút
-        ExitImg3.setLayoutY(510); // tọa độ Y của đầu nút
+        ExitImg3.setLayoutX(325); // tọa độ X của đầu nút
+        ExitImg3.setLayoutY(450); // tọa độ Y của đầu nút
         ExitImg3.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitImg3);
             st.setToX(1.1);
@@ -462,11 +462,11 @@ public class Arkanoid extends Application {
         File LoadImg4 = new File("src/main/resources/com/example/arkanoid/images/BackButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenuImg = new Image(LoadImg4.toURL().toString());
         ImageView MainMenuImgV = new ImageView(MainMenuImg);
-        MainMenuImgV.setFitHeight(60); // set chieu cao
-        MainMenuImgV.setFitWidth(110); // set chiều rong
+        MainMenuImgV.setFitHeight(80); // set chieu cao
+        MainMenuImgV.setFitWidth(160); // set chiều rong
         MainMenuImgV.setPickOnBounds(false);
-        MainMenuImgV.setLayoutX(20); // tọa độ X của đầu nút
-        MainMenuImgV.setLayoutY(20);
+        MainMenuImgV.setLayoutX(5); // tọa độ X của đầu nút
+        MainMenuImgV.setLayoutY(5);
         MainMenuImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuImgV);
             st.setToX(1.1);
@@ -591,10 +591,10 @@ public class Arkanoid extends Application {
         File loadBackButton = new File("src/main/resources/com/example/arkanoid/images/BackButton.png");
         Image backImg = new Image(loadBackButton.toURI().toString());
         ImageView backImgV = new ImageView(backImg);
-        backImgV.setFitHeight(55);
-        backImgV.setFitWidth(110);
+        backImgV.setFitHeight(80);
+        backImgV.setFitWidth(160);
         backImgV.setPickOnBounds(false);
-        backImgV.setLayoutX(30);
+        backImgV.setLayoutX(5);
         backImgV.setLayoutY(5);
         backImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), backImgV);
@@ -613,11 +613,11 @@ public class Arkanoid extends Application {
         File loadNextButton = new File("src/main/resources/com/example/arkanoid/images/NextButton.png");
         Image nextImg = new Image(loadNextButton.toURI().toString());
         ImageView nextImgV = new ImageView(nextImg);
-        nextImgV.setFitHeight(55);
-        nextImgV.setFitWidth(110);
+        nextImgV.setFitHeight(80);
+        nextImgV.setFitWidth(160);
         nextImgV.setPickOnBounds(false);
-        nextImgV.setLayoutX(790);
-        nextImgV.setLayoutY(650);
+        nextImgV.setLayoutX(755);
+        nextImgV.setLayoutY(635);
         nextImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), nextImgV);
             st.setToX(1.1);
