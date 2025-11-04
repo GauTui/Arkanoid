@@ -2,7 +2,6 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
@@ -24,7 +23,7 @@ import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
-    private boolean isGameStarted = false;
+
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
     public static final int INITIAL_LIVES = 3;
@@ -60,11 +59,6 @@ public class GameManager {
     private Arkanoid mainApp;
 
     /*====Getter/setter====*/
-    public void launchBall() {
-        if (!isGameStarted) {
-            isGameStarted = true;
-        }
-    }
     public List<Ball> getBalls() {
         return balls;
     }
@@ -208,11 +202,9 @@ public class GameManager {
 
     public void update() throws MalformedURLException {
         // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
-        if (!isGameStarted) {
-            // Lấy quả bóng đầu tiên và cập nhật vị trí của nó theo paddle
-            if (!balls.isEmpty()) {
-                balls.get(0).reset(paddle);
-            }
+        if (!balls.get(0).isLaunched()) {
+            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            balls.get(0).reset(paddle);
             // Không làm gì thêm cho đến khi game bắt đầu
             return;
         }
@@ -249,8 +241,6 @@ public class GameManager {
 
             // reset bóng và thanh đỡ cho màn mới
             paddle.reset();
-            // Reset trạng thái game để chờ phóng bóng ở màn tiếp theo
-            isGameStarted = false;
 
             //màn mới chỉ nên có 1 bóng, xóa các bóng còn thừa
             for (int i = balls.size() - 1; i >= 1; i--) {

@@ -21,7 +21,7 @@ public class FastBallPowerUp extends PowerUp {
 
     public FastBallPowerUp(double x, double y) {
         super(x, y); // dy = POWERUP_GRAVITY
-        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/ExtraLifePowerUp.png").toURI().toString());
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/FastBallPowerUp.png").toURI().toString());
         this.view = new ImageView(image);
 
         // Ép kiểu để đặt kích thước cho ảnh
@@ -64,7 +64,7 @@ public class FastBallPowerUp extends PowerUp {
             b.setDx(newDx);
             b.setDy(newDy);
         }
-        System.out.println("FastBallPowerUp effect applied, speeds increased.");
+        System.out.println("FastBallPowerUp effect applied.");
     }
 
     @Override
@@ -90,6 +90,6 @@ public class FastBallPowerUp extends PowerUp {
             }
         }
         originalSpeedMagnitudes.clear();
-        System.out.println("FastBallPowerUp effect removed, speeds restored.");
+        System.out.println("FastBallPowerUp effect removed.");
     }
 }

@@ -18,6 +18,8 @@ public class Ball extends MovableObject {
     public static final double BALL_DX = 2;
     public static final double BALL_DY = -2;
 
+    public boolean launched = false; // trạng thái quả bóng đã được phóng chưa
+
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
      * @param x toa do theo truc x
@@ -41,7 +43,13 @@ public class Ball extends MovableObject {
         //Node view khoi tao la Rball
         this.view = Rball;
     }
+    // ========= GETTER & SETTER =========
 
+    public boolean isLaunched() {
+        return launched;
+    }
+
+    // ========== PHƯƠNG THỨC ==========
     /**
      * phuong thuc lay so ngau nhien trong doan [a;b]
      * @param a so thuc a
@@ -52,6 +60,20 @@ public class Ball extends MovableObject {
         Random rand = new Random();
         // Công thức chuẩn: a + (b - a) * rand.nextDouble()
         return a + (b - a) * rand.nextDouble();
+    }
+
+    public void launch() {
+        if (!launched) {
+            // Thiết lập vận tốc ban đầu với góc ngẫu nhiên
+            double angle = getRandomNumber(-45, 45); // Góc từ -45 đến 45 độ
+            double radians = Math.toRadians(angle);
+            double speed = Math.sqrt(BALL_DX * BALL_DX + BALL_DY * BALL_DY);
+
+            this.setDx(speed * Math.sin(radians));
+            this.setDy(-speed * Math.cos(radians)); // Luôn hướng lên trên
+
+            launched = true;
+        }
     }
 
     /**
@@ -112,8 +134,8 @@ public class Ball extends MovableObject {
         if(sound) {
             SoundEffect WallCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
             WallCollideSound.play(0.5);
+            System.out.println("collide with wall " + this.getDx() + " , " + this.getDy());
         }
-        System.out.println("collide with wall " + this.getDx() + " , " + this.getDy());
     }
 
     /**
@@ -252,14 +274,15 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
     /**
      * Hàm reset lại vị trí, vận tốc quả bóng khi bóng rơi ra khỏi đáy màn hình.
      * vị trí ở giữa thanh trượt paddle.
+     * vân tốc dx,dy = 0
      * @param paddle thanh trượt để lấy vị trí tâm gậy
      */
     public void reset(Paddle paddle) {
-        this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
+        this.setX(paddle.getX() + paddle.getWidth() / 2.0 - this.getWidth() / 2.0);
         this.setY(paddle.getY() - this.getHeight());
-        this.setDx(BALL_DX);
-        this.setDy(BALL_DY);
+        this.setDx(0);
+        this.setDy(0);
+        launched = false;
         updateView();
     }
-
 }
