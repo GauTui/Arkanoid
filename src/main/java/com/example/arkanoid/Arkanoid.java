@@ -477,7 +477,7 @@ public class Arkanoid extends Application {
         RestartImgV.setFitHeight(70);
         RestartImgV.setFitWidth(230);
         RestartImgV.setPickOnBounds(false);
-        RestartImgV.setLayoutX(345);
+        RestartImgV.setLayoutX(235);
         RestartImgV.setLayoutY(330);
         RestartImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
@@ -514,7 +514,7 @@ public class Arkanoid extends Application {
         MainmenuImgV2.setFitHeight(70);
         MainmenuImgV2.setFitWidth(230);
         MainmenuImgV2.setPickOnBounds(false);
-        MainmenuImgV2.setLayoutX(345);
+        MainmenuImgV2.setLayoutX(235);
         MainmenuImgV2.setLayoutY(420);
         MainmenuImgV2.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), MainmenuImgV2);
@@ -667,8 +667,8 @@ public class Arkanoid extends Application {
         RestartImgV.setFitHeight(70);
         RestartImgV.setFitWidth(230);
         RestartImgV.setPickOnBounds(false);
-        RestartImgV.setLayoutX(345);
-        RestartImgV.setLayoutY(420);
+        RestartImgV.setLayoutX(235);
+        RestartImgV.setLayoutY(300);
         RestartImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.1);
@@ -704,8 +704,8 @@ public class Arkanoid extends Application {
         MainMenu2ImgV.setFitHeight(70); // set chieu cao
         MainMenu2ImgV.setFitWidth(230); // set chiều rong
         MainMenu2ImgV.setPickOnBounds(false);
-        MainMenu2ImgV.setLayoutX(345); // tọa độ X của đầu nút
-        MainMenu2ImgV.setLayoutY(510);
+        MainMenu2ImgV.setLayoutX(235); // tọa độ X của đầu nút
+        MainMenu2ImgV.setLayoutY(400);
         MainMenu2ImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
             st.setToX(1.1);
@@ -757,7 +757,7 @@ public class Arkanoid extends Application {
         Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
         ImageView loadBGImgV = new ImageView(loadBGImg);
         loadBGImgV.setFitWidth(720);
-        loadBGImgV.setFitHeight(800);
+        loadBGImgV.setFitHeight(720);
         gamePane.getChildren().add(loadBGImgV);
         gm.init(gamePane, this, LevelNumber);
         Scene scene = new Scene(gamePane, 920, GameManager.SCREEN_HEIGHT);

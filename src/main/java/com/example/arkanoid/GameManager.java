@@ -248,13 +248,18 @@ public class GameManager {
                     try {
                         Stage stage = (Stage) gamePane.getScene().getWindow();
                         Pane winPane = mainApp.GameWin(stage, score);
+                        winPane.setPrefSize(720,720);
+                        winPane.setClip(new javafx.scene.shape.Rectangle(720, 720));
+                        javafx.geometry.Point2D gamePanePos = gamePane.localToScreen(0, 0);
                         winPane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
-                        Scene transparentScene = new Scene(winPane, SCREEN_WIDTH, SCREEN_HEIGHT);
+                        Scene transparentScene = new Scene(winPane, 720, 700);
                         transparentScene.setFill(null);
                         Stage overlayStage = new Stage();
                         overlayStage.initOwner(stage);
                         overlayStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
                         overlayStage.setScene(transparentScene);
+                        overlayStage.setX(gamePanePos.getX());
+                        overlayStage.setY(gamePanePos.getY());
                         overlayStage.show();
 
                     } catch (Exception e) {
@@ -325,12 +330,15 @@ public class GameManager {
                         Stage stage = (Stage) gamePane.getScene().getWindow();
                         Pane losePane = mainApp.GameLoseSc(stage, score,currentLevel);
                         losePane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
-                        Scene transparentScene = new Scene(losePane, SCREEN_WIDTH, SCREEN_HEIGHT);
+                        javafx.geometry.Point2D gamePanePos = gamePane.localToScreen(0, 0);
+                        Scene transparentScene = new Scene(losePane, 720, SCREEN_HEIGHT);
                         transparentScene.setFill(null);
                         Stage overlayStage = new Stage();
                         overlayStage.initOwner(stage);
                         overlayStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
                         overlayStage.setScene(transparentScene);
+                        overlayStage.setX(gamePanePos.getX());
+                        overlayStage.setY(gamePanePos.getY());
                         overlayStage.show();
 
                     } catch (Exception e) {
