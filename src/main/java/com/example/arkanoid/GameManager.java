@@ -216,12 +216,19 @@ public class GameManager {
     }
 
     public void update() throws MalformedURLException {
-        // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
-        if (!balls.get(0).isLaunched()) {
-            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
-            balls.get(0).reset(paddle);
-            // Không làm gì thêm cho đến khi game bắt đầu
-            return;
+        // Check nếu còn bóng nào đang bay
+        boolean anyLaunched = false;
+        for (Ball ball : balls) {
+            if (ball.isLaunched()) {
+                anyLaunched = true;
+            }
+        }
+
+        // Nếu không còn bóng nào đang bay → reset bóng trên paddle
+        if (!anyLaunched) {
+            for (Ball ball : balls) {
+                ball.reset(paddle); // stop và đặt lại vị trí
+            }
         }
 
         // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
@@ -552,5 +559,13 @@ public class GameManager {
         bricks.clear();
         score = 0;
         lives = 3;
+    }
+
+    public void launchBall() {
+        for (Ball ball : balls) {
+            if (!ball.isLaunched()) {
+                ball.launch();
+            }
+        }
     }
 }

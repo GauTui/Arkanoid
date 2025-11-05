@@ -66,9 +66,6 @@ public class SplitBallPowerUp extends PowerUp {
 
         // Thêm bóng mới vào game
         for (Ball ball : newBalls) {
-            if( gm.getBalls().size() < GameManager.MAX_BALLS ) {// Giới hạn số lượng bóng tối đa
-                return;
-            }
             gm.addBall(ball);
         }
     }

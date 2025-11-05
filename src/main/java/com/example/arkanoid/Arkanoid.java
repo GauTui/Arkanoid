@@ -33,6 +33,10 @@ import java.net.MalformedURLException;
  */
 
 public class Arkanoid extends Application {
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
+    private static final double PADDLE_SPEED = 600.0; // pixels per second
+
     public static void closeAllStages() {
         Platform.runLater(() -> {
             for (Window window : Stage.getWindows()) {
@@ -774,20 +778,33 @@ public class Arkanoid extends Application {
         scene.setOnMouseMoved(event -> {
             mouseX = event.getX();
         });
-
-        // Game loop
-
+        // Game loop with delta-time paddle movement
         AnimationTimer gameLoop = new AnimationTimer() {
+            private long lastTime = 0;
+
             @Override
             public void handle(long now) {
-                // Cập nhật vị trí paddle theo chuột
-                Paddle paddle = gm.getPaddle();
-                double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(),
-                        mouseX - paddle.getWidth() / 2.0));
-                paddle.setX(newX);
-                paddle.updateView();
+                if (lastTime == 0) {
+                    lastTime = now;
+                    return;
+                }
+                double elapsedSeconds = (now - lastTime) / 1_000_000_000.0;
+                lastTime = now;
 
-                // Cập nhật toàn bộ game
+                // Update paddle position using keyboard input
+                Paddle paddle = gm.getPaddle();
+                if (paddle != null) {
+                    double dx = 0;
+                    if (leftPressed) dx -= PADDLE_SPEED * elapsedSeconds;
+                    if (rightPressed) dx += PADDLE_SPEED * elapsedSeconds;
+
+                    double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(),
+                            paddle.getX() + dx));
+                    paddle.setX(newX);
+                    paddle.updateView();
+                }
+
+                // Update the rest of the game
                 try {
                     gm.update();
                 } catch (MalformedURLException e) {
@@ -795,18 +812,15 @@ public class Arkanoid extends Application {
                 }
             }
         };
-        gm.setGameLoop(gameLoop);
         gameLoop.start();
 
+        gm.setGameLoop(gameLoop);
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
+                case LEFT, A -> leftPressed = true;
+                case RIGHT, D -> rightPressed = true;
                 // nút space để phóng bóng
-                case SPACE -> {
-                    if (!gm.getBalls().isEmpty()) {
-                        gm.getBalls().get(0).launch();
-                    }
-                }
-
+                case SPACE -> gm.launchBall();
                 case ESCAPE -> {
                     try {
                         gameLoop.stop(); // dừng game
@@ -817,6 +831,14 @@ public class Arkanoid extends Application {
                         e.printStackTrace();
                     }
                 }
+            }
+        });
+
+        // thả phím di chuyển paddle
+        scene.setOnKeyReleased(event -> {
+            switch (event.getCode()) {
+                case LEFT, A -> leftPressed = false;
+                case RIGHT, D -> rightPressed = false;
             }
         });
 

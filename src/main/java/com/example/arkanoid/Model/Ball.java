@@ -15,10 +15,10 @@ import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject {
     public static final int BALL_SIZE = 20;
-    public static final double BALL_DX = 2;
-    public static final double BALL_DY = -2;
+    public static final double BALL_DX = 3;
+    public static final double BALL_DY = -2.5;
 
-    public boolean launched = false; // trạng thái quả bóng đã được phóng chưa
+    public boolean launched = true; // trạng thái quả bóng đã được phóng chưa
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
@@ -188,7 +188,7 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         if (deltaY < 0) {
             double relativeIntersectX = ballCenterX - paddleCenterX;
             double normalizedIntersect = relativeIntersectX / (paddle.getWidth() / 2);
-            double angle = normalizedIntersect * 30; // Góc tối đa 60 độ
+            double angle = normalizedIntersect * 30; // Góc tối đa 30 độ
             double velocity = Math.sqrt(this.getDx() * this.getDx() + this.getDy() * this.getDy());
 
             this.setDx(velocity * Math.sin(Math.toRadians(angle)));
