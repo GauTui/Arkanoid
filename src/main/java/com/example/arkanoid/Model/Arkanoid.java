@@ -80,7 +80,7 @@ public class Arkanoid extends Application {
                 }
             }
         };
-
+        // hahahahah
         stage.setScene(scene);
         stage.show();
 
