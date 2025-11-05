@@ -1,20 +1,52 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.File;
+
 import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
 import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
+import static com.example.arkanoid.Model.PowerUp.POWERUP_WIDTH;
 
 public class Paddle extends MovableObject{
 
     private PowerUp currentPowerUp;
     private int initialWidth;
     public static final int PADDLE_WIDTH = 100;
-    public static final int PADDLE_HEIGHT = 10;
+    public static final int PADDLE_HEIGHT = 14;
     private static final double PADDLE_SPEED = 8.0;
     public static final Color PADDLE_COLOR = Color.AQUAMARINE;
+
+    private boolean hasLaser = false;
+
+    /**
+     * Bật hoặc tắt trạng thái bắn laser của paddle.
+     * Đồng thời thay đổi màu sắc để người chơi nhận biết.
+     * @param hasLaser true để bật, false để tắt.
+     */
+    public void setHasLaser(boolean hasLaser) {
+        this.hasLaser = hasLaser;
+
+        // Đảm bảo rằng 'view' của paddle là một Rectangle để có thể đổi màu
+        if (this.view instanceof javafx.scene.shape.Rectangle) {
+            if (hasLaser) {
+                // Khi có laser, đổi paddle sang màu vàng
+                ((javafx.scene.shape.Rectangle) this.view).setFill(javafx.scene.paint.Color.YELLOW);
+            } else {
+                // Khi hết laser, trả về màu gốc.
+                // HÃY THAY THẾ 'Color.CYAN' BẰNG MÀU GỐC CỦA PADDLE BẠN.
+                ((javafx.scene.shape.Rectangle) this.view).setFill(javafx.scene.paint.Color.CYAN);
+            }
+        }
+    }
+
+    public boolean getHasLaser() {
+        return this.hasLaser;
+    }
 
 
     public Paddle(double x, double y){
@@ -24,8 +56,18 @@ public class Paddle extends MovableObject{
 
         // Khởi tạo giao diện
         Rectangle paddleShape = new Rectangle(width, height);
-        paddleShape.setFill(PADDLE_COLOR);
-        this.view = paddleShape;
+        // Đặt ảnh powerup
+        try {
+            Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/Paddle.png").toURI().toString());
+            this.view = new ImageView(image);
+
+            // Ép kiểu để đặt kích thước cho ảnh
+            ((ImageView) this.view).setFitWidth(PADDLE_WIDTH);
+            ((ImageView) this.view).setFitHeight(PADDLE_HEIGHT);
+        } catch (Exception e) {
+            paddleShape.setFill(PADDLE_COLOR);
+            this.view = paddleShape;
+        }
         updateView();
     }
     public PowerUp getCurrentPowerUp(){
@@ -65,6 +107,7 @@ public class Paddle extends MovableObject{
     public void stopMove(){
         setDx(0);
     }
+
     //đưa paddle về trạng thái ban đầu
     public void update() {
         super.update();

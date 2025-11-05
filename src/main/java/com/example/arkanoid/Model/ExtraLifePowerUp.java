@@ -1,13 +1,14 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
-import javafx.scene.paint.Color;      // Import Color
-import javafx.scene.shape.Rectangle;  // SỬA: Import Rectangle thay vì Circle
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.File;
 
 /**
  * Power-up này có chức năng cộng thêm một mạng cho người chơi khi được thu thập.
  * Đây là một hiệu ứng tức thời.
- * Nó được hiển thị bằng một hình vuông màu tím.
  */
 public class ExtraLifePowerUp extends PowerUp {
 
@@ -20,50 +21,43 @@ public class ExtraLifePowerUp extends PowerUp {
         // Gọi constructor cơ bản của lớp cha
         super(x, y);
 
-        // --- SỬA LỖI: Chuyển từ Circle sang Rectangle (hình chữ nhật/vuông) ---
+        // Tải và gán hình ảnh cho power-up này
+        try {
+            // Nhớ tạo một file ảnh tên là "extra_life_powerup.png" (ví dụ: hình trái tim)
+            // và đặt nó vào thư mục images nhé!
+            Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/ExtraLifePowerUp.png").toURI().toString());
+            this.view = new ImageView(image);
 
-        // Kích thước cạnh của hình vuông (kiểu int để tương thích)
-        int size = 40;
+            // Ép kiểu để đặt kích thước cho ảnh
+            ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+            ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
 
-        // Tạo một đối tượng Rectangle mới
-        // Constructor này nhận vào tọa độ (x, y), chiều rộng và chiều cao.
-        // Ta có thể bỏ qua x, y ở đây vì updateView() sẽ đặt lại vị trí.
-        Rectangle powerUpShape = new Rectangle(size, size);
-
-        // Tô màu tím cho hình vuông
-        powerUpShape.setFill(Color.PURPLE);
-
-        // (Tùy chọn) Thêm viền màu trắng cho đẹp mắt
-        powerUpShape.setStroke(Color.WHITE);
-        powerUpShape.setStrokeWidth(2);
-
-        // Gán hình vuông này làm "view" (hình ảnh đại diện) của power-up
-        this.view = powerUpShape;
-
-        // Cập nhật lại chiều rộng và chiều cao của GameObject
-        // Vì 'size' là int, nên sẽ không còn lỗi "lossy conversion"
-        this.width = size;
-        this.height = size;
-
-        // Gọi phương thức của lớp cha để đặt vị trí hiển thị của hình vuông
-        updateView();
+            updateView(); // Cập nhật vị trí hiển thị
+        } catch (Exception e) {
+            System.err.println("Không thể tải ảnh cho ExtraLifePowerUp: " + e.getMessage());
+        }
     }
 
     /**
      * Phương thức này được gọi khi paddle thu thập được power-up.
+     * Logic chính: gọi GameManager để tăng số mạng của người chơi lên 1.
      * @param gm Instance của GameManager.
      */
     @Override
     public void applyEffect(GameManager gm) {
-        gm.increaseLives(1);
+        gm.increaseLives(1); // Gọi phương thức trong GameManager để tăng mạng
+
+        // Gợi ý: bạn có thể chơi một âm thanh "ting" ở đây để báo hiệu người chơi đã nhận được mạng.
     }
 
     /**
-     * Vì đây là hiệu ứng tức thời, phương thức này không cần làm gì cả.
+     * Vì đây là hiệu ứng tức thời và vĩnh viễn (cho đến khi người chơi thua),
+     * chúng ta không cần làm gì khi hiệu ứng "kết thúc".
+     * Tuy nhiên, ta vẫn phải override phương thức này vì nó là abstract ở lớp cha.
      * @param gm Instance của GameManager.
      */
     @Override
     public void removeEffect(GameManager gm) {
-        // Để trống.
+        // Để trống, không cần làm gì cả.
     }
 }

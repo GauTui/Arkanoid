@@ -1,48 +1,42 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
-import javafx.scene.paint.Color;      // SỬA: Thêm import cho Color
-import javafx.scene.shape.Rectangle;  // SỬA: Thêm import cho Rectangle
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView; // Import thêm ImageView
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.arkanoid.Model.Ball.BALL_SIZE;
+
 /**
- * Power-up chia mỗi quả bóng thành 3 (1 gốc + 2 lệch góc)
+ * Power-up này có chức năng chia mỗi quả bóng hiện có thành ba.
+ * Một quả bóng giữ nguyên hướng, và hai quả bóng mới được tạo ra bay theo góc lệch.
  */
 public class SplitBallPowerUp extends PowerUp {
 
+    // Hằng số góc lệch cho các quả bóng mới (tính bằng radian)
     private static final double SPLIT_ANGLE = Math.PI / 6; // 30 độ
-    private static final double BALL_SIZE = 20.0; // Đồng bộ với Ball.java
-
 
     public SplitBallPowerUp(double x, double y) {
+
         super(x, y);
 
-        // --- BẮT ĐẦU THAY ĐỔI: TẠO HÌNH VUÔNG MÀU ĐỎ ---
+        try {
+            Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/SplitBallPowerUp.png").toURI().toString());
+            this.view = new ImageView(image); // Gán ImageView mới cho view
 
-        // Kích thước cạnh của hình vuông (kiểu int để tránh lỗi)
-        int size = 40;
 
-        // Tạo một đối tượng Rectangle mới
-        Rectangle powerUpShape = new Rectangle(size, size);
+            ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+            ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
 
-        // Tô MÀU ĐỎ cho hình vuông
-        powerUpShape.setFill(Color.BROWN);
-
-        // (Tùy chọn) Thêm viền màu trắng cho nổi bật
-        powerUpShape.setStroke(Color.WHITE);
-        powerUpShape.setStrokeWidth(2);
-
-        // Gán hình vuông này làm "view" (hình ảnh đại diện) của power-up
-        this.view = powerUpShape;
-
-        // Cập nhật lại chiều rộng và chiều cao của GameObject để va chạm chính xác
-        this.width = size;
-        this.height = size;
-
-        // Gọi phương thức của lớp cha để đặt vị trí hiển thị của hình vuông
-        updateView();
+            updateView(); // Gọi phương thức để cập nhật vị trí của view
+        } catch (Exception e) {
+            System.err.println("Không thể tải ảnh cho SplitBallPowerUp: " + e.getMessage());
+        }
     }
+
 
     @Override
     public void applyEffect(GameManager gm) {

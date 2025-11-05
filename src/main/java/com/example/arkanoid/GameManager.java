@@ -2,11 +2,8 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Utils.SoundEffect;
-import javafx.animation.AnimationTimer;
+import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 import java.io.BufferedReader;
@@ -15,35 +12,34 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
 import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 import static com.example.arkanoid.Model.Ball.*;
 
 public class GameManager {
+    private boolean isGameStarted = false;
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 800;
     public static final int INITIAL_LIVES = 3;
-    public static final int MAP_NUMBERS = 6;
+    public static final int MAP_NUMBERS = 5;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 20;
+    public static final int SCORE_X = 560;
     public static final int SCORE_Y = 30;
 
-    public static final int LIVES_X = 20;
-    public static final int LIVES_Y = 60;
+    public static final int LIVES_X = 400;
+    public static final int LIVES_Y = 30;
 
     // Singleton GameManager
     private static GameManager instance;
-    private javafx.animation.AnimationTimer gameLoop;
-
 
     private Paddle paddle;
 
@@ -63,8 +59,19 @@ public class GameManager {
     private int lives;
     private int currentLevel;
     private Arkanoid mainApp;
+    private List<LaserBeam> laserBeams = new ArrayList<>();
+    // Biến để quản lý thời gian giữa các lần bắn (QUAN TRỌNG)
+    private long lastLaserShotTime = 0;
+
+    // Hằng số thời gian chờ giữa các lần bắn (1000ms = 1 giây) (QUAN TRỌNG)
+    private static final long LASER_COOLDOWN = 1000;
 
     /*====Getter/setter====*/
+    public void launchBall() {
+        if (!isGameStarted) {
+            isGameStarted = true;
+        }
+    }
     public List<Ball> getBalls() {
         return balls;
     }
@@ -94,13 +101,6 @@ public class GameManager {
     }
     /*====phuong thuc====*/
 
-    //ho tro tam dung game khi nhan nut
-    public void setGameLoop(AnimationTimer gameLoop) {
-        this.gameLoop = gameLoop;
-    }
-    public AnimationTimer getGameLoop() {
-        return this.gameLoop;
-    }
     //doc map
     public void loadLevel(int levelNumber) {
         //  dọn các viên gạch của màn cũ
@@ -114,7 +114,7 @@ public class GameManager {
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
             int brickWidth = 60;
-            int brickHeight = 25;
+            int brickHeight = 20;
             int currentY = 50; // tọa độ Y ban đầu cho hàng gạch đầu tiên
 
             String line;
@@ -195,13 +195,13 @@ public class GameManager {
         // UI text
         scoreText = new Text("Score: " + score);
         scoreText.setFont(Font.font("Arial", 20));
-        scoreText.setFill(Color.WHITE);
+        scoreText.setFill(Color.DARKBLUE);
         scoreText.setX(SCORE_X);
         scoreText.setY(SCORE_Y);
 
         livesText = new Text("Lives: " + lives);
         livesText.setFont(Font.font("Arial", 20));
-        livesText.setFill(Color.WHITE);
+        livesText.setFill(Color.RED);
         livesText.setX(LIVES_X);
         livesText.setY(LIVES_Y);
 
@@ -212,8 +212,19 @@ public class GameManager {
         loadLevel(LevelNumber);
     }
 
+
     public void update() throws MalformedURLException {
-        //  code cập nhật vị trí và va chạm
+        // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
+        if (!isGameStarted) {
+            // Lấy quả bóng đầu tiên và cập nhật vị trí của nó theo paddle
+            if (!balls.isEmpty()) {
+                balls.get(0).reset(paddle);
+            }
+            // Không làm gì thêm cho đến khi game bắt đầu
+            return;
+        }
+
+        // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
 
         paddle.update();
         for (Ball ball : balls) {
@@ -224,10 +235,11 @@ public class GameManager {
         }
         checkCollisions();
 
-        // di chuyển, cập nhật vị trí powerup rơi
-        for(PowerUp fPowerup : fallingPowerups) {
-            fPowerup.update();
-        }
+        handleLaserShooting();
+        updateLaserBeams();
+
+        //xử lý bóng rơi khỏi đáy màn hình
+        handleBallFallingBottom();
 
         // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
         handleRemoveActivePowerUp();
@@ -238,50 +250,73 @@ public class GameManager {
 
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
-            currentLevel++; // tăng level
+            System.out.println("Level " + currentLevel + " cleared!");
+            currentLevel++;
 
-            // Để tạm, vượt quá map tạo đc thì quay lại level đầu
             if (currentLevel > MAP_NUMBERS) {
-                Platform.runLater(() -> {
-                    gameLoop.stop();
-                    try {
-                        Stage stage = (Stage) gamePane.getScene().getWindow();
-                        Pane winPane = mainApp.GameWin(stage, score);
-                        winPane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
-                        Scene transparentScene = new Scene(winPane, SCREEN_WIDTH, SCREEN_HEIGHT);
-                        transparentScene.setFill(null);
-                        Stage overlayStage = new Stage();
-                        overlayStage.initOwner(stage);
-                        overlayStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
-                        overlayStage.setScene(transparentScene);
-                        overlayStage.show();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-                return;
+                currentLevel = 1;
             }
 
             // reset bóng và thanh đỡ cho màn mới
             paddle.reset();
+            // Reset trạng thái game để chờ phóng bóng ở màn tiếp theo
+            isGameStarted = false;
+
+            //màn mới chỉ nên có 1 bóng, xóa các bóng còn thừa
+            for (int i = balls.size() - 1; i >= 1; i--) {
+                removeBall(balls.get(i));
+            }
+
+            //xóa tất cả powerup rơi còn thừa trên màn hình
+            for (PowerUp pu : fallingPowerups) {
+                gamePane.getChildren().remove(pu.getView());
+            }
+            fallingPowerups.clear();
+
+            //xóa tất cả powerup đang hoạt động
+            for (PowerUp apu : activePowerups) {
+                apu.removeEffect(this);
+            }
+            activePowerups.clear();
+
+            // đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
             for (Ball ball : balls) {
                 ball.reset(paddle);
             }
 
-            loadLevel(currentLevel);// tải màn chơi tiếp theo
+            loadLevel(currentLevel);
             return;
         }
-        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        paddle.update(); //có thể bỏ dòng trên
-        balls.forEach(Ball::update);
-        fallingPowerups.forEach(GameObject::updateView);
 
-        //   cập nhật text
+        // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
+        balls.forEach(Ball::updateView);
+        fallingPowerups.forEach(GameObject::updateView);
+        paddle.updateView(); // Cập nhật cả view của paddle
+
+        // cập nhật text
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
-
     }
+
+    private void handleBallFallingBottom() throws MalformedURLException {
+
+        for (int i = balls.size() - 1; i >= 0; i--) {
+            Ball b = balls.get(i);
+            if (b.getY() + b.getHeight() > SCREEN_HEIGHT) {
+                gamePane.getChildren().remove(b.getView());
+                balls.remove(i); // ✅ an toàn khi duyệt ngược
+            }
+        }
+        if (balls.isEmpty()) {
+            loseLife();
+            // Ball
+            Ball newBall = new Ball(0, 0, BALL_DX, BALL_DY);
+            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            newBall.reset(this.getPaddle());
+            addBall(newBall);
+        }
+    }
+
 
     // ====== KIỂM TRA VA CHẠM ======
     public void checkCollisions() throws MalformedURLException {
@@ -300,37 +335,22 @@ public class GameManager {
                     score += INCREASE_POINTS;
 
                     // Có thể sinh power-up
-                    if (random.nextDouble() < 0.8) {
+                    if (random.nextDouble() < 0.5) {
                         spawnPowerUp(brick.getX(), brick.getY());
                     }
 
                     if (brick.isDestroyed()) {
                         gamePane.getChildren().remove(brick.getView());
                     }
+                    // chỉ xử lý một va chạm gạch mỗi khung hình cho mỗi quả bóng
+                    break;
                 }
             }
 
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
-                gameLoop.stop();
-                Platform.runLater(() -> {
-                    try {
-                        Stage stage = (Stage) gamePane.getScene().getWindow();
-                        Pane losePane = mainApp.GameLoseSc(stage, score,currentLevel);
-                        losePane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
-                        Scene transparentScene = new Scene(losePane, SCREEN_WIDTH, SCREEN_HEIGHT);
-                        transparentScene.setFill(null);
-                        Stage overlayStage = new Stage();
-                        overlayStage.initOwner(stage);
-                        overlayStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
-                        overlayStage.setScene(transparentScene);
-                        overlayStage.show();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+                System.exit(0);
                 //mainApp.showEndGameScreen(score);
             }
         }
@@ -341,8 +361,45 @@ public class GameManager {
 
             // Nếu va chạm giữa Paddle và fallingPowerUp thêm fallingPowerUp vào list activePowerups
             // Xóa fallingPowerUp chạm vào paddle khỏi danh sách hiển thị và list fallingPowerups
-            if (p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
+            if (p.getView() != null && paddle.getView() != null &&
+                    p.getView().getBoundsInParent().intersects(paddle.getView().getBoundsInParent())) {
                 handlePowerUpCollision(p);
+            }
+        }
+        // Trong checkCollisions()
+
+        Iterator<LaserBeam> laserIterator = laserBeams.iterator();
+        while (laserIterator.hasNext()) {
+            LaserBeam beam = laserIterator.next();
+
+            // Với mỗi tia laser, ta duyệt qua danh sách gạch
+            // Dùng Iterator để có thể xóa gạch một cách an toàn
+            Iterator<Brick> brickIterator = bricks.iterator();
+            while (brickIterator.hasNext()) {
+                Brick brick = brickIterator.next();
+
+                // Nếu tia laser va chạm với viên gạch
+                if (beam.checkCollision(brick)) {
+
+                    // Gạch nhận sát thương
+                    brick.takeHit();
+
+                    // Nếu gạch bị phá hủy, xử lý điểm, xóa gạch, và tạo power-up
+                    if (brick.isDestroyed()) {
+                        score += INCREASE_POINTS;
+                        gamePane.getChildren().remove(brick.getView());
+                        brickIterator.remove(); // Xóa gạch
+                        spawnPowerUp(brick.getX(), brick.getY());
+                    }
+
+                    // --- PHẦN SỬA LỖI QUAN TRỌNG NHẤT ---
+                    // Ngay sau khi va chạm, xóa tia laser và dừng kiểm tra
+                    gamePane.getChildren().remove(beam.getView());
+                    laserIterator.remove(); // Xóa tia laser
+
+                    // Thoát khỏi vòng lặp gạch (vì tia laser đã biến mất)
+                    break;
+                }
             }
         }
     }
@@ -396,67 +453,132 @@ public class GameManager {
     }
 
     private void spawnPowerUp(double x, double y) {
+        // Lấy một số ngẫu nhiên từ 0.0 (bao gồm) đến 1.0 (không bao gồm)
+        double chance = random.nextDouble();
 
-        PowerUp newPowerUp;
+        PowerUp newPowerUp = null; // Khởi tạo là null
 
-        // Tạo một số nguyên ngẫu nhiên từ 0 đến 2 (bao gồm 0, 1, 2)
-        int choice = random.nextInt(4);
+        // --- ĐÂY LÀ NƠI CHÚNG TA ĐỊNH NGHĨA TỈ LỆ RƠI ---
 
-        // Dựa vào số ngẫu nhiên để quyết định tạo power-up nào
-        if (choice == 0) {
-            // Trường hợp 1: Tạo ExtraLifePowerUp
+        // 5% cơ hội rơi ra Extra Life (khi chance < 0.05)
+        if (chance < 0.05) {
             newPowerUp = new ExtraLifePowerUp(x, y);
-        } else if (choice == 1) {
-            // Trường hợp 2: Tạo ExpandPaddlePowerUp
-            newPowerUp = new ExpandPaddlePowerUp(x, y);
-        } else if (choice == 2){ // choice == 2
-            // Trường hợp 3: Tạo FastBallPowerUp
-            newPowerUp = new FastBallPowerUp(x, y);
-        } else {
+
+            // 10% cơ hội rơi ra Split Ball (khi chance >= 0.05 và < 0.15)
+        } else if (chance < 0.15) {
             newPowerUp = new SplitBallPowerUp(x, y);
+
+            // 20% cơ hội rơi ra Expand Paddle (khi chance >= 0.15 và < 0.35)
+        } else if (chance < 0.35) {
+            newPowerUp = new ExpandPaddlePowerUp(x, y);
+
+            // 20% cơ hội rơi ra Fast Ball (khi chance >= 0.35 và < 0.55)
+        } else if (chance < 0.55) {
+            newPowerUp = new FastBallPowerUp(x, y);
+        }
+        else if (chance < 0.85) {
+            newPowerUp = new LaserPaddlePowerUp(x, y);
         }
 
-        // Thêm power-up vừa tạo vào danh sách và hiển thị ra màn hình
-        fallingPowerups.add(newPowerUp);
-        gamePane.getChildren().add(newPowerUp.getView());
-    }
-    public void addBall(Ball ball) {
-        // 1. Thêm đối tượng ball vào danh sách quản lý các quả bóng của game
-        if (this.balls != null) {
-            this.balls.add(ball);
+        // Nếu không rơi vào các trường hợp trên (chance >= 0.55), sẽ không có power-up nào được tạo ra.
+
+        // Chỉ thêm power-up vào game nếu nó đã được tạo (không phải là null)
+        if (newPowerUp != null) {
+            fallingPowerups.add(newPowerUp);
+            gamePane.getChildren().add(newPowerUp.getView());
         }
-
-        // 2. Thêm hình ảnh đại diện (view) của quả bóng vào Pane chính của game
-        //    để người chơi có thể nhìn thấy nó trên màn hình.
-        if (this.gamePane != null) {
-            this.gamePane.getChildren().add(ball.getView());
-        }
-    }
-
-    public void increaseLives(int amount) {
-        this.lives += amount;
-
-
-        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
     }
 
     public void loseLife() throws MalformedURLException {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
-        loseLifeSound.play(1);
+        loseLifeSound.play(0.5);
     }
-    //reset lai trang thai game tu ban dau, chu neu khong thi lai khoai:))
 
-    public void reset() {
-        if (gameLoop != null) {
-            gameLoop.stop();
+
+    public void addBall(Ball ball) {
+        if (ball == null) return;
+        if (this.balls != null) {
+            this.balls.add(ball);
         }
-        if (gamePane != null) {
-            gamePane.getChildren().clear();
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().add(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().add(ball.getView()));
+            }
         }
-        balls.clear();
-        bricks.clear();
-        score = 0;
-        lives = 3;
     }
+
+    public void removeBall(Ball ball) {
+        if (ball == null) return;
+
+        if (this.balls != null) {
+            this.balls.remove(ball);
+        }
+
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().remove(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().remove(ball.getView()));
+            }
+        }
+    }
+    public void increaseLives(int amount) {
+        this.lives += amount;
+
+        // Cập nhật giao diện người dùng (UI) để hiển thị số mạng mới
+        updateLivesDisplay();
+        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
+    }
+
+    // Một phương thức helper để cập nhật Text hiển thị số mạng
+    // Bạn cần gọi phương thức này ở hàm init() để hiển thị số mạng ban đầu
+    public void updateLivesDisplay() {
+        if (livesText != null) {
+            livesText.setText("Mạng: " + this.lives);
+        }
+    }
+    /**
+     * Xử lý logic bắn laser.
+     * Kiểm tra xem paddle có power-up không và đã đủ thời gian cooldown chưa.
+     */
+    private void handleLaserShooting() {
+        // Kiểm tra xem paddle có đang sở hữu power-up laser không
+        if (paddle.getHasLaser()) {
+            long currentTime = System.currentTimeMillis();
+            // Kiểm tra xem đã đủ 1 giây kể từ lần bắn trước chưa
+            if (currentTime - lastLaserShotTime > LASER_COOLDOWN) {
+
+                // Tính toán vị trí chính giữa paddle để bắn
+                double laserX = paddle.getX() + (paddle.getWidth() / 2) - (5 / 2.0); // 5 là chiều rộng của LaserBeam
+                double laserY = paddle.getY();
+
+                // Tạo một tia laser duy nhất
+                LaserBeam beam = new LaserBeam(laserX, laserY);
+
+                // Thêm tia laser vào game
+                laserBeams.add(beam);
+                gamePane.getChildren().add(beam.getView());
+
+                // Cập nhật lại thời gian của lần bắn cuối cùng
+                lastLaserShotTime = currentTime;
+            }
+        }
+    }
+    private void updateLaserBeams() {
+        // Duyệt ngược danh sách để có thể xóa phần tử một cách an toàn
+        for (int i = laserBeams.size() - 1; i >= 0; i--) {
+            LaserBeam beam = laserBeams.get(i);
+            beam.update(); // Di chuyển tia laser
+
+            // Xóa tia laser nếu nó bay ra khỏi màn hình
+            if (beam.getY() < 0) {
+                gamePane.getChildren().remove(beam.getView());
+                laserBeams.remove(i); // Xóa bằng chỉ số i
+            }
+        }
+    }
+
 }
