@@ -15,7 +15,10 @@ public class Brick extends GameObject {
     public Brick(double x, double y, int width, int height, int hitPoints) {
         super(x, y, width, height);
         this.hitPoints = hitPoints;
-        Rectangle rBrick= new Rectangle(x, y, width, height);
+        Rectangle rBrick = new Rectangle(width, height);
+        rBrick.setTranslateX(x);
+        rBrick.setTranslateY(y);
+
         //đặt màu mặc định
         Image BrickImg = new Image(getClass().getResourceAsStream("/com/example/arkanoid/images/NormalBrick.png"));
 

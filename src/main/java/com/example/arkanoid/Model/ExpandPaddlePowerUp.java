@@ -1,8 +1,15 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.io.File;
+
+import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
+import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 
 /** Nới rộng Paddle */
 public class ExpandPaddlePowerUp extends PowerUp {
@@ -11,8 +18,15 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
     public ExpandPaddlePowerUp(double x, double y) {
         super(x, y); // rơi thẳng với dy = POWERUP_GRAVITY
-        // skin riêng (màu xanh lá để phân biệt)
-        this.view = new Rectangle(POWERUP_WIDTH, POWERUP_HEIGHT, Color.LIME);
+
+        // Đặt ảnh powerup
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/ExpandPaddlePowerUp.png").toURI().toString());
+        this.view = new ImageView(image);
+
+        // Ép kiểu để đặt kích thước cho ảnh
+        ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+        ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
+
         updateView();
     }
 
@@ -27,6 +41,13 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
         pad.setWidth(pad.getWidth() + EXTRA_WIDTH);
         pad.updateView(); // đồng bộ hiển thị (nếu Paddle tự cập nhật width cho Rectangle thì vẫn an toàn)
+        //cập nhật ảnh paddle
+        try {
+            // Ép kiểu để đặt kích thước cho ảnh
+            ((ImageView) pad.view).setFitWidth(pad.getWidth());
+        } catch (Exception e) {
+            System.err.println("Không thể mở rộng độ rộng ảnh paddle: " + e.getMessage());
+        }
     }
 
 
@@ -39,6 +60,13 @@ public class ExpandPaddlePowerUp extends PowerUp {
             Paddle pad = gm.getPaddle();
             pad.setWidth(originalWidth);
             pad.updateView();
+            //cập nhật ảnh paddle
+            try {
+                // Ép kiểu để đặt kích thước cho ảnh
+                ((ImageView) pad.view).setFitWidth(pad.getWidth());
+            } catch (Exception e) {
+                System.err.println("Không thể thu hẹp độ rộng ảnh paddle: " + e.getMessage());
+            }
         }
     }
 }

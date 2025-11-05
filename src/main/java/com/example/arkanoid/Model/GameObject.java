@@ -2,6 +2,7 @@ package com.example.arkanoid.Model;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
 public abstract class GameObject {
     protected double x;
@@ -69,8 +70,8 @@ public abstract class GameObject {
     }
 
     public void updateView() {
-        view.setLayoutX(x);
-        view.setLayoutY(y);
+        view.setTranslateX(x);
+        view.setTranslateY(y);
     }
 
 }
