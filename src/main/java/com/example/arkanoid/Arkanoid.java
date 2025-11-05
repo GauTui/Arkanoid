@@ -478,7 +478,7 @@ public class Arkanoid extends Application {
         File LoadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png"); // nem dia chi nut start
         Image RestartImg2 = new Image(LoadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg2);
-        RestartImgV.setFitHeight(70);
+        RestartImgV.setFitHeight(80);
         RestartImgV.setFitWidth(230);
         RestartImgV.setPickOnBounds(false);
         RestartImgV.setLayoutX(235);
@@ -515,7 +515,7 @@ public class Arkanoid extends Application {
         File LoadMainmenu = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // nem dia chi nut start
         Image MainenuImg2 = new Image(LoadMainmenu.toURI().toString());
         ImageView MainmenuImgV2 = new ImageView(MainenuImg2);
-        MainmenuImgV2.setFitHeight(70);
+        MainmenuImgV2.setFitHeight(90);
         MainmenuImgV2.setFitWidth(230);
         MainmenuImgV2.setPickOnBounds(false);
         MainmenuImgV2.setLayoutX(235);
@@ -668,7 +668,7 @@ public class Arkanoid extends Application {
         File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
         Image RestartImg = new Image(loadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg);
-        RestartImgV.setFitHeight(70);
+        RestartImgV.setFitHeight(80);
         RestartImgV.setFitWidth(230);
         RestartImgV.setPickOnBounds(false);
         RestartImgV.setLayoutX(235);
@@ -705,7 +705,7 @@ public class Arkanoid extends Application {
         File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
         ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
-        MainMenu2ImgV.setFitHeight(70); // set chieu cao
+        MainMenu2ImgV.setFitHeight(80); // set chieu cao
         MainMenu2ImgV.setFitWidth(230); // set chiều rong
         MainMenu2ImgV.setPickOnBounds(false);
         MainMenu2ImgV.setLayoutX(235); // tọa độ X của đầu nút
@@ -759,8 +759,8 @@ public class Arkanoid extends Application {
         GameManager gm = GameManager.getInstance();
         File loadBackGroundImg;
         switch (LevelNumber) {
-            case 1 -> loadBackGroundImg = new File("src/main/resources/bg_level1.png");
-            case 2 -> loadBackGroundImg = new File("src/main/resources/bg_level2.png");
+            case 1 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
+            case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level2.jpg");
             case 3 -> loadBackGroundImg = new File("src/main/resources/bg_level3.png");
             case 4 -> loadBackGroundImg = new File("src/main/resources/bg_level4.png");
             default -> loadBackGroundImg = new File("src/main/resources/bg_level5.png");
