@@ -18,8 +18,6 @@ public class Ball extends MovableObject {
     public static final double BALL_DX = 3;
     public static final double BALL_DY = -2.5;
 
-    public boolean launched = true; // trạng thái quả bóng đã được phóng chưa
-
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
      *
@@ -47,7 +45,7 @@ public class Ball extends MovableObject {
     // ========= GETTER & SETTER =========
 
     public boolean isLaunched() {
-        return launched;
+        return (!(this.getDx() == 0 && this.getDy() == 0));
     }
 
     // ========== PHƯƠNG THỨC ==========
@@ -64,7 +62,7 @@ public class Ball extends MovableObject {
     }
 
     public void launch() {
-        if (!launched) {
+        if (!isLaunched()) {
             // Thiết lập vận tốc ban đầu với góc ngẫu nhiên
             double angle = getRandomNumber(-45, 45); // Góc từ -45 đến 45 độ
             double radians = Math.toRadians(angle);
@@ -72,8 +70,6 @@ public class Ball extends MovableObject {
 
             this.setDx(0);
             this.setDy(-speed * Math.cos(radians)); // Luôn hướng lên trên
-
-            launched = true;
         }
     }
 
@@ -283,7 +279,6 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         this.setY(paddle.getY() - this.getHeight());
         this.setDx(0);
         this.setDy(0);
-        launched = false;
         updateView();
     }
 }
