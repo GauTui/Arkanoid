@@ -14,9 +14,9 @@ import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
 import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject {
-    public static final int BALL_SIZE = 20;
-    public static final double BALL_DX = 2;
-    public static final double BALL_DY = -2;
+    public static final int BALL_SIZE = 30;
+    public static final double BALL_DX = 3;
+    public static final double BALL_DY = -3;
 
     public boolean launched = false; // trạng thái quả bóng đã được phóng chưa
 
