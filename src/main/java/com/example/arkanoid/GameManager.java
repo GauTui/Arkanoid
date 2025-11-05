@@ -201,12 +201,20 @@ public class GameManager {
 
 
     public void update() throws MalformedURLException {
-        // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
-        if (!balls.get(0).isLaunched()) {
-            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
-            balls.get(0).reset(paddle);
-            // Không làm gì thêm cho đến khi game bắt đầu
-            return;
+        // Check nếu còn bóng nào đang bay
+        boolean anyLaunched = false;
+        for (Ball ball : balls) {
+            if (ball.isLaunched()) {
+                anyLaunched = true;
+                ball.update(); // update bình thường
+            }
+        }
+
+        // Nếu không còn bóng nào đang bay → reset tất cả bóng trên paddle
+        if (!anyLaunched) {
+            for (Ball ball : balls) {
+                ball.reset(paddle); // stop và đặt lại vị trí
+            }
         }
 
         // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
@@ -409,7 +417,7 @@ public class GameManager {
             newPowerUp = new ExtraLifePowerUp(x, y);
 
             // 10% cơ hội rơi ra Split Ball (khi chance >= 0.05 và < 0.15)
-        } else if (chance < 0.15) {
+        } else if (chance < 0.3) {
             newPowerUp = new SplitBallPowerUp(x, y);
 
             // 20% cơ hội rơi ra Expand Paddle (khi chance >= 0.15 và < 0.35)
@@ -479,6 +487,14 @@ public class GameManager {
     public void updateLivesDisplay() {
         if (livesText != null) {
             livesText.setText("Mạng: " + this.lives);
+        }
+    }
+
+    public void launchBall() {
+        for (Ball ball : balls) {
+            if (!ball.isLaunched()) {
+                ball.launch();
+            }
         }
     }
 }

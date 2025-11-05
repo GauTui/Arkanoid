@@ -28,11 +28,7 @@ public class Arkanoid extends Application {
             switch (event.getCode()) {
                 case LEFT, A -> leftPressed = true;
                 case RIGHT, D -> rightPressed = true;
-                case SPACE -> {
-                    if (!gm.getBalls().isEmpty()) {
-                        gm.getBalls().get(0).launch();
-                    }
-                }
+                case SPACE -> gm.launchBall();
             }
         });
 

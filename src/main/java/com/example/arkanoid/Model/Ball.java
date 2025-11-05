@@ -6,6 +6,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.util.Random;
@@ -18,7 +19,7 @@ public class Ball extends MovableObject {
     public static final double BALL_DX = 2;
     public static final double BALL_DY = -2;
 
-    public boolean launched = false; // trạng thái quả bóng đã được phóng chưa
+    public boolean launched = true; // trạng thái quả bóng đã được phóng chưa
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
@@ -69,7 +70,7 @@ public class Ball extends MovableObject {
             double radians = Math.toRadians(angle);
             double speed = Math.sqrt(BALL_DX * BALL_DX + BALL_DY * BALL_DY);
 
-            this.setDx(speed * Math.sin(radians));
+            this.setDx(0);
             this.setDy(-speed * Math.cos(radians)); // Luôn hướng lên trên
 
             launched = true;
@@ -277,7 +278,7 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
      * vân tốc dx,dy = 0
      * @param paddle thanh trượt để lấy vị trí tâm gậy
      */
-    public void reset(Paddle paddle) {
+    public void reset(@NotNull Paddle paddle) {
         this.setX(paddle.getX() + paddle.getWidth() / 2.0 - this.getWidth() / 2.0);
         this.setY(paddle.getY() - this.getHeight());
         this.setDx(0);
