@@ -12,7 +12,7 @@ public class LaserBeam extends MovableObject {
     public LaserBeam(double x, double y) {
         super(x, y, LASER_WIDTH, LASER_HEIGHT, 0, -LASER_SPEED);
 
-        Rectangle laserView = new Rectangle(LASER_WIDTH, LASER_HEIGHT, Color.WHITE);
+        Rectangle laserView = new Rectangle(LASER_WIDTH, LASER_HEIGHT, Color.ORANGE);
         this.view = laserView;
         updateView();
     }

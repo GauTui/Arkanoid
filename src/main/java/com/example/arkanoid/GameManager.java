@@ -60,6 +60,11 @@ public class GameManager {
     private int currentLevel;
     private Arkanoid mainApp;
     private List<LaserBeam> laserBeams = new ArrayList<>();
+    // Biến để quản lý thời gian giữa các lần bắn (QUAN TRỌNG)
+    private long lastLaserShotTime = 0;
+
+    // Hằng số thời gian chờ giữa các lần bắn (1000ms = 1 giây) (QUAN TRỌNG)
+    private static final long LASER_COOLDOWN = 1000;
 
     /*====Getter/setter====*/
     public void launchBall() {
@@ -230,6 +235,9 @@ public class GameManager {
         }
         checkCollisions();
 
+        handleLaserShooting();
+        updateLaserBeams();
+
         //xử lý bóng rơi khỏi đáy màn hình
         handleBallFallingBottom();
 
@@ -363,23 +371,36 @@ public class GameManager {
         Iterator<LaserBeam> laserIterator = laserBeams.iterator();
         while (laserIterator.hasNext()) {
             LaserBeam beam = laserIterator.next();
-            boolean laserHit = false;
 
+            // Với mỗi tia laser, ta duyệt qua danh sách gạch
+            // Dùng Iterator để có thể xóa gạch một cách an toàn
             Iterator<Brick> brickIterator = bricks.iterator();
             while (brickIterator.hasNext()) {
                 Brick brick = brickIterator.next();
 
+                // Nếu tia laser va chạm với viên gạch
                 if (beam.checkCollision(brick)) {
-                    // Nếu vào được đây, có nghĩa là va chạm đã được phát hiện
-                    System.out.println(">>> VA CHẠM: Laser đã trúng một viên gạch!");
 
+                    // Gạch nhận sát thương
                     brick.takeHit();
-                    // ... (code xử lý gạch vỡ) ...
-                    laserHit = true;
+
+                    // Nếu gạch bị phá hủy, xử lý điểm, xóa gạch, và tạo power-up
+                    if (brick.isDestroyed()) {
+                        score += INCREASE_POINTS;
+                        gamePane.getChildren().remove(brick.getView());
+                        brickIterator.remove(); // Xóa gạch
+                        spawnPowerUp(brick.getX(), brick.getY());
+                    }
+
+                    // --- PHẦN SỬA LỖI QUAN TRỌNG NHẤT ---
+                    // Ngay sau khi va chạm, xóa tia laser và dừng kiểm tra
+                    gamePane.getChildren().remove(beam.getView());
+                    laserIterator.remove(); // Xóa tia laser
+
+                    // Thoát khỏi vòng lặp gạch (vì tia laser đã biến mất)
                     break;
                 }
             }
-            // ... (code xóa laser) ...
         }
     }
 
@@ -517,6 +538,33 @@ public class GameManager {
     public void updateLivesDisplay() {
         if (livesText != null) {
             livesText.setText("Mạng: " + this.lives);
+        }
+    }
+    /**
+     * Xử lý logic bắn laser.
+     * Kiểm tra xem paddle có power-up không và đã đủ thời gian cooldown chưa.
+     */
+    private void handleLaserShooting() {
+        // Kiểm tra xem paddle có đang sở hữu power-up laser không
+        if (paddle.getHasLaser()) {
+            long currentTime = System.currentTimeMillis();
+            // Kiểm tra xem đã đủ 1 giây kể từ lần bắn trước chưa
+            if (currentTime - lastLaserShotTime > LASER_COOLDOWN) {
+
+                // Tính toán vị trí chính giữa paddle để bắn
+                double laserX = paddle.getX() + (paddle.getWidth() / 2) - (5 / 2.0); // 5 là chiều rộng của LaserBeam
+                double laserY = paddle.getY();
+
+                // Tạo một tia laser duy nhất
+                LaserBeam beam = new LaserBeam(laserX, laserY);
+
+                // Thêm tia laser vào game
+                laserBeams.add(beam);
+                gamePane.getChildren().add(beam.getView());
+
+                // Cập nhật lại thời gian của lần bắn cuối cùng
+                lastLaserShotTime = currentTime;
+            }
         }
     }
     private void updateLaserBeams() {
