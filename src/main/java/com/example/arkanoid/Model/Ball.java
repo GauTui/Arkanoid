@@ -18,6 +18,8 @@ public class Ball extends MovableObject {
     public static final double BALL_DX = 2;
     public static final double BALL_DY = -2;
 
+    public boolean launched = false; // trạng thái quả bóng đã được phóng chưa
+
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
      *
@@ -42,7 +44,13 @@ public class Ball extends MovableObject {
         //Node view khoi tao la Rball
         this.view = Rball;
     }
+    // ========= GETTER & SETTER =========
 
+    public boolean isLaunched() {
+        return launched;
+    }
+
+    // ========== PHƯƠNG THỨC ==========
     /**
      * phuong thuc lay so ngau nhien trong doan [a;b]
      * @param a so thuc a
@@ -55,30 +63,43 @@ public class Ball extends MovableObject {
         return a + (b - a) * rand.nextDouble();
     }
 
+    public void launch() {
+        if (!launched) {
+            // Thiết lập vận tốc ban đầu với góc ngẫu nhiên
+            double angle = getRandomNumber(-45, 45); // Góc từ -45 đến 45 độ
+            double radians = Math.toRadians(angle);
+            double speed = Math.sqrt(BALL_DX * BALL_DX + BALL_DY * BALL_DY);
+
+            this.setDx(0);
+            this.setDy(-speed * Math.cos(radians)); // Luôn hướng lên trên
+
+            launched = true;
+        }
+    }
+
     /**
      * Ham kiem tra va cham voi cac object brick, paddle, ko co powerup....
      * @param other game object
      * @return tra ve true neu va cham, ko thi false
      */
     public boolean checkCollision(GameObject other) {
-        if (other == null || other.getView() == null) return false;
-        // Lấy ranh giới hiển thị thực tế của bóng : viền của node chứa bóng
-        Bounds ballBounds = this.view.getBoundsInParent();
+        if (other == null) return false;
 
-        if (other instanceof Brick) {
-            if (ballBounds.intersects(other.getView().getBoundsInParent())) {
-                return true;
-            }
-        }
+        // hinh chữ nhật của đối tượng ball
+        double bx = this.getX();
+        double by = this.getY();
+        double bw = this.getWidth();
+        double bh = this.getHeight();
 
-        //kiem tra va cham voi paddle
-        if (other instanceof Paddle) {
-            if (ballBounds.intersects(other.getView().getBoundsInParent())) {
-                return true;
-            }
-        }
+        // hình chữ nhật của đối tượng khác
+        double ox = other.getX();
+        double oy = other.getY();
+        double ow = other.getWidth();
+        double oh = other.getHeight();
 
-        return false;
+        // Kiểm tra va chạm AABB
+        boolean intersects = bx < ox + ow && bx + bw > ox && by < oy + oh && by + bh > oy;
+        return intersects;
     }
 
     /**
@@ -114,13 +135,7 @@ public class Ball extends MovableObject {
         if(sound) {
             SoundEffect WallCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
             WallCollideSound.play(0.5);
-        }
-
-        GameManager gm = GameManager.getInstance();
-        //Xử lý va chạm dưới rớt xuống khỏi màn hình, ngoài ra hàm này thực hiện việc giảm máu và gameOver.
-        if(this.getY() + this.getHeight() > SCREEN_HEIGHT) {
-            gm.loseLife();
-            this.reset(gm.getPaddle());
+            System.out.println("collide with wall " + this.getDx() + " , " + this.getDy());
         }
     }
 
@@ -130,40 +145,60 @@ public class Ball extends MovableObject {
      * Hướng bật phụ thuộc vào vùng bóng tác động bên trái hay phải paddle.
      * @param paddle thanh trượt
      */
-    public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
-        // tránh trường hợp null của paddle và rectangle
-        if(paddle == null|| paddle.getView() == null) {
+public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
+        // Kiểm tra paddle có tồn tại không, hoặc va chạm không
+        if (paddle == null || paddle.getView() == null || !checkCollision(paddle)) {
             return;
         }
 
-        // Xử lý va chạm khi quả bóng đi xuống (dy>0), ở đây chỉ coi va chạm là chạm trên
-        if(checkCollision(paddle)) {
-            this.setDy(-this.getDy());
+        // Tính toán vị trí tâm của bóng và paddle
+        double ballCenterX = this.getX() + this.getWidth() / 2.0;
+        double ballCenterY = this.getY() + this.getHeight() / 2.0;
+        double paddleCenterX = paddle.getX() + paddle.getWidth() / 2.0;
+        double paddleCenterY = paddle.getY() + paddle.getHeight() / 2.0;
 
-            //cho dx > 1.5
-            double rdx = getRandomNumber(BALL_DX - 1.5, BALL_DX + 1);
-            // Cho qua bong di chuyen sang trai hay phai (dx) dua tren diem va cham voi thanh paddle.
-            // Neu va cham nua phai paddle thi ta cho bong di chuyen phai(dx<0), va nguoc lai (dx>0)
+        // Tính khoảng cách tương đối
+        double deltaX = ballCenterX - paddleCenterX;
+        double deltaY = ballCenterY - paddleCenterY;
 
-            // Diem va cham xet voi tam qua bong theo truc x
-            double pointCollision = this.getX() + this.getWidth()/2.0;
+        // Tính tỷ lệ va chạm theo cạnh X và Y
+        double ratioX = Math.abs(deltaX) / (paddle.getWidth() / 2.0 + this.getWidth() / 2.0);
+        double ratioY = Math.abs(deltaY) / (paddle.getHeight() / 2.0 + this.getHeight() / 2.0);
 
-            // Diem dua thanh paddle
-            double midPaddle = paddle.getX() + paddle.getWidth()/2.0;
-
-            // Neu bong nam ben trai ta dat lai van toc qua bong dx âm. TH còn lại giữ nguyên
-            if(pointCollision < midPaddle) {
-                rdx = -rdx;
+        // Xử lý va chạm theo hướng gần nhất
+        if (ratioX > ratioY) {
+            // Va chạm từ bên trái hoặc phải paddle
+            this.setDx(-this.getDx());
+            if (deltaX > 0) {
+                this.setX(paddle.getX() + paddle.getWidth());
+            } else {
+                this.setX(paddle.getX() - this.getWidth());
             }
-
-            // Đặt vận tốc dx cho bóng
-            this.setDx(rdx);
-
-            // Hiển thị âm thanh
-            SoundEffect PaddleCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
-            PaddleCollideSound.play(0.5);
+        } else {
+            // Va chạm từ trên hoặc dưới paddle
+            this.setDy(-this.getDy());
+            if (deltaY > 0) {
+                this.setY(paddle.getY() + paddle.getHeight());
+            } else {
+                this.setY(paddle.getY() - this.getHeight());
+            }
         }
 
+        // Điều chỉnh góc nảy khi va chạm từ trên
+        if (deltaY < 0) {
+            double relativeIntersectX = ballCenterX - paddleCenterX;
+            double normalizedIntersect = relativeIntersectX / (paddle.getWidth() / 2);
+            double angle = normalizedIntersect * 30; // Góc tối đa 60 độ
+            double velocity = Math.sqrt(this.getDx() * this.getDx() + this.getDy() * this.getDy());
+
+            this.setDx(velocity * Math.sin(Math.toRadians(angle)));
+            this.setDy(-velocity * Math.cos(Math.toRadians(angle)));
+        }
+
+        // Phát âm thanh va chạm
+        SoundEffect paddleCollideSound = new SoundEffect("/com/example/arkanoid/sounds/WallPaddle.wav");
+        paddleCollideSound.play(0.5);
+        System.out.println("collide with paddle " + this.getDx() + " , " + this.getDy());
     }
 
     /**
@@ -234,39 +269,21 @@ public class Ball extends MovableObject {
         //hiển thị âm thanh
         SoundEffect BrickCollideSound = new SoundEffect("/com/example/arkanoid/sounds/collision.wav");
         BrickCollideSound.play(2);
-    }
-
-    /**
-     * Hàm cập nhật điểm hiện thị node view chứa quả bóng.
-     * điểm hiện thị cập nhật thông qua thuộc tính x, y do class quản lý
-     */
-    public void updateView() {
-        // hiện thị tại tọa độ theo kiểu (rectangle ball). getX() + this.getX()
-        // nghĩa là di chuyển tại tọa độ gốc x và cộng thêm 1 đoạn this.getX()
-        this.view.setTranslateX(this.getX());
-        this.view.setTranslateY(this.getY());
+        System.out.println("collide with brick " + this.getDx() + " , " + this.getDy());
     }
 
     /**
      * Hàm reset lại vị trí, vận tốc quả bóng khi bóng rơi ra khỏi đáy màn hình.
      * vị trí ở giữa thanh trượt paddle.
+     * vân tốc dx,dy = 0
      * @param paddle thanh trượt để lấy vị trí tâm gậy
      */
     public void reset(Paddle paddle) {
-        this.setX(paddle.getX()  + paddle.getWidth()/2.0 - this.getWidth()/2.0);
+        this.setX(paddle.getX() + paddle.getWidth() / 2.0 - this.getWidth() / 2.0);
         this.setY(paddle.getY() - this.getHeight());
-        this.setDx(BALL_DX);
-        this.setDy(BALL_DY);
-        updateView();
-    }
-
-    /**
-     * Cap nhat vi tri theo van toc, diem hien thi cua rectangle chua ball.
-     */
-    @Override
-    public void update() {
-        setX(getX() + getDx());
-        setY(getY() + getDy());
+        this.setDx(0);
+        this.setDy(0);
+        launched = false;
         updateView();
     }
 }

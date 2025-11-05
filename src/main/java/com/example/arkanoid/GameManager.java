@@ -35,11 +35,13 @@ public class GameManager {
     public static final int MAP_NUMBERS = 6;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 20;
+    public static final int SCORE_X = 560;
     public static final int SCORE_Y = 30;
 
-    public static final int LIVES_X = 20;
-    public static final int LIVES_Y = 60;
+    public static final int LIVES_X = 400;
+    public static final int LIVES_Y = 30;
+    // số bóng tối đa trong game
+    public static final int MAX_BALLS = 15;
 
     // Singleton GameManager
     private static GameManager instance;
@@ -196,13 +198,13 @@ public class GameManager {
         // UI text
         scoreText = new Text("Score: " + score);
         scoreText.setFont(Font.font("Arial", 20));
-        scoreText.setFill(Color.WHITE);
+        scoreText.setFill(Color.BLUE);
         scoreText.setX(SCORE_X);
         scoreText.setY(SCORE_Y);
 
         livesText = new Text("Lives: " + lives);
         livesText.setFont(Font.font("Arial", 20));
-        livesText.setFill(Color.WHITE);
+        livesText.setFill(Color.RED);
         livesText.setX(LIVES_X);
         livesText.setY(LIVES_Y);
 
@@ -214,7 +216,15 @@ public class GameManager {
     }
 
     public void update() throws MalformedURLException {
-        //  code cập nhật vị trí và va chạm
+        // Nếu game chưa bắt đầu, quả bóng sẽ đi theo thanh đỡ
+        if (!balls.get(0).isLaunched()) {
+            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            balls.get(0).reset(paddle);
+            // Không làm gì thêm cho đến khi game bắt đầu
+            return;
+        }
+
+        // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
 
         paddle.update();
         for (Ball ball : balls) {
@@ -225,10 +235,8 @@ public class GameManager {
         }
         checkCollisions();
 
-        // di chuyển, cập nhật vị trí powerup rơi
-        for(PowerUp fPowerup : fallingPowerups) {
-            fPowerup.update();
-        }
+        //xử lý bóng rơi khỏi đáy màn hình
+        handleBallFallingBottom();
 
         // nếu activatePowerup hết hiệu lực, xóa hiệu ứng powerUp, xóa khỏi danh sách.
         handleRemoveActivePowerUp();
@@ -239,8 +247,9 @@ public class GameManager {
 
         // kiểm tra chuyển màn
         if (bricks.isEmpty()) {
+            System.out.println("Level " + currentLevel + " cleared!");
             currentLevel++; // tăng level
-            // Để tạm, vượt quá map tạo đc thì quay lại level đầu
+
             if (currentLevel > MAP_NUMBERS) {
                 Platform.runLater(() -> {
                     gameLoop.stop();
@@ -270,28 +279,63 @@ public class GameManager {
             }
 
             // reset bóng và thanh đỡ cho màn mới
-            balls.clear();
             paddle.reset();
 
-            // tạo lại bóng mới
-            Ball newBall = new Ball(0, 0, BALL_DX, BALL_DY);
-            newBall.reset(paddle);
-            balls.add(newBall);
-            gamePane.getChildren().add(newBall.getView());
+            //màn mới chỉ nên có 1 bóng, xóa các bóng còn thừa
+            for (int i = balls.size() - 1; i >= 1; i--) {
+                removeBall(balls.get(i));
+            }
+
+            //xóa tất cả powerup rơi còn thừa trên màn hình
+            for (PowerUp pu : fallingPowerups) {
+                gamePane.getChildren().remove(pu.getView());
+            }
+            fallingPowerups.clear();
+
+            //xóa tất cả powerup đang hoạt động
+            for (PowerUp apu : activePowerups) {
+                apu.removeEffect(this);
+            }
+            activePowerups.clear();
+
+            // đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            for (Ball ball : balls) {
+                ball.reset(paddle);
+            }
 
             // tải màn chơi tiếp theo
             loadLevel(currentLevel);
             return;
         }
+
         // cập nhật vị trí hình ảnh trên màn hình (cập nhật view)
-        paddle.update(); //có thể bỏ dòng trên
-        balls.forEach(Ball::update);
+        paddle.updateView();
+        balls.forEach(Ball::updateView);
         fallingPowerups.forEach(GameObject::updateView);
 
         //   cập nhật text
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
 
+    }
+
+    private void handleBallFallingBottom() throws MalformedURLException {
+
+        for (int i = balls.size() - 1; i >= 0; i--) {
+            Ball b = balls.get(i);
+            if (b.getY() + b.getHeight() > SCREEN_HEIGHT) {
+                gamePane.getChildren().remove(b.getView());
+                balls.remove(i); // ✅ an toàn khi duyệt ngược
+            }
+        }
+        if (balls.isEmpty()) {
+            loseLife();
+            // Ball
+            Ball newBall = new Ball(0, 0, BALL_DX, BALL_DY);
+            // Đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
+            newBall.reset(this.getPaddle());
+            addBall(newBall);
+        }
     }
 
     // ====== KIỂM TRA VA CHẠM ======
@@ -311,16 +355,17 @@ public class GameManager {
                     score += INCREASE_POINTS;
 
                     // Có thể sinh power-up
-                    if (random.nextDouble() < 0.2) {
+                    if (random.nextDouble() < 0.5) {
                         spawnPowerUp(brick.getX(), brick.getY());
                     }
 
                     if (brick.isDestroyed()) {
                         gamePane.getChildren().remove(brick.getView());
                     }
+                    // chỉ xử lý một va chạm gạch mỗi khung hình cho mỗi quả bóng
+                    break;
                 }
             }
-
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
@@ -410,25 +455,92 @@ public class GameManager {
     }
 
     private void spawnPowerUp(double x, double y) {
+        // Lấy một số ngẫu nhiên từ 0.0 (bao gồm) đến 1.0 (không bao gồm)
+        double chance = random.nextDouble();
 
-        PowerUp newPowerUp;
-        if (random.nextBoolean()) {
+        PowerUp newPowerUp = null; // Khởi tạo là null
+
+        // --- ĐÂY LÀ NƠI CHÚNG TA ĐỊNH NGHĨA TỈ LỆ RƠI ---
+
+        // 5% cơ hội rơi ra Extra Life (khi chance < 0.05)
+        if (chance < 0.05) {
+            newPowerUp = new ExtraLifePowerUp(x, y);
+
+            // 10% cơ hội rơi ra Split Ball (khi chance >= 0.05 và < 0.15)
+        } else if (chance < 0.15) {
+            newPowerUp = new SplitBallPowerUp(x, y);
+
+            // 20% cơ hội rơi ra Expand Paddle (khi chance >= 0.15 và < 0.35)
+        } else if (chance < 0.35) {
             newPowerUp = new ExpandPaddlePowerUp(x, y);
-        } else {
+
+            // 20% cơ hội rơi ra Fast Ball (khi chance >= 0.35 và < 0.55)
+        } else if (chance < 0.55) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-        fallingPowerups.add(newPowerUp);
-        gamePane.getChildren().add(newPowerUp.getView());
+
+        // Nếu không rơi vào các trường hợp trên (chance >= 0.55), sẽ không có power-up nào được tạo ra.
+
+        // Chỉ thêm power-up vào game nếu nó đã được tạo (không phải là null)
+        if (newPowerUp != null) {
+            fallingPowerups.add(newPowerUp);
+            gamePane.getChildren().add(newPowerUp.getView());
+        }
     }
 
     public void loseLife() throws MalformedURLException {
         lives = lives - 1;
         SoundEffect loseLifeSound = new SoundEffect("/com/example/arkanoid/sounds/loseLife.wav");
-        SoundManager.stopBackgroundMusic();
         loseLifeSound.play(1);
     }
-    //reset lai trang thai game tu ban dau, chu neu khong thi lai khoai:))
 
+    public void addBall(Ball ball) {
+        if (ball == null) return;
+        if (this.balls != null) {
+            this.balls.add(ball);
+        }
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().add(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().add(ball.getView()));
+            }
+        }
+    }
+
+    public void removeBall(Ball ball) {
+        if (ball == null) return;
+
+        if (this.balls != null) {
+            this.balls.remove(ball);
+        }
+
+        if (this.gamePane != null && ball.getView() != null) {
+            if (Platform.isFxApplicationThread()) {
+                this.gamePane.getChildren().remove(ball.getView());
+            } else {
+                Platform.runLater(() -> this.gamePane.getChildren().remove(ball.getView()));
+            }
+        }
+    }
+    public void increaseLives(int amount) {
+        this.lives += amount;
+
+        // Cập nhật giao diện người dùng (UI) để hiển thị số mạng mới
+        updateLivesDisplay();
+        System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
+    }
+
+    // Một phương thức helper để cập nhật Text hiển thị số mạng
+    // Bạn cần gọi phương thức này ở hàm init() để hiển thị số mạng ban đầu
+    public void updateLivesDisplay() {
+        if (livesText != null) {
+            livesText.setText("Lives: " + this.lives);
+        }
+    }
+
+
+    //reset lai trang thai game tu ban dau, chu neu khong thi lai khoai:))
     public void reset() {
         if (gameLoop != null) {
             gameLoop.stop();

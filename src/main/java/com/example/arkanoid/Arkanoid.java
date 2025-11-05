@@ -799,14 +799,23 @@ public class Arkanoid extends Application {
         gameLoop.start();
 
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                try {
-                    gameLoop.stop(); // dừng game
-                    Pane pausePane = PauseGame(stage,LevelNumber); // tạo menu pause
-                    gamePane.getChildren().add(pausePane); // chồng menu lên game
-                    SoundManager.pauseMusic();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            switch (event.getCode()) {
+                // nút space để phóng bóng
+                case SPACE -> {
+                    if (!gm.getBalls().isEmpty()) {
+                        gm.getBalls().get(0).launch();
+                    }
+                }
+
+                case ESCAPE -> {
+                    try {
+                        gameLoop.stop(); // dừng game
+                        Pane pausePane = PauseGame(stage, LevelNumber); // tạo menu pause
+                        gamePane.getChildren().add(pausePane); // chồng menu lên game
+                        SoundManager.pauseMusic();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
