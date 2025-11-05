@@ -61,11 +61,11 @@ public class Arkanoid extends Application {
         File loadResume = new File("src/main/resources/com/example/arkanoid/images/ResumeButton.png");
         Image ResumeImg = new Image(loadResume.toURI().toString());
         ImageView ResumeImgV = new ImageView(ResumeImg);
-        ResumeImgV.setFitHeight(70);
+        ResumeImgV.setFitHeight(80);
         ResumeImgV.setFitWidth(230);
         ResumeImgV.setPickOnBounds(false);
         ResumeImgV.setLayoutX(245);
-        ResumeImgV.setLayoutY(330);
+        ResumeImgV.setLayoutY(250);
         ResumeImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), ResumeImgV);
             st.setToX(1.1);
@@ -83,11 +83,11 @@ public class Arkanoid extends Application {
         File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
         Image RestartImg = new Image(loadRestart.toURI().toString());
         ImageView RestartImgV = new ImageView(RestartImg);
-        RestartImgV.setFitHeight(70);
+        RestartImgV.setFitHeight(80);
         RestartImgV.setFitWidth(230);
         RestartImgV.setPickOnBounds(false);
         RestartImgV.setLayoutX(245);
-        RestartImgV.setLayoutY(420);
+        RestartImgV.setLayoutY(350);
         RestartImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
             st.setToX(1.1);
@@ -105,11 +105,11 @@ public class Arkanoid extends Application {
         File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());
         ImageView MainMenu2ImgV = new ImageView(MainMenu2Img);
-        MainMenu2ImgV.setFitHeight(70); // set chieu cao
+        MainMenu2ImgV.setFitHeight(80); // set chieu cao
         MainMenu2ImgV.setFitWidth(230); // set chiều rong
         MainMenu2ImgV.setPickOnBounds(false);
         MainMenu2ImgV.setLayoutX(245); // tọa độ X của đầu nút
-        MainMenu2ImgV.setLayoutY(510);
+        MainMenu2ImgV.setLayoutY(450);
         MainMenu2ImgV.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
             st.setToX(1.1);

@@ -46,6 +46,7 @@ public class ExtraLifePowerUp extends PowerUp {
     @Override
     public void applyEffect(GameManager gm) {
         gm.increaseLives(1); // Gọi phương thức trong GameManager để tăng mạng
+
         // Gợi ý: bạn có thể chơi một âm thanh "ting" ở đây để báo hiệu người chơi đã nhận được mạng.
     }
 

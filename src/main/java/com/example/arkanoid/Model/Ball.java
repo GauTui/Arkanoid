@@ -2,7 +2,6 @@ package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
 import com.example.arkanoid.Utils.SoundEffect;
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -10,7 +9,6 @@ import javafx.scene.shape.Rectangle;
 import java.net.MalformedURLException;
 import java.util.Random;
 
-import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
 import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject {

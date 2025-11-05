@@ -20,7 +20,7 @@ public class Paddle extends MovableObject{
     public static final int PADDLE_HEIGHT = 14;
     private static final double PADDLE_SPEED = 8.0;
     public static final Color PADDLE_COLOR = Color.AQUAMARINE;
-
+    private boolean hasLaser = false;
 
     public Paddle(double x, double y){
         super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0);
@@ -109,5 +109,12 @@ public class Paddle extends MovableObject{
             currentPowerUp = null;
         }
         updateView();
+    }
+    public boolean hasLaser() {
+        return hasLaser;
+    }
+
+    public void setHasLaser(boolean hasLaser) {
+        this.hasLaser = hasLaser;
     }
 }

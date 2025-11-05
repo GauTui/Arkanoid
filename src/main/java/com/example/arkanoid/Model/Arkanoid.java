@@ -1,12 +1,12 @@
 // java
 package com.example.arkanoid.Model;
 
-import com.example.arkanoid.GameManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import com.example.arkanoid.GameManager;
 
 import java.net.MalformedURLException;
 
