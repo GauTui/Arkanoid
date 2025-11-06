@@ -282,7 +282,7 @@ public class Arkanoid extends Application {
     }
 
     public void openLevelSelect(Stage stage, Scene menuScene) throws IOException {
-        Pane SelectLVButton = new Pane();
+        Pane SelectLVPane = new Pane();
         StackPane SelectLV = new StackPane();
 
         Image image = new Image("file:src/main/resources/com/example/arkanoid/images/SelectLVImg.png");
@@ -305,6 +305,7 @@ public class Arkanoid extends Application {
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
+            PreViewGame(SelectLVPane ,1);
         });
 
         LV1ImgV.setOnMouseExited(e -> {
@@ -312,6 +313,7 @@ public class Arkanoid extends Application {
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
+            SelectLVPane.getChildren().removeIf(node -> "PreView".equals(node.getId()));
         });
 
         LV1ImgV.setOnMouseClicked(e -> {
@@ -468,8 +470,8 @@ public class Arkanoid extends Application {
                 ex.printStackTrace();
             }
         });
-        SelectLVButton.getChildren().addAll(LV1ImgV, LV2ImgV, LV3ImgV, LV4ImgV, LV5ImgV, MainMenuImgV);
-        SelectLV.getChildren().addAll(imageView, SelectLVButton);
+        SelectLVPane.getChildren().addAll(LV1ImgV, LV2ImgV, LV3ImgV, LV4ImgV, LV5ImgV, MainMenuImgV);
+        SelectLV.getChildren().addAll(imageView, SelectLVPane);
         Scene lvScene = new Scene(SelectLV, 920, 720);
         stage.setScene(lvScene);
     }
@@ -763,7 +765,8 @@ public class Arkanoid extends Application {
             case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level2.jpg");
             case 3 -> loadBackGroundImg = new File("src/main/resources/bg_level3.png");
             case 4 -> loadBackGroundImg = new File("src/main/resources/bg_level4.png");
-            default -> loadBackGroundImg = new File("src/main/resources/bg_level5.png");
+            case 5 -> loadBackGroundImg = new File("src/main/resources/bg_level5.png");
+            default -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
         }
         Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
         ImageView loadBGImgV = new ImageView(loadBGImg);
@@ -849,5 +852,23 @@ public class Arkanoid extends Application {
     public Stage getPrimaryStage() {
         return getPrimaryStage();
     }
-
+    public void PreViewGame(Pane PreView, int LevelNumber) {
+        File loadPreView;
+        switch (LevelNumber) {
+            case 1 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/TestPreView.jfif");
+            case 2 -> loadPreView = new File("");
+            case 3 -> loadPreView = new File("");
+            case 4 -> loadPreView = new File("");
+            case 5 -> loadPreView = new File("");
+            default -> loadPreView = new File("");
+        }
+        Image PreViewImg = new Image(loadPreView.toURI().toString());
+        ImageView PreImgView = new ImageView(PreViewImg);
+        PreImgView.setFitHeight(400);
+        PreImgView.setFitWidth(360);
+        PreImgView.setX(530);
+        PreImgView.setY(120);
+        PreImgView.setId("PreView");
+        PreView.getChildren().add(PreImgView);
+    }
 }
