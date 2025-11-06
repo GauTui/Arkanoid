@@ -762,7 +762,7 @@ public class Arkanoid extends Application {
         File loadBackGroundImg;
         switch (LevelNumber) {
             case 1 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
-            case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level2.jpg");
+            case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
             case 3 -> loadBackGroundImg = new File("src/main/resources/bg_level3.png");
             case 4 -> loadBackGroundImg = new File("src/main/resources/bg_level4.png");
             case 5 -> loadBackGroundImg = new File("src/main/resources/bg_level5.png");

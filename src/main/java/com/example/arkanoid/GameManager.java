@@ -122,7 +122,7 @@ public class GameManager {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                int currentX = 0; // tọa độ X ban đầu cho mỗi hàng
+                int currentX = 60; // tọa độ X ban đầu cho mỗi hàng
                 for (char brickType : line.toCharArray()) {
                     Brick newBrick = null;
                     //  đọc từng ký tự và tạo loại gạch tương ứng
