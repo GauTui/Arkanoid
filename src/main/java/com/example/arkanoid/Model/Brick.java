@@ -29,6 +29,11 @@ public class Brick extends GameObject {
             isDestroyed = true;
         }
     }
+    public void destroyed() {
+        hitPoints = 0;
+        isDestroyed = true;
+    }
+
     public boolean isDestroyed() {
         return isDestroyed;
     }

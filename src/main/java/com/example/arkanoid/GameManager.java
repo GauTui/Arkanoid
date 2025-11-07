@@ -63,8 +63,8 @@ public class GameManager {
     // Biến để quản lý thời gian giữa các lần bắn (QUAN TRỌNG)
     private long lastLaserShotTime = 0;
 
-    // Hằng số thời gian chờ giữa các lần bắn (1000ms = 1 giây) (QUAN TRỌNG)
-    private static final long LASER_COOLDOWN = 1000;
+    // Hằng số thời gian chờ giữa các lần bắn (300ms = 0.3 giây) (QUAN TRỌNG)
+    private static final long LASER_COOLDOWN = 300;
 
     /*====Getter/setter====*/
     public void launchBall() {
@@ -382,7 +382,7 @@ public class GameManager {
                 if (beam.checkCollision(brick)) {
 
                     // Gạch nhận sát thương
-                    brick.takeHit();
+                    brick.destroyed();
 
                     // Nếu gạch bị phá hủy, xử lý điểm, xóa gạch, và tạo power-up
                     if (brick.isDestroyed()) {
@@ -548,7 +548,7 @@ public class GameManager {
         // Kiểm tra xem paddle có đang sở hữu power-up laser không
         if (paddle.getHasLaser()) {
             long currentTime = System.currentTimeMillis();
-            // Kiểm tra xem đã đủ 1 giây kể từ lần bắn trước chưa
+            // Kiểm tra xem đã đủ 0.3 giây kể từ lần bắn trước chưa
             if (currentTime - lastLaserShotTime > LASER_COOLDOWN) {
 
                 // Tính toán vị trí chính giữa paddle để bắn
