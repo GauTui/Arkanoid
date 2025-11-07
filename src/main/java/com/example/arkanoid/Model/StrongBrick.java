@@ -13,7 +13,6 @@ public class StrongBrick extends Brick{
         super(x,y,width,height,HIT_POINT_STRONG_BRICK);
         //sửa màu
         Image StrongBrickIMG = new Image(getClass().getResourceAsStream("/com/example/arkanoid/images/SStrongBrick.png"));
-        Image StrongBrickIMG3 = new Image(getClass().getResourceAsStream("/com/example/arkanoid/images/BrickSapVo.png"));
         ((ImageView) this.view).setImage(StrongBrickIMG);
     }
 
