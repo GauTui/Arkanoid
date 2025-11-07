@@ -197,7 +197,7 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
 
     /**
      * kiểm tra va chạm với brick.
-     * xóa luôn brick va chạm nếu thỏa mãn máu của nó về 0
+     * giamr máu gạch, đặt trạng thái bị phá hủy nếu máu về không
      * @param brick gach
      */
     public void collideWithBrick(Brick brick) throws MalformedURLException {
@@ -251,14 +251,8 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
             }
         }
 
-        // giảm máu gạch, phá hủy nếu máu về không bằng cách kiểm tra IsVisiable
+        // giảm máu gạch , nếu máu về 0 thì đặt trạng thái gạch bị phá hủy
         brick.takeHit();
-
-
-        if(brick.isDestroyed()) {
-            GameManager gm = GameManager.getInstance();
-            gm.getGamePane().getChildren().remove(brick.getView());
-        }
 
         //hiển thị âm thanh
         SoundEffect BrickCollideSound = new SoundEffect("/com/example/arkanoid/sounds/collision.wav");

@@ -367,16 +367,15 @@ public class GameManager {
                 if (brick.isDestroyed()) continue;
 
                 if (ball.checkCollision(brick)) {
-                    //xu ly va cham voi bong, xoa brick ra list va ra pane, tang diem,.
+                    //xu ly va cham voi bong, đặt trạng thái bị phá hủy nếu máu về 0
                     ball.collideWithBrick(brick);
-                    score += INCREASE_POINTS;
-
-                    // Có thể sinh power-up
-                    if (random.nextDouble() < 0.5) {
-                        spawnPowerUp(brick.getX(), brick.getY());
-                    }
-
                     if (brick.isDestroyed()) {
+                        if(brick instanceof StrongBrick){
+                            score += INCREASE_POINTS * 2;
+                        } else {
+                            score += INCREASE_POINTS;
+                        }
+                        spawnPowerUp(brick.getX(), brick.getY());
                         gamePane.getChildren().remove(brick.getView());
                     }
                     // chỉ xử lý một va chạm gạch mỗi khung hình cho mỗi quả bóng
@@ -435,8 +434,7 @@ public class GameManager {
 
                 // Nếu tia laser va chạm với viên gạch
                 if (beam.checkCollision(brick)) {
-
-                    // Gạch nhận sát thương
+                    // phá gạch
                     brick.destroyed();
 
                     // Nếu gạch bị phá hủy, xử lý điểm, xóa gạch, và tạo power-up
@@ -507,6 +505,9 @@ public class GameManager {
 
     }
 
+    /*
+     sinh powerup ngẫu nhiên tại vị trí (x,y) khi viên gạch bị phá hủy
+     */
     private void spawnPowerUp(double x, double y) {
         // Lấy một số ngẫu nhiên từ 0.0 (bao gồm) đến 1.0 (không bao gồm)
         double chance = random.nextDouble();
@@ -515,24 +516,24 @@ public class GameManager {
 
         // --- ĐÂY LÀ NƠI CHÚNG TA ĐỊNH NGHĨA TỈ LỆ RƠI ---
 
-        // 5% cơ hội rơi ra Extra Life (khi chance < 0.05)
-        if (chance < 0.05) {
+        // 2% cơ hội rơi ra Extra Life (khi chance < 0.02)
+        if (chance < 0.02) {
             newPowerUp = new ExtraLifePowerUp(x, y);
 
-            // 10% cơ hội rơi ra Split Ball (khi chance >= 0.05 và < 0.15)
-        } else if (chance < 0.15) {
+            // 8% cơ hội rơi ra Split Ball (khi chance >= 0.02 và < 0.10)
+        } else if (chance < 0.10) {
             newPowerUp = new SplitBallPowerUp(x, y);
 
-            // 20% cơ hội rơi ra Expand Paddle (khi chance >= 0.15 và < 0.35)
-        } else if (chance < 0.35) {
+            // 10% cơ hội rơi ra Expand Paddle (khi chance >= 0.10 và < 0.20)
+        } else if (chance < 0.20) {
             newPowerUp = new ExpandPaddlePowerUp(x, y);
 
-            // 20% cơ hội rơi ra Fast Ball (khi chance >= 0.35 và < 0.55)
-        } else if (chance < 0.55) {
+            // 10% cơ hội rơi ra Fast Ball (khi chance >= 0.20 và < 0.30)
+        } else if (chance < 0.30) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-            // 30% cơ hội rơi ra Laser Paddle (khi chance >= 0.55 và < 0.85)
-        else if (chance < 0.85) {
+            // 20% cơ hội rơi ra Laser Paddle (khi chance >= 0.30 và < 0.5)
+        else if (chance < 0.50) {
             newPowerUp = new LaserPaddlePowerUp(x, y);
         }
 
