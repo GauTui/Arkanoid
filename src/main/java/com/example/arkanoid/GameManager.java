@@ -628,7 +628,7 @@ public class GameManager {
 
                 // Tạo một tia laser duy nhất
                 LaserBeam beam = new LaserBeam(laserX, laserY);
-
+                beam.getLaserSound().play(0.5); // Phát âm thanh bắn laser
                 // Thêm tia laser vào game
                 laserBeams.add(beam);
                 gamePane.getChildren().add(beam.getView());
