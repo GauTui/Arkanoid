@@ -42,7 +42,7 @@ public class GameManager {
     public static final int LIVES_X = 400;
     public static final int LIVES_Y = 30;
     // số bóng tối đa trong game
-    public static final int MAX_BALLS = 15;
+    public static final int MAX_BALLS = 10;
 
     // Singleton GameManager
     private static GameManager instance;
@@ -531,6 +531,7 @@ public class GameManager {
         } else if (chance < 0.55) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
+            // 30% cơ hội rơi ra Laser Paddle (khi chance >= 0.55 và < 0.85)
         else if (chance < 0.85) {
             newPowerUp = new LaserPaddlePowerUp(x, y);
         }

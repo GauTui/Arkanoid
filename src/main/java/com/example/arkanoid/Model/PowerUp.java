@@ -10,7 +10,7 @@ public abstract class PowerUp extends MovableObject {
     private boolean isActive;
     private long activationTime;  // Thời điểm bắt đầu kích hoạt
 
-    private long duration = 5000;    // Thời gian hiệu lực (ms)
+    private long duration = 3500;    // Thời gian hiệu lực (ms)
 
     public static final int POWERUP_WIDTH = 20;
     public static final int POWERUP_HEIGHT = 20;

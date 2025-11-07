@@ -1,8 +1,13 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+
+import java.io.File;
 
 /**
  * Đây là class định nghĩa Power-up "Paddle Bắn Laser".
@@ -10,8 +15,8 @@ import javafx.scene.shape.Rectangle;
  */
 public class LaserPaddlePowerUp extends PowerUp {
 
-    // Thời gian hiệu lực của power-up (10000 milliseconds = 10 giây)
-    private static final long DURATION_MS = 10000;
+    // Thời gian hiệu lực của power-up (7000 milliseconds = 7 giây)
+    private static final long DURATION_MS = 7000;
 
     /**
      * Constructor để tạo đối tượng power-up tại một vị trí cụ thể.
@@ -23,19 +28,19 @@ public class LaserPaddlePowerUp extends PowerUp {
         super(x, y);
 
         // --- Thiết lập ngoại hình cho power-up ---
-        // Tạo một hình vuông màu vàng để người chơi dễ nhận biết
-        int size = 40;
-        Rectangle powerUpShape = new Rectangle(size, size, Color.YELLOW);
-        powerUpShape.setStroke(Color.WHITE);
-        powerUpShape.setStrokeWidth(2);
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/LaserPowerUp.png").toURI().toString());
+        this.view = new ImageView(image);
+        ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+        ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
 
-        // Gán hình vuông này làm "view" (hình ảnh đại diện)
-        this.view = powerUpShape;
-        this.width = size;
-        this.height = size;
-
-        // Cập nhật vị trí hiển thị ban đầu
         updateView();
+        /*Rectangle powerUpShape = new Rectangle(POWERUP_WIDTH, POWERUP_WIDTH, Color.YELLOW);
+        powerUpShape.setStroke(Color.BLACK);
+        powerUpShape.setStrokeWidth(2);
+        this.view = powerUpShape;
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/LaserPowerUp.png").toURI().toString());
+        ((Rectangle) this.view).setFill(new ImagePattern(image));
+        */
     }
 
     /**
