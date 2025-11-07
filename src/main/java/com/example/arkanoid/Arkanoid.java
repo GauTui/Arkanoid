@@ -21,6 +21,8 @@ import javafx.util.Duration;
 
 import java.awt.*;
 import javafx.geometry.Rectangle2D;
+import jdk.jfr.Frequency;
+
 import java.io.File;
 
 
@@ -313,7 +315,8 @@ public class Arkanoid extends Application {
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
-            SelectLVPane.getChildren().removeIf(node -> "PreView".equals(node.getId()));
+            SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
+            SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
 
         LV1ImgV.setOnMouseClicked(e -> {
@@ -337,6 +340,7 @@ public class Arkanoid extends Application {
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
+            PreViewGame(SelectLVPane,2);
         });
 
         LV2ImgV.setOnMouseExited(e -> {
@@ -344,6 +348,8 @@ public class Arkanoid extends Application {
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
+            SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
+            SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
 
         LV2ImgV.setOnMouseClicked(e -> {
@@ -366,6 +372,7 @@ public class Arkanoid extends Application {
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
+            PreViewGame(SelectLVPane,3);
         });
 
         LV3ImgV.setOnMouseExited(e -> {
@@ -373,6 +380,8 @@ public class Arkanoid extends Application {
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
+            SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
+            SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
 
         LV3ImgV.setOnMouseClicked(e -> {
@@ -395,6 +404,7 @@ public class Arkanoid extends Application {
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
+            PreViewGame(SelectLVPane,4);
         });
 
         LV4ImgV.setOnMouseExited(e -> {
@@ -402,6 +412,8 @@ public class Arkanoid extends Application {
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
+            SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
+            SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
 
         LV4ImgV.setOnMouseClicked(e -> {
@@ -424,6 +436,7 @@ public class Arkanoid extends Application {
             st.setToX(1.1);
             st.setToY(1.1);
             st.play();
+            PreViewGame(SelectLVPane,5);
         });
 
         LV5ImgV.setOnMouseExited(e -> {
@@ -431,6 +444,9 @@ public class Arkanoid extends Application {
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
+            PreViewGame(SelectLVPane,5);
+            SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
+            SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
 
         LV5ImgV.setOnMouseClicked(e -> {
@@ -438,6 +454,7 @@ public class Arkanoid extends Application {
             SoundManager lv5sound = new SoundManager();
             SoundManager.playBackgroundMusic("src/main/resources/com/example/arkanoid/sounds/gameMusic5.wav");
             startLevel(stage, 5);
+
         });
 
 
@@ -470,6 +487,7 @@ public class Arkanoid extends Application {
                 ex.printStackTrace();
             }
         });
+
         SelectLVPane.getChildren().addAll(LV1ImgV, LV2ImgV, LV3ImgV, LV4ImgV, LV5ImgV, MainMenuImgV);
         SelectLV.getChildren().addAll(imageView, SelectLVPane);
         Scene lvScene = new Scene(SelectLV, 920, 720);
@@ -759,20 +777,28 @@ public class Arkanoid extends Application {
     public void startLevel(Stage stage, int LevelNumber) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
+        File loadSide = new File("");
+        Image SideImage = new Image(loadSide.toURI().toString());
+        ImageView SideView = new ImageView(SideImage);
+        SideView.setLayoutY(720);
+        SideView.setLayoutX(0);
+        SideView.setFitHeight(720);
+        SideView.setFitWidth(200);
+
         File loadBackGroundImg;
         switch (LevelNumber) {
             case 1 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
-            case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
-            case 3 -> loadBackGroundImg = new File("src/main/resources/bg_level3.png");
-            case 4 -> loadBackGroundImg = new File("src/main/resources/bg_level4.png");
-            case 5 -> loadBackGroundImg = new File("src/main/resources/bg_level5.png");
+            case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level2.png");
+            case 3 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level3.jpg");
+            case 4 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level4.jpg");
+            case 5 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level5.jpg");
             default -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
         }
         Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
         ImageView loadBGImgV = new ImageView(loadBGImg);
         loadBGImgV.setFitWidth(720);
         loadBGImgV.setFitHeight(720);
-        gamePane.getChildren().add(loadBGImgV);
+        gamePane.getChildren().addAll(loadBGImgV, SideView);
         gm.init(gamePane, this, LevelNumber);
         Scene scene = new Scene(gamePane, 920, GameManager.SCREEN_HEIGHT);
         loadBGImgV.setPreserveRatio(false);
@@ -855,20 +881,31 @@ public class Arkanoid extends Application {
     public void PreViewGame(Pane PreView, int LevelNumber) {
         File loadPreView;
         switch (LevelNumber) {
-            case 1 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/TestPreView.jfif");
-            case 2 -> loadPreView = new File("");
-            case 3 -> loadPreView = new File("");
-            case 4 -> loadPreView = new File("");
-            case 5 -> loadPreView = new File("");
-            default -> loadPreView = new File("");
+            case 1 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/Pre1.jfif");
+            case 2 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/Pre2.jfif");
+            case 3 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/Pre3.jfif");
+            case 4 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/Pre4.jfif");
+            case 5 -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/Pre5.jfif");
+            default -> loadPreView = new File("src/main/resources/com/example/arkanoid/images/Pre1.jfif");
         }
         Image PreViewImg = new Image(loadPreView.toURI().toString());
         ImageView PreImgView = new ImageView(PreViewImg);
-        PreImgView.setFitHeight(400);
-        PreImgView.setFitWidth(360);
-        PreImgView.setX(530);
-        PreImgView.setY(120);
+        PreImgView.setFitHeight(390);
+        PreImgView.setFitWidth(270);
+        PreImgView.setX(533);
+        PreImgView.setY(205);
         PreImgView.setId("PreView");
-        PreView.getChildren().add(PreImgView);
+
+        File loadFrame = new File("src/main/resources/com/example/arkanoid/images/PreViewFrame.png");
+        Image Frame = new Image(loadFrame.toURI().toString());
+        ImageView FrameView = new ImageView(Frame);
+        FrameView.setFitWidth(650);
+        FrameView.setFitHeight(600);
+        FrameView.setX(355);
+        FrameView.setY(105);
+        FrameView.setId("FrameView");
+
+        PreView.getChildren().addAll(PreImgView,FrameView);
+
     }
 }
