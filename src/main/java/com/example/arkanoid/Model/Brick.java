@@ -50,4 +50,9 @@ public class Brick extends GameObject {
     public boolean isDestroyed() {
         return isDestroyed;
     }
+
+    public void destroyed() {
+        this.isDestroyed = true;
+        hitPoints = 0;
+    }
 }
