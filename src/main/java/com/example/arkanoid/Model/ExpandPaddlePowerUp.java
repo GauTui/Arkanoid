@@ -3,13 +3,8 @@ package com.example.arkanoid.Model;
 import com.example.arkanoid.GameManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.io.File;
-
-import static com.example.arkanoid.Model.Paddle.PADDLE_HEIGHT;
-import static com.example.arkanoid.Model.Paddle.PADDLE_WIDTH;
 
 /** Nới rộng Paddle */
 public class ExpandPaddlePowerUp extends PowerUp {

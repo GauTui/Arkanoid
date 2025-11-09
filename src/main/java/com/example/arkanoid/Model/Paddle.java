@@ -10,7 +10,6 @@ import java.io.File;
 
 import static com.example.arkanoid.GameManager.SCREEN_HEIGHT;
 import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
-import static com.example.arkanoid.Model.PowerUp.POWERUP_WIDTH;
 
 public class Paddle extends MovableObject{
 

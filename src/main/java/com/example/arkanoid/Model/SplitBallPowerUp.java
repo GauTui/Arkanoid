@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.arkanoid.GameManager.MAX_BALLS;
 import static com.example.arkanoid.Model.Ball.BALL_SIZE;
 
 /**
@@ -66,7 +67,8 @@ public class SplitBallPowerUp extends PowerUp {
 
         // Thêm bóng mới vào game
         for (Ball ball : newBalls) {
-            gm.addBall(ball);
+            //giới hạn số lượng bóng
+            if(gm.getBalls().size() < MAX_BALLS) gm.addBall(ball);
         }
     }
 
