@@ -68,11 +68,16 @@ public class GameManager {
     private int currentLevel;
     private Arkanoid mainApp;
     private List<LaserBeam> laserBeams = new ArrayList<>();
+
     // Biến để quản lý thời gian giữa các lần bắn (QUAN TRỌNG)
     private long lastLaserShotTime = 0;
-
     // Hằng số thời gian chờ giữa các lần bắn (300ms = 0.3 giây) (QUAN TRỌNG)
     private static final long LASER_COOLDOWN = 300;
+
+    // Biến theo dõi thời gian bóng đứng im trên paddle
+    private long ballOnPaddleStartTime = 0;
+    // Thời gian tối đa bóng có thể đứng im trên paddle (5 giây)
+    private static final long MAX_BALL_ON_PADDLE_TIME = 5000;
 
     /*====Getter/setter====*/
     public List<Ball> getBalls() {
@@ -238,7 +243,23 @@ public class GameManager {
                 ball.reset(paddle); // stop và đặt lại vị trí
             }
         }
-
+        else {
+            // Nếu có bóng đang bay, đặt thời gian bắt đầu đếm ngược
+            ballOnPaddleStartTime = System.currentTimeMillis();
+        }
+        if( ballOnPaddleStartTime != 0) {
+            long elapsed = System.currentTimeMillis() - ballOnPaddleStartTime;
+            if (elapsed > MAX_BALL_ON_PADDLE_TIME) {
+                // Tự động tung bóng sau 5 giây
+                for (Ball ball : balls) {
+                    if (!ball.isLaunched()) {
+                        ball.launch();
+                    }
+                }
+                // Reset thời gian
+                ballOnPaddleStartTime = 0;
+            }
+        }
         // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
 
         paddle.update();
@@ -315,6 +336,12 @@ public class GameManager {
                 apu.removeEffect(this);
             }
             activePowerups.clear();
+
+            //xóa tất cả tia laser còn hoạt động
+            for (LaserBeam beam : laserBeams) {
+                gamePane.getChildren().remove(beam.getView());
+            }
+            laserBeams.clear();
 
             // đặt lại vị trí quả bóng trên thanh paddle, node view cập nhật vị trí hiển thị.
             for (Ball ball : balls) {
@@ -609,6 +636,9 @@ public class GameManager {
         }
         balls.clear();
         bricks.clear();
+        fallingPowerups.clear();
+        activePowerups.clear();
+        laserBeams.clear();
         score = 0;
         lives = 3;
     }
