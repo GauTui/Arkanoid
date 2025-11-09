@@ -15,6 +15,7 @@ public class Ball extends MovableObject {
     public static final int BALL_SIZE = 20;
     public static final double BALL_DX = 3;
     public static final double BALL_DY = -2.5;
+    private boolean isBomb = false;
 
     /**
      * constructor 4 tham so, (x,y) la toa do qua bong goc tren cung ben trai.
@@ -272,5 +273,25 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         this.setDx(0);
         this.setDy(0);
         updateView();
+    }
+    public void setBomb(boolean isBomb) {
+        this.isBomb = isBomb;
+
+        // (Tùy chọn) Bạn có thể thêm logic đổi màu hoặc đổi ảnh ở đây.
+        // Ví dụ, nếu bạn dùng ImagePattern:
+        if (this.view instanceof javafx.scene.shape.Rectangle) {
+            if (isBomb) {
+                // ((javafx.scene.shape.Rectangle) this.view).setFill(BOMB_BALL_PATTERN);
+            } else {
+                // ((javafx.scene.shape.Rectangle) this.view).setFill(NORMAL_BALL_PATTERN);
+            }
+        }
+    }
+    /**
+     * Kiểm tra xem quả bóng có đang ở trạng thái bom không.
+     * @return true nếu là bom, false nếu không.
+     */
+    public boolean isBomb() {
+        return this.isBomb;
     }
 }

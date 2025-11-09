@@ -68,6 +68,7 @@ public class GameManager {
     private int currentLevel;
     private Arkanoid mainApp;
     private List<LaserBeam> laserBeams = new ArrayList<>();
+    private static final double BOMB_RADIUS = 150;
 
     // Biến để quản lý thời gian giữa các lần bắn (QUAN TRỌNG)
     private long lastLaserShotTime = 0;
@@ -563,8 +564,11 @@ public class GameManager {
         else if (chance < 0.50) {
             newPowerUp = new LaserPaddlePowerUp(x, y);
         }
+        else if (chance < 0.90){
+            newPowerUp = new BombBallPowerUp(x, y);
+        }
 
-        // Nếu không rơi vào các trường hợp trên (chance >= 0.55), sẽ không có power-up nào được tạo ra.
+        // Nếu không rơi vào các trường hợp trên (chance >= 0.90), sẽ không có power-up nào được tạo ra.
 
         // Chỉ thêm power-up vào game nếu nó đã được tạo (không phải là null)
         if (newPowerUp != null) {
@@ -616,6 +620,49 @@ public class GameManager {
         System.out.println("Mạng đã tăng lên: " + this.lives); // In ra console để kiểm tra
     }
 
+    public void detonateBombs() {
+        // Tạo một danh sách các quả bom cần nổ để xử lý
+        List<Ball> bombsToDetonate = new ArrayList<>();
+        for (Ball ball : balls) {
+            if (ball.isBomb()) {
+                bombsToDetonate.add(ball);
+            }
+        }
+
+        // Nếu không có quả bom nào thì không làm gì cả
+        if (bombsToDetonate.isEmpty()) {
+            return;
+        }
+
+        // Với mỗi quả bom, tìm và phá hủy các viên gạch xung quanh
+        for (Ball bomb : bombsToDetonate) {
+            double bombCenterX = bomb.getX() + bomb.getWidth() / 2;
+            double bombCenterY = bomb.getY() + bomb.getHeight() / 2;
+
+            // Dùng Iterator để có thể xóa gạch một cách an toàn
+            Iterator<Brick> brickIterator = bricks.iterator();
+            while (brickIterator.hasNext()) {
+                Brick brick = brickIterator.next();
+
+                double brickCenterX = brick.getX() + brick.getWidth() / 2;
+                double brickCenterY = brick.getY() + brick.getHeight() / 2;
+
+                // Tính khoảng cách giữa tâm quả bom và tâm viên gạch
+                double distance = Math.sqrt(Math.pow(bombCenterX - brickCenterX, 2) + Math.pow(bombCenterY - brickCenterY, 2));
+
+                // Nếu gạch nằm trong bán kính nổ, phá hủy nó
+                if (distance < BOMB_RADIUS) {
+                    // Phá hủy ngay lập tức, không cần takeHit()
+                    score += INCREASE_POINTS;
+                    gamePane.getChildren().remove(brick.getView());
+                    brickIterator.remove();
+                }
+            }
+
+            // Sau khi nổ xong, trả quả bóng về trạng thái bình thường
+            bomb.setBomb(false);
+        }
+    }
     // Một phương thức helper để cập nhật Text hiển thị số mạng
     // Bạn cần gọi phương thức này ở hàm init() để hiển thị số mạng ban đầu
     public void updateLivesDisplay() {

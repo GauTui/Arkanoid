@@ -824,6 +824,7 @@ public class Arkanoid extends Application {
                 case RIGHT, D -> rightPressed = true;
                 // nút space để phóng bóng
                 case SPACE -> gm.launchBall();
+                case ENTER -> gm.detonateBombs();
                 case ESCAPE -> {
                     try {
                         gameLoop.stop(); // dừng game
