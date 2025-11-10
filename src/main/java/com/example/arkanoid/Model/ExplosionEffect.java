@@ -28,7 +28,7 @@ public class ExplosionEffect {
     private static final int COUNT = 7;        // 7 khung hình có nội dung
     private static final int FRAME_WIDTH = 240;  // Chiều rộng một khung hình (960 / 4)
     private static final int FRAME_HEIGHT = 192; // Chiều cao một khung hình (384 / 2)
-    private static final int DURATION_MS = 700;  // Tổng thời gian hoạt ảnh (0.7 giây)
+    private static final int DURATION_MS = 140;  // Tổng thời gian hoạt ảnh (0.7 giây)
 
     /**
      * Tạo một hiệu ứng nổ mới.
