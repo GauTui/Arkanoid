@@ -1,8 +1,12 @@
 package com.example.arkanoid.Model;
 
 import com.example.arkanoid.GameManager;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.ImageView;
+
+import java.io.File;
 
 public class BombBallPowerUp extends PowerUp {
 
@@ -13,17 +17,11 @@ public class BombBallPowerUp extends PowerUp {
         // Hiện tại, nó là một hình vuông màu Cam.
         // Sau này, bạn có thể thay thế 4 dòng code tạo hình vuông này
         // bằng code tải ảnh quả bom của bạn, giống như trong ExtraLifePowerUp.
-        // Ví dụ:
-        // Image image = new Image(new File(".../bomb_powerup.png").toURI().toString());
-        // this.view = new ImageView(image);
-        int size = 40;
-        Rectangle powerUpShape = new Rectangle(size, size, Color.BLACK);
-        powerUpShape.setStroke(Color.BLACK);
-        powerUpShape.setStrokeWidth(2);
-        this.view = powerUpShape;
 
-        this.width = size;
-        this.height = size;
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/bombball.png").toURI().toString());
+        this.view = new ImageView(image);
+        ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
+        ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
         updateView();
     }
 
