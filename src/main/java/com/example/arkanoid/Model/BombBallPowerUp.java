@@ -13,12 +13,8 @@ public class BombBallPowerUp extends PowerUp {
     public BombBallPowerUp(double x, double y) {
         super(x, y);
 
-        // --- CHÚ THÍCH THÊM ẢNH SAU ---
-        // Hiện tại, nó là một hình vuông màu Cam.
-        // Sau này, bạn có thể thay thế 4 dòng code tạo hình vuông này
-        // bằng code tải ảnh quả bom của bạn, giống như trong ExtraLifePowerUp.
 
-        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/bombball.png").toURI().toString());
+        Image image = new Image(new File("src/main/resources/com/example/arkanoid/images/BombBallPowerUp.png").toURI().toString());
         this.view = new ImageView(image);
         ((ImageView) this.view).setFitWidth(POWERUP_WIDTH);
         ((ImageView) this.view).setFitHeight(POWERUP_WIDTH);
