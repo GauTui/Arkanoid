@@ -15,6 +15,9 @@ public class Ball extends MovableObject {
     public static final int BALL_SIZE = 20;
     public static final double BALL_DX = 3;
     public static final double BALL_DY = -2.5;
+
+    private static final ImagePattern NORMAL_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/ball.png").toExternalForm()));
+    private static final ImagePattern BOMB_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/bombball.png").toExternalForm()));
     private boolean isBomb = false;
 
     /**
@@ -33,6 +36,9 @@ public class Ball extends MovableObject {
 
         Rball.setTranslateX(x);
         Rball.setTranslateY(y);
+
+        // Đặt ảnh ban đầu là ảnh quả bóng thường
+        Rball.setFill(NORMAL_BALL_PATTERN);
 
         String iball = getClass().getResource("/com/example/arkanoid/images/ball.png").toExternalForm();
         Image imagineBallUrl = new Image(iball);
@@ -272,18 +278,25 @@ public void collideWithPaddle(Paddle paddle) throws MalformedURLException {
         this.setY(paddle.getY() - this.getHeight());
         this.setDx(0);
         this.setDy(0);
+
+        this.setBomb(false); //bong tro ve trang thai binh thuong
+
         updateView();
+
     }
     public void setBomb(boolean isBomb) {
+        if (this.isBomb == isBomb) return; // Không làm gì nếu trạng thái không đổi
+
         this.isBomb = isBomb;
 
-        // (Tùy chọn) Bạn có thể thêm logic đổi màu hoặc đổi ảnh ở đây.
-        // Ví dụ, nếu bạn dùng ImagePattern:
-        if (this.view instanceof javafx.scene.shape.Rectangle) {
+        // Đảm bảo 'view' của bóng là một Rectangle để có thể đổi ảnh nền
+        if (this.view instanceof Rectangle) {
             if (isBomb) {
-                // ((javafx.scene.shape.Rectangle) this.view).setFill(BOMB_BALL_PATTERN);
+                // Chuyển sang hình ảnh quả bom
+                ((Rectangle) this.view).setFill(BOMB_BALL_PATTERN);
             } else {
-                // ((javafx.scene.shape.Rectangle) this.view).setFill(NORMAL_BALL_PATTERN);
+                // Trở về hình ảnh quả bóng thường
+                ((Rectangle) this.view).setFill(NORMAL_BALL_PATTERN);
             }
         }
     }
