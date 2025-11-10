@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.image.ImageView;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -362,6 +363,7 @@ public class GameManager {
         scoreText.setText("Score: " + score);
         livesText.setText("Lives: " + lives);
 
+        gamePane.getChildren().removeIf(node -> node instanceof ImageView && !node.isVisible());
     }
 
     private void handleBallFallingBottom() throws MalformedURLException {
@@ -639,6 +641,15 @@ public class GameManager {
             double bombCenterX = bomb.getX() + bomb.getWidth() / 2;
             double bombCenterY = bomb.getY() + bomb.getHeight() / 2;
 
+            // 1. Tạo một đối tượng ExplosionEffect mới tại vị trí của quả bom
+            ExplosionEffect explosion = new ExplosionEffect(bombCenterX, bombCenterY);
+
+            // 2. Thêm hình ảnh của hiệu ứng vào gamePane để người chơi có thể thấy
+            gamePane.getChildren().add(explosion.getView());
+
+            // 3. Bắt đầu chạy hoạt ảnh nổ
+            explosion.play();
+
             // Dùng Iterator để có thể xóa gạch một cách an toàn
             Iterator<Brick> brickIterator = bricks.iterator();
             while (brickIterator.hasNext()) {
@@ -736,4 +747,5 @@ public class GameManager {
             }
         }
     }
+
 }
