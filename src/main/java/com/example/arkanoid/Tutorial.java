@@ -1,5 +1,6 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Utils.HoverEffect;
 import javafx.animation.ScaleTransition;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -36,19 +37,7 @@ public class Tutorial {
         backImgV.setPickOnBounds(false);
         backImgV.setLayoutX(5);
         backImgV.setLayoutY(5);
-        backImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), backImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        backImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), backImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(backImgV);
 
         File loadNextButton = new File("src/main/resources/com/example/arkanoid/images/NextButton.png");
         Image nextImg = new Image(loadNextButton.toURI().toString());
@@ -58,19 +47,7 @@ public class Tutorial {
         nextImgV.setPickOnBounds(false);
         nextImgV.setLayoutX(755);
         nextImgV.setLayoutY(635);
-        nextImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), nextImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        nextImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), nextImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(nextImgV);
 
         int[] CurrentPage = {0};
 
@@ -96,19 +73,7 @@ public class Tutorial {
         BackToMenuImgV.setPickOnBounds(false);
         BackToMenuImgV.setLayoutX(310);
         BackToMenuImgV.setLayoutY(650);
-        BackToMenuImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackToMenuImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        BackToMenuImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), BackToMenuImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(BackToMenuImgV);
 
         BackToMenuImgV.setOnMouseClicked(e->{
             try{

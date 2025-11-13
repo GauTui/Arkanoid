@@ -1,5 +1,6 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
@@ -22,19 +23,7 @@ public class GameWin {
         RestartImgV.setPickOnBounds(false);
         RestartImgV.setLayoutX(235);
         RestartImgV.setLayoutY(300);
-        RestartImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        RestartImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(RestartImgV);
         /*
         File loadNextLV = new File("src/main/resources/com/example/arkanoid/images/NextLevelButton.png");
         Image NextLVImg = new Image(loadNextLV.toURI().toString());
@@ -58,19 +47,7 @@ public class GameWin {
         MainMenu2ImgV.setPickOnBounds(false);
         MainMenu2ImgV.setLayoutX(235); // tọa độ X của đầu nút
         MainMenu2ImgV.setLayoutY(400);
-        MainMenu2ImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        MainMenu2ImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenu2ImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(MainMenu2ImgV);
 
         MainMenu2ImgV.setOnMouseClicked(e -> {
             try {

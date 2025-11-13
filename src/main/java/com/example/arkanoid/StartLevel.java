@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.Paddle;
+import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -18,6 +19,7 @@ public class StartLevel extends Arkanoid {
     private static boolean rightPressed = false;
     private static final double PADDLE_SPEED = 600.0;
     public static double mouseX;
+    private Pane pausePane = null;
     public void startLevel(Stage stage, int LevelNumber, Arkanoid mainApp) {
         Pane gamePane = new Pane();
         GameManager gm = GameManager.getInstance();
@@ -97,9 +99,66 @@ public class StartLevel extends Arkanoid {
                 case ESCAPE -> {
                     try {
                         gameLoop.stop(); // dừng game
-                        Pane pausePane = PauseGame.PauseGame(stage, LevelNumber, mainApp); // tạo menu pause
-                        gamePane.getChildren().add(pausePane); // chồng menu lên game
-                        SoundManager.pauseMusic();
+
+                        if (pausePane == null) { // tránh tạo nhiều pane
+                            pausePane = new Pane();
+
+                            // Resume Button
+                            File loadResume = new File("src/main/resources/com/example/arkanoid/images/ResumeButton.png");
+                            ImageView ResumeImgV = new ImageView(new Image(loadResume.toURI().toString()));
+                            ResumeImgV.setFitWidth(230); ResumeImgV.setFitHeight(80);
+                            ResumeImgV.setLayoutX(245); ResumeImgV.setLayoutY(250);
+                            HoverEffect.addHoverEffect(ResumeImgV);
+                            ResumeImgV.setOnMouseClicked(e2 -> {
+                                gm.launchBall();
+                                gamePane.getChildren().remove(pausePane); // remove đúng pane
+                                SoundManager.resumeMusic();
+                                gameLoop.start();
+                                pausePane = null; // reset reference
+                            });
+
+                            // Restart Button
+                            File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
+                            ImageView RestartImgV = new ImageView(new Image(loadRestart.toURI().toString()));
+                            RestartImgV.setFitWidth(230); RestartImgV.setFitHeight(80);
+                            RestartImgV.setLayoutX(245); RestartImgV.setLayoutY(350);
+                            HoverEffect.addHoverEffect(RestartImgV);
+                            RestartImgV.setOnMouseClicked(e2 -> {
+                                try {
+                                    String bgmFile = SoundManager.getCurrentBgmFile();
+                                    GameManager kk = GameManager.getInstance();
+                                    kk.reset();
+                                    Arkanoid.closeAllStages();
+                                    Stage newStage = new Stage();
+                                    SoundManager.playBackgroundMusic(bgmFile);
+                                    new StartLevel().startLevel(newStage, LevelNumber, mainApp);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            });
+
+                            // Menu Button
+                            File loadMenu = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png");
+                            ImageView MenuImgV = new ImageView(new Image(loadMenu.toURI().toString()));
+                            MenuImgV.setFitWidth(230); MenuImgV.setFitHeight(80);
+                            MenuImgV.setLayoutX(245); MenuImgV.setLayoutY(450);
+                            HoverEffect.addHoverEffect(MenuImgV);
+                            MenuImgV.setOnMouseClicked(e2 -> {
+                                try {
+                                    Arkanoid.closeAllStages();
+                                    GameManager.getInstance().reset();
+                                    SoundManager.stopBackgroundMusic();
+                                    Stage newStage = new Stage();
+                                    mainApp.start(newStage);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            });
+
+                            pausePane.getChildren().addAll(ResumeImgV, RestartImgV, MenuImgV);
+                            gamePane.getChildren().add(pausePane);
+                            SoundManager.pauseMusic();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

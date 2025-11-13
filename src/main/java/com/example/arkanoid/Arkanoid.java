@@ -157,7 +157,8 @@ public class Arkanoid extends Application {
         // tiêu đề của game
         StartImgV.setOnMouseClicked(e -> {
             try {
-                SelectLevel.openLevelSelect(stage, scene);
+                SelectLevel selectLevel = new SelectLevel();
+                selectLevel.openLevelSelect(stage, scene, this);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -176,11 +177,11 @@ public class Arkanoid extends Application {
     }
     public Pane createGameWin(Stage stage, int score) throws Exception {
         GameWin win = new GameWin();
-        return win.createPane(stage, score, this); // truyền mainApp vào nếu cần
+        return win.GameWin(stage, score, this); // truyền mainApp vào nếu cần
     }
 
     public Pane createGameLose(Stage stage, int score, int level) throws Exception {
         GameLose lose = new GameLose();
-        return lose.createPane(stage, score, level, this);
+        return lose.GameLoseSc(stage, score, level, this);
     }
 }

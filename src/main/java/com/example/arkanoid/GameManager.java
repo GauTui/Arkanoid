@@ -295,7 +295,7 @@ public class GameManager {
                     SoundManager.stopBackgroundMusic();
                     try {
                         Stage stage = (Stage) gamePane.getScene().getWindow();
-                        Pane winPane = mainApp.GameWin(stage, score);
+                        Pane winPane = mainApp.createGameWin(stage, score);
                         winPane.setPrefSize(720,720);
                         winPane.setClip(new javafx.scene.shape.Rectangle(720, 720));
                         javafx.geometry.Point2D gamePanePos = gamePane.localToScreen(0, 0);
@@ -417,7 +417,7 @@ public class GameManager {
                 Platform.runLater(() -> {
                     try {
                         Stage stage = (Stage) gamePane.getScene().getWindow();
-                        Pane losePane = mainApp.GameLoseSc(stage, score,currentLevel);
+                        Pane losePane = mainApp.createGameLose(stage, score,currentLevel);
                         losePane.setStyle("-fx-background-color: rgba(0,0,0,0.3);");
                         javafx.geometry.Point2D gamePanePos = gamePane.localToScreen(0, 0);
                         Scene transparentScene = new Scene(losePane, 720, SCREEN_HEIGHT);

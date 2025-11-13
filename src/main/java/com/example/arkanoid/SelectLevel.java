@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Utils.AnimationGame;
+import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Rectangle2D;
@@ -42,19 +43,11 @@ public class SelectLevel {
         LV1ImgV.setPickOnBounds(false);
         LV1ImgV.setLayoutX(30); // tọa độ X của đầu nút
         LV1ImgV.setLayoutY(100);
+        HoverEffect.addHoverEffect(LV1ImgV);
         LV1ImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV1ImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-            PreViewGame.PreViewGame(SelectLVPane ,1);
+            PreViewGame.PreViewGame(SelectLVPane,1);
         });
-
         LV1ImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV1ImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
             SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
             SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
@@ -75,20 +68,12 @@ public class SelectLevel {
         LV2ImgV.setPickOnBounds(false);
         LV2ImgV.setLayoutX(30); // tọa độ X của đầu nút
         LV2ImgV.setLayoutY(200);
-
+        HoverEffect.addHoverEffect(LV2ImgV);
         LV2ImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV2ImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
             PreViewGame.PreViewGame(SelectLVPane,2);
         });
 
         LV2ImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV2ImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
             SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
             SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
@@ -109,19 +94,12 @@ public class SelectLevel {
         LV3ImgV.setPickOnBounds(false);
         LV3ImgV.setLayoutX(30); // tọa độ X của đầu nút
         LV3ImgV.setLayoutY(300);
+        HoverEffect.addHoverEffect(LV3ImgV);
         LV3ImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV3ImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
             PreViewGame.PreViewGame(SelectLVPane,3);
         });
 
         LV3ImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV3ImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
             SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
             SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
@@ -142,19 +120,11 @@ public class SelectLevel {
         LV4ImgV.setPickOnBounds(false);
         LV4ImgV.setLayoutX(30); // tọa độ X của đầu nút
         LV4ImgV.setLayoutY(400);
+        HoverEffect.addHoverEffect(LV4ImgV);
         LV4ImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV4ImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
             PreViewGame.PreViewGame(SelectLVPane,4);
         });
-
         LV4ImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV4ImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
             SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
             SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
@@ -175,20 +145,11 @@ public class SelectLevel {
         LV5ImgV.setPickOnBounds(false);
         LV5ImgV.setLayoutX(30); // tọa độ X của đầu nút
         LV5ImgV.setLayoutY(500);
+        HoverEffect.addHoverEffect(LV5ImgV);
         LV5ImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV5ImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
             PreViewGame.PreViewGame(SelectLVPane,5);
         });
-
         LV5ImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), LV5ImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-            PreViewGame.PreViewGame(SelectLVPane,5);
             SelectLVPane.getChildren().removeIf(node ->"PreView".equals(node.getId()));
             SelectLVPane.getChildren().removeIf(node ->"FrameView".equals(node.getId()));
         });
@@ -210,20 +171,7 @@ public class SelectLevel {
         MainMenuImgV.setPickOnBounds(false);
         MainMenuImgV.setLayoutX(5); // tọa độ X của đầu nút
         MainMenuImgV.setLayoutY(5);
-        MainMenuImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        MainMenuImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainMenuImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
-
+        HoverEffect.addHoverEffect(MainMenuImgV);
         MainMenuImgV.setOnMouseClicked(e -> {
             try {
                 Arkanoid arkanoid = new Arkanoid();

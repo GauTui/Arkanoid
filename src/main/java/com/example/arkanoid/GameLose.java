@@ -1,5 +1,6 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
@@ -7,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 
 import java.io.File;
 
@@ -21,19 +23,7 @@ public class GameLose {
         RestartImgV.setPickOnBounds(false);
         RestartImgV.setLayoutX(235);
         RestartImgV.setLayoutY(330);
-        RestartImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        RestartImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), RestartImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(RestartImgV);
 
         RestartImgV.setOnMouseClicked(e->{
             try {//  đóng hết mọi Stage đang mở
@@ -58,19 +48,7 @@ public class GameLose {
         MainmenuImgV2.setPickOnBounds(false);
         MainmenuImgV2.setLayoutX(235);
         MainmenuImgV2.setLayoutY(420);
-        MainmenuImgV2.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainmenuImgV2);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        MainmenuImgV2.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), MainmenuImgV2);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(MainmenuImgV2);
 
         MainmenuImgV2.setOnMouseClicked(e -> {
             try {
