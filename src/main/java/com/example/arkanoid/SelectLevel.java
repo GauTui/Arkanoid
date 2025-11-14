@@ -30,9 +30,12 @@ public class SelectLevel {
 
         Image image = new Image("file:src/main/resources/com/example/arkanoid/images/SelectLVImg.png");
         ImageView imageView = new ImageView(image);
-        imageView.setViewport(new Rectangle2D(0, 0, 920, 863));
-        AnimationGame anim = new AnimationGame(imageView, 4, 1056, 992, 600);
+        imageView.setViewport(new Rectangle2D(0, 0, 1024, 1024));
+        AnimationGame anim = new AnimationGame(imageView, 4, 1024, 1024, 600);
         anim.play();
+        imageView.setFitWidth(1080);
+        imageView.setFitHeight(720);
+        imageView.setPreserveRatio(false);
 
 
         File LoadImgLV1 = new File("src/main/resources/com/example/arkanoid/images/Level1Button.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
@@ -183,7 +186,7 @@ public class SelectLevel {
 
         SelectLVPane.getChildren().addAll(LV1ImgV, LV2ImgV, LV3ImgV, LV4ImgV, LV5ImgV, MainMenuImgV);
         SelectLV.getChildren().addAll(imageView, SelectLVPane);
-        Scene lvScene = new Scene(SelectLV, 920, 720);
+        Scene lvScene = new Scene(SelectLV, 1080, 720);
         stage.setScene(lvScene);
     }
 }

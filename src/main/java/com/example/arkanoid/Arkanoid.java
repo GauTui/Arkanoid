@@ -3,6 +3,7 @@ package com.example.arkanoid;
 import com.example.arkanoid.Model.Paddle;
 import com.example.arkanoid.Utils.AnimationGame;
 import com.example.arkanoid.Utils.BackgroundMusic;
+import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
 import javafx.animation.ScaleTransition;
@@ -36,6 +37,10 @@ import java.net.MalformedURLException;
 
 public class Arkanoid extends Application {
     // pixels per second
+    public static final int SCRENWIDTH = 1080;
+    public static final int SCRENHEIGHT = 720;
+    public static final int BUTTONWIDTH = 270;
+    public static final int BUTTONHEIGHT = 200;
     public static void closeAllStages() {
         Platform.runLater(() -> {
             for (Window window : Stage.getWindows()) {
@@ -62,70 +67,34 @@ public class Arkanoid extends Application {
         File LoadImg = new File("src/main/resources/com/example/arkanoid/images/StartButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image StartImg = new Image(LoadImg.toURL().toString());
         ImageView StartImgV = new ImageView(StartImg);
-        StartImgV.setFitHeight(200); // set chieu cao
-        StartImgV.setFitWidth(270); // set chiều rong
+        StartImgV.setFitHeight(BUTTONHEIGHT); // set chieu cao
+        StartImgV.setFitWidth(BUTTONWIDTH); // set chiều rong
         StartImgV.setPickOnBounds(false);
-        StartImgV.setLayoutX(325); // tọa độ X của đầu nút
+        StartImgV.setLayoutX((SCRENWIDTH-BUTTONWIDTH)/2); // tọa độ X của đầu nút
         StartImgV.setLayoutY(230); // tọa độ Y của đầu nút
-        StartImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        StartImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), StartImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(StartImgV);
         //chuc nang cho start button
 
         File LoadImg2 = new File("src/main/resources/com/example/arkanoid/images/TutorialBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image TutorialImg = new Image(LoadImg2.toURL().toString());
         ImageView TutorialImgV = new ImageView(TutorialImg);
-        TutorialImgV.setFitHeight(200); // set chieu cao
-        TutorialImgV.setFitWidth(270); // set chiều rong
+        TutorialImgV.setFitHeight(BUTTONHEIGHT); // set chieu cao
+        TutorialImgV.setFitWidth(BUTTONWIDTH); // set chiều rong
         TutorialImgV.setPickOnBounds(false);
-        TutorialImgV.setLayoutX(325); // tọa độ X của đầu nút
+        TutorialImgV.setLayoutX((SCRENWIDTH-BUTTONWIDTH)/2); // tọa độ X của đầu nút
         TutorialImgV.setLayoutY(340); // tọa độ Y của đầu nút
-        TutorialImgV.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialImgV);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        TutorialImgV.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), TutorialImgV);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(TutorialImgV);
 
 
         File LoadImg3 = new File("src/main/resources/com/example/arkanoid/images/ExitGameBt.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image ExitImg = new Image(LoadImg3.toURL().toString());
         ImageView ExitImg3 = new ImageView(ExitImg);
-        ExitImg3.setFitHeight(200); // set chieu cao
-        ExitImg3.setFitWidth(270); // set chiều rong
+        ExitImg3.setFitHeight(BUTTONHEIGHT); // set chieu cao
+        ExitImg3.setFitWidth(BUTTONWIDTH); // set chiều rong
         ExitImg3.setPickOnBounds(false);
-        ExitImg3.setLayoutX(325); // tọa độ X của đầu nút
+        ExitImg3.setLayoutX((SCRENWIDTH-BUTTONWIDTH)/2); // tọa độ X của đầu nút
         ExitImg3.setLayoutY(450); // tọa độ Y của đầu nút
-        ExitImg3.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitImg3);
-            st.setToX(1.1);
-            st.setToY(1.1);
-            st.play();
-        });
-
-        ExitImg3.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), ExitImg3);
-            st.setToX(1.0);
-            st.setToY(1.0);
-            st.play();
-        });
+        HoverEffect.addHoverEffect(ExitImg3);
 
         ExitImg3.setOnMouseClicked(e->{
             System.exit(0);
@@ -139,8 +108,8 @@ public class Arkanoid extends Application {
         Image anhnen = new Image(StartBackground.toURL().toString());
         ImageView bgView = new ImageView(anhnen);
         //set độ dài rộng của ảnh nền
-        bgView.setFitWidth(920);
-        bgView.setFitHeight(720);
+        bgView.setFitWidth(SCRENWIDTH);
+        bgView.setFitHeight(SCRENHEIGHT);
         //dòng này để chọn xem có bóp méo ảnh để lấy đúng tỷ lệ hay không!!
         bgView.setPreserveRatio(false);
         //
@@ -153,7 +122,7 @@ public class Arkanoid extends Application {
         root.getChildren().addAll(bgView, bt);
 
         //load khung hình start game với từng tỷ lệ
-        Scene scene = new Scene(root, 920, 720);
+        Scene scene = new Scene(root, SCRENWIDTH, SCRENHEIGHT);
         // tiêu đề của game
         StartImgV.setOnMouseClicked(e -> {
             try {

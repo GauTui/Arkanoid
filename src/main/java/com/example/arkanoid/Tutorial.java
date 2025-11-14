@@ -85,7 +85,7 @@ public class Tutorial {
         });
 
         Pane TutorialPane = new Pane(TutorialView, backImgV, nextImgV,BackToMenuImgV);
-        Scene TutorialScene = new Scene(TutorialPane,920,720);
+        Scene TutorialScene = new Scene(TutorialPane,1080,720);
         stage.setScene(TutorialScene);
     }
 }

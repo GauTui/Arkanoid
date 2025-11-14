@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.Paddle;
+import com.example.arkanoid.Utils.GameHUD;
 import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -20,16 +22,12 @@ public class StartLevel extends Arkanoid {
     private static final double PADDLE_SPEED = 600.0;
     public static double mouseX;
     private Pane pausePane = null;
+    private GameHUD hud;
     public void startLevel(Stage stage, int LevelNumber, Arkanoid mainApp) {
-        Pane gamePane = new Pane();
+        Pane gamePane = new Pane();   // tao pane nay de luu scene cho game chay
+        Pane gameHUD = new Pane();      // tao pane nay de luu cai scene hien phan thong tin cho nguoi choi xem
+        StackPane root = new StackPane();       // tao stackpane de luu 2 cai pane nay de no hien thi ra
         GameManager gm = GameManager.getInstance();
-        File loadSide = new File("");
-        Image SideImage = new Image(loadSide.toURI().toString());
-        ImageView SideView = new ImageView(SideImage);
-        SideView.setLayoutY(720);
-        SideView.setLayoutX(0);
-        SideView.setFitHeight(720);
-        SideView.setFitWidth(200);
 
         File loadBackGroundImg;
         switch (LevelNumber) {
@@ -44,11 +42,23 @@ public class StartLevel extends Arkanoid {
         ImageView loadBGImgV = new ImageView(loadBGImg);
         loadBGImgV.setFitWidth(720);
         loadBGImgV.setFitHeight(720);
-        gamePane.getChildren().addAll(loadBGImgV, SideView);
+        gamePane.getChildren().addAll(loadBGImgV);
         gm.init(gamePane, mainApp, LevelNumber);
-        Scene scene = new Scene(gamePane, 920, GameManager.SCREEN_HEIGHT);
+        gm.hud = new GameHUD(gamePane, gm);
+        Scene scene = new Scene(root, 1080, GameManager.SCREEN_HEIGHT);
         loadBGImgV.setPreserveRatio(false);
 
+        File loadHUD = new File("src/main/resources/com/example/arkanoid/images/HUDgame.png");
+        Image HUDImg = new Image(loadHUD.toURI().toString());
+        ImageView HUDView = new ImageView(HUDImg);
+        HUDView.setFitHeight(720);
+        HUDView.setFitWidth(360);
+        HUDView.setLayoutY(0);
+        HUDView.setLayoutX(720);
+
+        gameHUD.getChildren().add(HUDView);
+
+        root.getChildren().addAll(gameHUD,gamePane);
         // Bắt tọa độ chuột
         scene.setOnMouseMoved(event -> {
             mouseX = event.getX();
@@ -82,6 +92,7 @@ public class StartLevel extends Arkanoid {
                 // Update the rest of the game
                 try {
                     gm.update();
+                    //gm.hud.render();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }

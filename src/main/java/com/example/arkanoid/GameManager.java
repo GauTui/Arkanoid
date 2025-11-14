@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
+import com.example.arkanoid.Utils.GameHUD;
 import com.example.arkanoid.Utils.SoundEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
@@ -46,6 +47,7 @@ public class GameManager {
 
     // Singleton GameManager
     private static GameManager instance;
+    public GameHUD hud;
     private javafx.animation.AnimationTimer gameLoop;
 
 
@@ -63,8 +65,8 @@ public class GameManager {
     //text hien thi so diem ra man hinh voi dinh nghia : "Score : " + score
     private Text scoreText;
     private Text livesText;
-    private int score;
-    private int lives;
+    public int score;
+    public int lives;
     private int currentLevel;
     private Arkanoid mainApp;
     private List<LaserBeam> laserBeams = new ArrayList<>();
