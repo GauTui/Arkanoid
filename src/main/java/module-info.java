@@ -20,6 +20,14 @@ module com.example.arkanoid {
 
     opens com.example.arkanoid to javafx.fxml;
     exports com.example.arkanoid;
-    exports com.example.arkanoid.Model;
-    opens com.example.arkanoid.Model to javafx.fxml;
+    exports com.example.arkanoid.model;
+    opens com.example.arkanoid.model to javafx.fxml;
+    exports com.example.arkanoid.model.brick;
+    opens com.example.arkanoid.model.brick to javafx.fxml;
+    exports com.example.arkanoid.model.powerup;
+    opens com.example.arkanoid.model.powerup to javafx.fxml;
+    exports com.example.arkanoid.core;
+    opens com.example.arkanoid.core to javafx.fxml;
+    exports com.example.arkanoid.ui;
+    opens com.example.arkanoid.ui to javafx.fxml;
 }

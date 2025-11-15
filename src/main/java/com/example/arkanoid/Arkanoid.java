@@ -1,34 +1,23 @@
 package com.example.arkanoid;
 
-import com.example.arkanoid.Model.Paddle;
-import com.example.arkanoid.Utils.AnimationGame;
-import com.example.arkanoid.Utils.BackgroundMusic;
-import com.example.arkanoid.Utils.HoverEffect;
-import com.example.arkanoid.Utils.SoundManager;
-import javafx.animation.AnimationTimer;
-import javafx.animation.ScaleTransition;
+import com.example.arkanoid.ui.GameLose;
+import com.example.arkanoid.ui.GameWin;
+import com.example.arkanoid.ui.SelectLevel;
+import com.example.arkanoid.ui.Tutorial;
+import com.example.arkanoid.utils.fx.HoverEffect;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Window;
-import javafx.util.Duration;
-
-import java.awt.*;
-import javafx.geometry.Rectangle2D;
-import jdk.jfr.Frequency;
 
 import java.io.File;
 
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 
 /**
