@@ -1,13 +1,11 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.*;
-import com.example.arkanoid.Utils.GameHUD;
 import com.example.arkanoid.Utils.SoundEffect;
 import com.example.arkanoid.Utils.SoundManager;
+import com.example.arkanoid.Model.HighScoreManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
@@ -37,17 +35,15 @@ public class GameManager {
     public static final int MAP_NUMBERS = 6;
     public static final int INCREASE_POINTS = 10;
 
-    public static final int SCORE_X = 560;
-    public static final int SCORE_Y = 30;
-
-    public static final int LIVES_X = 400;
-    public static final int LIVES_Y = 30;
+    public static final int SCORE_X = 1080-180-60/2;
+    public static final int SCORE_Y = 185;
+    public static final int LIVES_Y = 640;
+    public static final int HIGHSCORE_X = (SCORE_Y + LIVES_Y)/2;
     // số bóng tối đa trong game
     public static final int MAX_BALLS = 10;
 
     // Singleton GameManager
     private static GameManager instance;
-    public GameHUD hud;
     private javafx.animation.AnimationTimer gameLoop;
 
 
@@ -65,8 +61,10 @@ public class GameManager {
     //text hien thi so diem ra man hinh voi dinh nghia : "Score : " + score
     private Text scoreText;
     private Text livesText;
+    private Text highscoreText;
     public int score;
     public int lives;
+    public int highscore = HighScoreManager.loadHighscore();
     private int currentLevel;
     private Arkanoid mainApp;
     private List<LaserBeam> laserBeams = new ArrayList<>();
@@ -110,7 +108,6 @@ public class GameManager {
         this.bricks = bricks;
     }
     /*====phuong thuc====*/
-
     //ho tro tam dung game khi nhan nut
     public void setGameLoop(AnimationTimer gameLoop) {
         this.gameLoop = gameLoop;
@@ -177,6 +174,7 @@ public class GameManager {
         // Khởi tạo giá trị ban đầu
         score = 0;
         lives = INITIAL_LIVES;
+        highscore = HighScoreManager.loadHighscore();
     }
 
     /**
@@ -198,6 +196,7 @@ public class GameManager {
         // Khởi tạo điểm và máu
         score = 0;
         lives = INITIAL_LIVES;
+        highscore = HighScoreManager.loadHighscore();
 
         // Paddle
         paddle = new Paddle(SCREEN_WIDTH / 2.0 - PADDLE_WIDTH / 2.0, SCREEN_HEIGHT - PADDLE_HEIGHT - 15);
@@ -211,17 +210,23 @@ public class GameManager {
         gamePane.getChildren().add(ball.getView());
 
         // UI text
-        scoreText = new Text("Score: " + score);
-        scoreText.setFont(Font.font("Arial", 20));
-        scoreText.setFill(Color.DARKBLUE);
+        scoreText = new Text(score +"");
+        scoreText.setFont(Font.font("Arial", 60));
+        scoreText.setFill(Color.WHITE);
         scoreText.setX(SCORE_X);
         scoreText.setY(SCORE_Y);
 
-        livesText = new Text("Lives: " + lives);
-        livesText.setFont(Font.font("Arial", 20));
-        livesText.setFill(Color.RED);
-        livesText.setX(LIVES_X);
+        livesText = new Text(lives + "");
+        livesText.setFont(Font.font("Arial", 60));
+        livesText.setFill(Color.WHITE);
+        livesText.setX(SCORE_X);
         livesText.setY(LIVES_Y);
+
+        highscoreText = new Text( highscore + "");
+        highscoreText.setFont(Font.font("Arial", 60));
+        highscoreText.setFill(Color.WHITE);
+        highscoreText.setX(HIGHSCORE_X);
+        highscoreText.setY(LIVES_Y);
 
         gamePane.getChildren().addAll(scoreText, livesText);
 
@@ -361,8 +366,8 @@ public class GameManager {
         fallingPowerups.forEach(GameObject::updateView);
 
         //   cập nhật text
-        scoreText.setText("Score: " + score);
-        livesText.setText("Lives: " + lives);
+        scoreText.setText(score + "");
+        livesText.setText(lives + "");
 
     }
 
@@ -372,7 +377,7 @@ public class GameManager {
             Ball b = balls.get(i);
             if (b.getY() + b.getHeight() > SCREEN_HEIGHT) {
                 gamePane.getChildren().remove(b.getView());
-                balls.remove(i); // ✅ an toàn khi duyệt ngược
+                balls.remove(i);
             }
         }
         if (balls.isEmpty()) {
@@ -402,8 +407,16 @@ public class GameManager {
                     if (brick.isDestroyed()) {
                         if(brick instanceof StrongBrick){
                             score += INCREASE_POINTS * 2;
+                            if(score > highscore) {
+                                highscore = score;
+                                HighScoreManager.saveHighscore(highscore);
+                            }
                         } else {
                             score += INCREASE_POINTS;
+                            if(score > highscore) {
+                                highscore = score;
+                                HighScoreManager.saveHighscore(highscore);
+                            }
                         }
                         spawnPowerUp(brick.getX(), brick.getY());
                         gamePane.getChildren().remove(brick.getView());

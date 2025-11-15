@@ -1,7 +1,6 @@
 package com.example.arkanoid;
 
 import com.example.arkanoid.Model.Paddle;
-import com.example.arkanoid.Utils.GameHUD;
 import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
 import javafx.animation.AnimationTimer;
