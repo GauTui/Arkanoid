@@ -1,5 +1,6 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Model.HighScoreManager;
 import com.example.arkanoid.Model.Paddle;
 import com.example.arkanoid.Utils.HoverEffect;
 import com.example.arkanoid.Utils.SoundManager;
@@ -136,6 +137,7 @@ public class StartLevel extends Arkanoid {
                             HoverEffect.addHoverEffect(RestartImgV);
                             RestartImgV.setOnMouseClicked(e2 -> {
                                 try {
+                                    HighScoreManager.saveHighscore(Math.max(gm.highscore,gm.score));
                                     String bgmFile = SoundManager.getCurrentBgmFile();
                                     GameManager kk = GameManager.getInstance();
                                     kk.reset();
@@ -148,7 +150,7 @@ public class StartLevel extends Arkanoid {
                                 }
                             });
 
-                            // Menu Button
+                            // Menu Button (về nhà)
                             File loadMenu = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png");
                             ImageView MenuImgV = new ImageView(new Image(loadMenu.toURI().toString()));
                             MenuImgV.setFitWidth(230); MenuImgV.setFitHeight(80);
@@ -156,6 +158,7 @@ public class StartLevel extends Arkanoid {
                             HoverEffect.addHoverEffect(MenuImgV);
                             MenuImgV.setOnMouseClicked(e2 -> {
                                 try {
+                                    HighScoreManager.saveHighscore(Math.max(gm.highscore,gm.score));
                                     Arkanoid.closeAllStages();
                                     GameManager.getInstance().reset();
                                     SoundManager.stopBackgroundMusic();
@@ -183,6 +186,12 @@ public class StartLevel extends Arkanoid {
                 case LEFT, A -> leftPressed = false;
                 case RIGHT, D -> rightPressed = false;
             }
+        });
+
+
+        //nếu tắt chương trình thì lưu điểm cao nhất
+        stage.setOnCloseRequest(event -> {
+            HighScoreManager.saveHighscore(Math.max(gm.highscore,gm.score));
         });
 
         stage.setScene(scene);

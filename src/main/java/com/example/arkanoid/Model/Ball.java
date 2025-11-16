@@ -13,7 +13,7 @@ import static com.example.arkanoid.GameManager.SCREEN_WIDTH;
 
 public class Ball extends MovableObject {
     public static final int BALL_SIZE = 20;
-    public static final double BALL_DX = 3;
+    public static final double BALL_DX = 2.5;
     public static final double BALL_DY = -2.5;
 
     private static final ImagePattern NORMAL_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/ball.png").toExternalForm()));

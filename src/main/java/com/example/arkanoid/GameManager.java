@@ -39,7 +39,7 @@ public class GameManager {
     public static final int SCORE_X = 1080-180-60/2;
     public static final int SCORE_Y = 185;
     public static final int LIVES_Y = 640;
-    public static final int HIGHSCORE_X = (SCORE_Y + LIVES_Y)/2;
+    public static final int HIGHSCORE_Y = (SCORE_Y + LIVES_Y)/2;
     // số bóng tối đa trong game
     public static final int MAX_BALLS = 10;
 
@@ -223,10 +223,10 @@ public class GameManager {
         highscoreText = new Text( highscore + "");
         highscoreText.setFont(Font.font("Arial", 60));
         highscoreText.setFill(Color.WHITE);
-        highscoreText.setX(HIGHSCORE_X);
-        highscoreText.setY(LIVES_Y);
+        highscoreText.setX(SCORE_X);
+        highscoreText.setY(HIGHSCORE_Y);
 
-        gamePane.getChildren().addAll(scoreText, livesText);
+        gamePane.getChildren().addAll(scoreText, livesText, highscoreText);
 
         // Load level bricks
         currentLevel = LevelNumber; // reset về level 1 khi bắt đầu game mới
@@ -349,7 +349,7 @@ public class GameManager {
         //   cập nhật text
         scoreText.setText(score + "");
         livesText.setText(lives + "");
-
+        highscoreText.setText(highscore + "");
         gamePane.getChildren().removeIf(node -> node instanceof ImageView && !node.isVisible());
     }
 
@@ -389,16 +389,8 @@ public class GameManager {
                     if (brick.isDestroyed()) {
                         if(brick instanceof StrongBrick){
                             score += INCREASE_POINTS * 2;
-                            if(score > highscore) {
-                                highscore = score;
-                                HighScoreManager.saveHighscore(highscore);
-                            }
                         } else {
                             score += INCREASE_POINTS;
-                            if(score > highscore) {
-                                highscore = score;
-                                HighScoreManager.saveHighscore(highscore);
-                            }
                         }
                         spawnPowerUp(brick.getX(), brick.getY());
                         gamePane.getChildren().remove(brick.getView());
@@ -410,6 +402,8 @@ public class GameManager {
             // Xử ly nốt nếu bóng rơi khỏi màn hình, kiểm tra máu còn lại.
             // Ông đức viết code chuyển màn hình game over khi máu về 0
             if (lives <= 0) {
+                highscore = Math.max(highscore, score);
+                HighScoreManager.saveHighscore(highscore);
                 gameLoop.stop();
                 Platform.runLater(() -> {
                     try {

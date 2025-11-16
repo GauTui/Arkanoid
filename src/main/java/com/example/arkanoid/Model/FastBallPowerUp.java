@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 /** Tăng tốc bóng */
 public class FastBallPowerUp extends PowerUp {
-    private static final double SPEED_MULTIPLIER = 1.3; // hệ số tăng tốc
+    private static final double SPEED_MULTIPLIER = 1.5; // hệ số tăng tốc
     private static final double MAX_SPEED = 9.5; // GIỚI HẠN TỐC ĐỘ TỐI ĐA
 
     // Lưu vận tốc gốc để hoàn tác: Ball -> {dx, dy}
