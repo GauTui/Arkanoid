@@ -21,7 +21,7 @@ public class StartLevel extends Arkanoid {
     private static final double PADDLE_SPEED = 600.0;
     public static double mouseX;
     private Pane pausePane = null;
-    private GameHUD hud;
+
     public void startLevel(Stage stage, int LevelNumber, Arkanoid mainApp) {
         Pane gamePane = new Pane();   // tao pane nay de luu scene cho game chay
         Pane gameHUD = new Pane();      // tao pane nay de luu cai scene hien phan thong tin cho nguoi choi xem
@@ -43,7 +43,7 @@ public class StartLevel extends Arkanoid {
         loadBGImgV.setFitHeight(720);
         gamePane.getChildren().addAll(loadBGImgV);
         gm.init(gamePane, mainApp, LevelNumber);
-        gm.hud = new GameHUD(gamePane, gm);
+
         Scene scene = new Scene(root, 1080, GameManager.SCREEN_HEIGHT);
         loadBGImgV.setPreserveRatio(false);
 

@@ -73,11 +73,7 @@ public class GameManager {
     private long lastLaserShotTime = 0;
     // Hằng số thời gian chờ giữa các lần bắn (300ms = 0.3 giây) (QUAN TRỌNG)
     private static final long LASER_COOLDOWN = 300;
-
-    // Biến theo dõi thời gian bóng đứng im trên paddle
-    private long ballOnPaddleStartTime = 0;
-    // Thời gian tối đa bóng có thể đứng im trên paddle (5 giây)
-    private static final long MAX_BALL_ON_PADDLE_TIME = 5000;
+    
 
     /*====Getter/setter====*/
     public List<Ball> getBalls() {
@@ -248,23 +244,6 @@ public class GameManager {
         if (!anyLaunched) {
             for (Ball ball : balls) {
                 ball.reset(paddle); // stop và đặt lại vị trí
-            }
-        }
-        else {
-            // Nếu có bóng đang bay, đặt thời gian bắt đầu đếm ngược
-            ballOnPaddleStartTime = System.currentTimeMillis();
-        }
-        if( ballOnPaddleStartTime != 0) {
-            long elapsed = System.currentTimeMillis() - ballOnPaddleStartTime;
-            if (elapsed > MAX_BALL_ON_PADDLE_TIME) {
-                // Tự động tung bóng sau 5 giây
-                for (Ball ball : balls) {
-                    if (!ball.isLaunched()) {
-                        ball.launch();
-                    }
-                }
-                // Reset thời gian
-                ballOnPaddleStartTime = 0;
             }
         }
         // --- Phần code dưới đây chỉ chạy KHI GAME ĐÃ BẮT ĐẦU ---
