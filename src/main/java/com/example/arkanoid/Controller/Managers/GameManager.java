@@ -299,6 +299,8 @@ public class GameManager {
             currentLevel++; // tăng level
 
             if (currentLevel > MAP_NUMBERS) {
+                highscore = Math.max(highscore,score);
+                HighScoreManager.saveHighscore(highscore);
                 Platform.runLater(() -> {
                     gameLoop.stop();
                     BackgroundMusic.stopBackgroundMusic();
