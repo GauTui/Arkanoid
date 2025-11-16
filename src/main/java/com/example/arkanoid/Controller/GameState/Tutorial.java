@@ -15,17 +15,21 @@ public class Tutorial {
     public static void TutorialGame (Stage stage, Scene scene) {
 
         File[] loadTutorial = {
-                new File("src/main/resources/com/example/arkanoid/images/Tutorial1.png"),//nhap hinh vao day,
-                new File("src/main/resources/com/example/arkanoid/images/Tutorial2.png"),// nhap dia chi vao day,
-                new File("src/main/resources/com/example/arkanoid/images/Tutorial3.png"), // nhap dia chi file vao day
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial1.jpg"),//nhap hinh vao day,
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial2.jpg"),// nhap dia chi vao day,
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial3.jpg"),
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial4.jpg"),
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial5.jpg"),
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial6.jpg"),
+                new File("src/main/resources/com/example/arkanoid/images/Tutorial7.jpg"),
         };
         Image[] TutorialImg = new Image[loadTutorial.length];
-        for(int i=0; i<3;++i) {
+        for(int i=0; i<7;++i) {
             TutorialImg[i] = new Image(loadTutorial[i].toURI().toString());
         }
 
         ImageView TutorialView = new ImageView(TutorialImg[0]);
-        TutorialView.setFitWidth(920);
+        TutorialView.setFitWidth(1080);
         TutorialView.setFitHeight(720);
 
         File loadBackButton = new File("src/main/resources/com/example/arkanoid/images/BackButton.png");
