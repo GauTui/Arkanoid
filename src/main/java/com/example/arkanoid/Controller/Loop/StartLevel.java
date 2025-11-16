@@ -33,12 +33,12 @@ public class StartLevel extends Arkanoid {
 
         File loadBackGroundImg;
         switch (LevelNumber) {
-            case 1 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
+            case 1 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.png");
             case 2 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level2.png");
-            case 3 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level3.jpg");
-            case 4 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level4.jpg");
-            case 5 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level5.jpg");
-            default -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.jpg");
+            case 3 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level3.png");
+            case 4 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level4.png");
+            case 5 -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level5.png");
+            default -> loadBackGroundImg = new File("src/main/resources/com/example/arkanoid/images/bg_Level1.png");
         }
         Image loadBGImg = new Image(loadBackGroundImg.toURI().toString());
         ImageView loadBGImgV = new ImageView(loadBGImg);
