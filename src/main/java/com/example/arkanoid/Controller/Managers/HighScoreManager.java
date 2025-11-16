@@ -5,35 +5,26 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class HighScoreManager {
-
-    private static final String FILE_PATH = "highscore.txt";
-
     public static int loadHighscore() {
         try {
-            File file = new File(FILE_PATH);
-
-            if (!file.exists()) {
-                return 0;   // file chưa tồn tại, highscore = 0
-            }
-
+            File file = new File("src/main/resources/com/example/arkanoid/highscore/highscore.txt");
             Scanner scanner = new Scanner(file);
+
             int high = scanner.nextInt();
             scanner.close();
             return high;
-
         } catch (Exception e) {
-            return 0; // lỗi thì trả về 0
+            System.out.println("không mở được file để đọc");
+            return 0; // nếu lỗi thì highscore mặc định = 0
         }
     }
-
     public static void saveHighscore(int newHighscore) {
         try {
-            FileWriter writer = new FileWriter(FILE_PATH);
+            FileWriter writer = new FileWriter("src/main/resources/com/example/arkanoid/highscore/highscore.txt");
             writer.write(String.valueOf(newHighscore));
-            writer.flush();
             writer.close();
         } catch (Exception e) {
-            System.err.println("Lỗi khi ghi vào file highscore.txt");
+            System.out.println("không mở được file để lưu");
         }
     }
 }

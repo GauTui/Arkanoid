@@ -550,19 +550,20 @@ public class GameManager {
         } else if (chance < 0.10) {
             newPowerUp = new SplitBallPowerUp(x, y);
 
-            // 10% cơ hội rơi ra Expand Paddle (khi chance >= 0.10 và < 0.20)
-        } else if (chance < 0.20) {
+            // 10% cơ hội rơi ra Expand Paddle (khi chance >= 0.1 và < 0.2)
+        } else if (chance < 0.2) {
             newPowerUp = new ExpandPaddlePowerUp(x, y);
 
-            // 10% cơ hội rơi ra Fast Ball (khi chance >= 0.20 và < 0.30)
-        } else if (chance < 0.30) {
+            // 10% cơ hội rơi ra Fast Ball (khi chance >= 0.2 và < 0.3)
+        } else if (chance < 0.3) {
             newPowerUp = new FastBallPowerUp(x, y);
         }
-            // 20% cơ hội rơi ra Laser Paddle (khi chance >= 0.30 và < 0.5)
-        else if (chance < 0.50) {
+            // 15% cơ hội rơi ra Laser Paddle (khi chance >= 0.3 và < 0.4)
+        else if (chance < 0.45) {
             newPowerUp = new LaserPaddlePowerUp(x, y);
         }
-        else if (chance < 0.90){
+            // 5% cơ hội rơi ra Bomb Ball
+        else if (chance < 0.5){
             newPowerUp = new BombBallPowerUp(x, y);
         }
 
