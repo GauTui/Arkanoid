@@ -5,9 +5,10 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class HighScoreManager {
+    public static String HIGH_SCORE_FILE = "src/main/resources/com/example/arkanoid/highscore/highscore.txt";
     public static int loadHighscore() {
         try {
-            File file = new File("src/main/resources/com/example/arkanoid/highscore/highscore.txt");
+            File file = new File(HIGH_SCORE_FILE);
             Scanner scanner = new Scanner(file);
 
             int high = scanner.nextInt();
@@ -20,7 +21,7 @@ public class HighScoreManager {
     }
     public static void saveHighscore(int newHighscore) {
         try {
-            FileWriter writer = new FileWriter("src/main/resources/com/example/arkanoid/highscore/highscore.txt");
+            FileWriter writer = new FileWriter(HIGH_SCORE_FILE);
             writer.write(String.valueOf(newHighscore));
             writer.close();
         } catch (Exception e) {

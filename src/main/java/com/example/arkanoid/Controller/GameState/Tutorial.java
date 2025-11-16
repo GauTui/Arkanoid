@@ -57,13 +57,13 @@ public class Tutorial {
         backImgV.setOnMouseClicked(e->{
             CurrentPage[0] --;
             if(CurrentPage[0] <0) {
-                CurrentPage[0] = 2;
+                CurrentPage[0] = 6;
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
         });
         nextImgV.setOnMouseClicked(e->{
             CurrentPage[0] ++;
-            if(CurrentPage[0] == 3) {
+            if(CurrentPage[0] == 7) {
                 CurrentPage[0] = 0;
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
