@@ -54,7 +54,6 @@ public class GameManager {
     private static GameManager instance;
     private javafx.animation.AnimationTimer gameLoop;
 
-
     private Paddle paddle;
 
     private List<Ball> balls;
@@ -85,6 +84,21 @@ public class GameManager {
     
 
     /*====Getter/setter====*/
+    public List<PowerUp> getFallingPowerups() {
+        return fallingPowerups;
+    }
+
+    public void addFallingPowerups(PowerUp p) {
+        this.fallingPowerups.add(p);
+    }
+
+    public List<PowerUp> getActivePowerups() {
+        return activePowerups;
+    }
+    public void setPaddle(Paddle p) {
+        this.paddle = p;
+    }
+    // getter setter trên dùng cho junit test thôi
     public List<Ball> getBalls() {
         return balls;
     }

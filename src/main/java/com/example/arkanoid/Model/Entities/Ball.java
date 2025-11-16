@@ -17,8 +17,8 @@ public class Ball extends MovableObject {
     public static final double BALL_DX = 2.5;
     public static final double BALL_DY = -2.5;
 
-    private static final ImagePattern NORMAL_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/ball.png").toExternalForm()));
-    private static final ImagePattern BOMB_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/bombball.png").toExternalForm()));
+    public static final ImagePattern NORMAL_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/ball.png").toExternalForm()));
+    public static final ImagePattern BOMB_BALL_PATTERN = new ImagePattern(new Image(Ball.class.getResource("/com/example/arkanoid/images/bombball.png").toExternalForm()));
     private boolean isBomb = false;
 
     /**
@@ -30,7 +30,7 @@ public class Ball extends MovableObject {
      * @param ballDy
      */
     public Ball(double x, double y, double ballDx, double ballDy) {
-        super(x, y, BALL_SIZE, BALL_SIZE, BALL_DX, BALL_DY);
+        super(x, y, BALL_SIZE, BALL_SIZE, ballDx, ballDy);
 
         //khởi tạo hình chữ nhật chứa ball
         Rectangle Rball = new Rectangle(BALL_SIZE, BALL_SIZE);
@@ -40,10 +40,6 @@ public class Ball extends MovableObject {
 
         // Đặt ảnh ban đầu là ảnh quả bóng thường
         Rball.setFill(NORMAL_BALL_PATTERN);
-
-        String iball = getClass().getResource("/com/example/arkanoid/images/ball.png").toExternalForm();
-        Image imagineBallUrl = new Image(iball);
-        Rball.setFill(new ImagePattern(imagineBallUrl));
 
         //Node view khoi tao la Rball
         this.view = Rball;
