@@ -38,7 +38,7 @@ public class GameManager {
     public static final int SCORE_X = 1080-180-60/2;
     public static final int SCORE_Y = 185;
     public static final int LIVES_Y = 640;
-    public static final int HIGHSCORE_X = (SCORE_Y + LIVES_Y)/2;
+    public static final int HIGHSCORE_Y = (SCORE_Y + LIVES_Y)/2;
     // số bóng tối đa trong game
     public static final int MAX_BALLS = 10;
 
@@ -225,10 +225,10 @@ public class GameManager {
         highscoreText = new Text( highscore + "");
         highscoreText.setFont(Font.font("Arial", 60));
         highscoreText.setFill(Color.WHITE);
-        highscoreText.setX(HIGHSCORE_X);
-        highscoreText.setY(LIVES_Y);
+        highscoreText.setX(SCORE_X);
+        highscoreText.setY(HIGHSCORE_Y);
 
-        gamePane.getChildren().addAll(scoreText, livesText);
+        gamePane.getChildren().addAll(scoreText, livesText,highscoreText);
 
         // Load level bricks
         currentLevel = LevelNumber; // reset về level 1 khi bắt đầu game mới
