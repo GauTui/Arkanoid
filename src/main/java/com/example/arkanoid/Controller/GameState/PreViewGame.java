@@ -28,9 +28,9 @@ public class PreViewGame {
         File loadFrame = new File("src/main/resources/com/example/arkanoid/images/PreViewFrame.png");
         Image Frame = new Image(loadFrame.toURI().toString());
         ImageView FrameView = new ImageView(Frame);
-        FrameView.setFitWidth(650);
-        FrameView.setFitHeight(600);
-        FrameView.setX(355);
+        FrameView.setFitWidth(430);
+        FrameView.setFitHeight(550);
+        FrameView.setX(450);
         FrameView.setY(105);
         FrameView.setId("FrameView");
 

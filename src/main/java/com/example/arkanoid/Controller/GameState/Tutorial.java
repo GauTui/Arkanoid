@@ -48,7 +48,7 @@ public class Tutorial {
         nextImgV.setFitHeight(80);
         nextImgV.setFitWidth(160);
         nextImgV.setPickOnBounds(false);
-        nextImgV.setLayoutX(755);
+        nextImgV.setLayoutX(900);
         nextImgV.setLayoutY(635);
         HoverEffect.addHoverEffect(nextImgV);
 
@@ -71,11 +71,11 @@ public class Tutorial {
         File LoadMainMenuT = new File("src/main/resources/com/example/arkanoid/images/BackToMenu.png");
         Image BackToMenuImg = new Image(LoadMainMenuT.toURI().toString());
         ImageView BackToMenuImgV = new ImageView(BackToMenuImg);
-        BackToMenuImgV.setFitWidth(300);
-        BackToMenuImgV.setFitHeight(60);
+        BackToMenuImgV.setFitWidth(240);
+        BackToMenuImgV.setFitHeight(80);
         BackToMenuImgV.setPickOnBounds(false);
-        BackToMenuImgV.setLayoutX(310);
-        BackToMenuImgV.setLayoutY(650);
+        BackToMenuImgV.setLayoutX((1080-240)/2);
+        BackToMenuImgV.setLayoutY(630);
         HoverEffect.addHoverEffect(BackToMenuImgV);
 
         BackToMenuImgV.setOnMouseClicked(e->{
