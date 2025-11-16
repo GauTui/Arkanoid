@@ -106,6 +106,7 @@ public class StartLevel extends Arkanoid {
                 case RIGHT, D -> rightPressed = true;
                 // nút space để phóng bóng
                 case SPACE -> gm.launchBall();
+                case SHIFT -> gm.detonateBombs();
                 case ESCAPE -> {
                     try {
                         gameLoop.stop(); // dừng game
