@@ -100,9 +100,6 @@ public class Paddle extends MovableObject{
     public void moveLeft(){
         setDx(-PADDLE_SPEED);
     }
-    public void moveRight(){
-        setDx(PADDLE_SPEED);
-    }
 
     public void stopMove(){
         setDx(0);
