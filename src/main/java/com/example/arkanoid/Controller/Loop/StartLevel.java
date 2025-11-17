@@ -68,6 +68,7 @@ public class StartLevel extends Arkanoid {
         // Game loop with delta-time paddle movement
         AnimationTimer gameLoop = new AnimationTimer() {
             private long lastTime = 0;
+            private static final long OPTIMAL_TIME = 1_000_000_000 / 60; // 60 FPS
 
             @Override
             public void handle(long now) {
@@ -75,15 +76,24 @@ public class StartLevel extends Arkanoid {
                     lastTime = now;
                     return;
                 }
-                double elapsedSeconds = (now - lastTime) / 1_000_000_000.0;
+                long deltaTime = now - lastTime;
+
+                // Giới hạn delta time để tránh jump lớn khi lag
+                if (deltaTime > OPTIMAL_TIME * 3) {
+                    deltaTime = OPTIMAL_TIME;
+                }
+
+                double deltaSeconds = deltaTime / 1_000_000_000.0;
                 lastTime = now;
+//                double elapsedSeconds = (now - lastTime) / 1_000_000_000.0;
+//                lastTime = now;
 
                 // Update paddle position using keyboard input
                 Paddle paddle = gm.getPaddle();
                 if (paddle != null) {
                     double dx = 0;
-                    if (leftPressed) dx -= PADDLE_SPEED * elapsedSeconds;
-                    if (rightPressed) dx += PADDLE_SPEED * elapsedSeconds;
+                    if (leftPressed) dx -= PADDLE_SPEED * deltaSeconds; //elapsedSeconds;
+                    if (rightPressed) dx += PADDLE_SPEED * deltaSeconds;//elapsedSeconds;
 
                     double newX = Math.max(0, Math.min(GameManager.SCREEN_WIDTH - paddle.getWidth(),
                             paddle.getX() + dx));
