@@ -1,5 +1,5 @@
 #  GAME NAME : ARKANOID
-TÊN NHÓM : NHÓM 6.
+TÊN NHÓM : NHÓM 6  
 Đây là một dự án game 2D được phát triển bằng ngôn ngữ java với thư viện javafx.
 CÔNG CỤ PHÁT TRIỂN : IntelliJ IDEA
 
