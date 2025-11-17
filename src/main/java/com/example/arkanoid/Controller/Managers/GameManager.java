@@ -409,6 +409,11 @@ public class GameManager {
                         } else {
                             score += INCREASE_POINTS;
                         }
+                        if(score >highscore) {
+                            highscore = score;
+                            highscoreText.setText(highscore+ "");
+                            HighScoreManager.saveHighscore(highscore);
+                        }
                         spawnPowerUp(brick.getX(), brick.getY());
                         gamePane.getChildren().remove(brick.getView());
                     }
@@ -479,6 +484,11 @@ public class GameManager {
                         gamePane.getChildren().remove(brick.getView());
                         brickIterator.remove(); // Xóa gạch
                         spawnPowerUp(brick.getX(), brick.getY());
+                        if(score > highscore) {
+                            highscore = score;
+                            highscoreText.setText(highscore + "");
+                            HighScoreManager.saveHighscore(highscore);
+                        }
                     }
 
                     // --- PHẦN SỬA LỖI QUAN TRỌNG NHẤT ---
@@ -646,6 +656,11 @@ public class GameManager {
                 if (distance < BOMB_RADIUS) {
                     // Phá hủy ngay lập tức, không cần takeHit()
                     score += INCREASE_POINTS;
+                    if(score > highscore) {
+                        highscore = score;
+                        HighScoreManager.saveHighscore(highscore);
+                        highscoreText.setText(highscore + "");
+                    }
                     gamePane.getChildren().remove(brick.getView());
                     brickIterator.remove();
                 }
