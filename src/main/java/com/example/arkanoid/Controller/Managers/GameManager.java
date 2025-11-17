@@ -9,6 +9,8 @@ import com.example.arkanoid.Model.Bricks.StrongBrick;
 import com.example.arkanoid.Model.Entities.Ball;
 import com.example.arkanoid.Model.Entities.LaserBeam;
 import com.example.arkanoid.Model.Entities.Paddle;
+import com.example.arkanoid.Model.PowerUps.PowerUpFactory;
+import com.example.arkanoid.Model.PowerUps.PowerUpType;
 import com.example.arkanoid.Model.PowerUps.*;
 import com.example.arkanoid.Controller.Utils.SoundEffect;
 import com.example.arkanoid.Controller.Utils.BackgroundMusic;
@@ -66,7 +68,7 @@ public class GameManager {
     //danh sach cac PowerUp da cham vao paddle va dang gay hieu ung
     private List<PowerUp> activePowerups;
     //dung de sinh ngau nhien PowerUp
-    private Random random = new Random();
+//    private Random random = new Random();
     //text hien thi so diem ra man hinh voi dinh nghia : "Score : " + score
     private Text scoreText;
     private Text livesText;
@@ -545,45 +547,19 @@ public class GameManager {
      sinh powerup ngẫu nhiên tại vị trí (x,y) khi viên gạch bị phá hủy
      */
     private void spawnPowerUp(double x, double y) {
-        // Lấy một số ngẫu nhiên từ 0.0 (bao gồm) đến 1.0 (không bao gồm)
-        double chance = random.nextDouble();
+        // Gọi Factory để tạo PowerUp ngẫu nhiên
+        PowerUp newPowerUp = PowerUpFactory.createRandomPowerUp(x, y);
 
-        PowerUp newPowerUp = null; // Khởi tạo là null
-
-        // --- ĐÂY LÀ NƠI CHÚNG TA ĐỊNH NGHĨA TỈ LỆ RƠI ---
-
-        // 2% cơ hội rơi ra Extra Life (khi chance < 0.02)
-        if (chance < 0.02) {
-            newPowerUp = new ExtraLifePowerUp(x, y);
-
-            // 8% cơ hội rơi ra Split Ball (khi chance >= 0.02 và < 0.10)
-        } else if (chance < 0.10) {
-            newPowerUp = new SplitBallPowerUp(x, y);
-
-            // 10% cơ hội rơi ra Expand Paddle (khi chance >= 0.1 và < 0.2)
-        } else if (chance < 0.2) {
-            newPowerUp = new ExpandPaddlePowerUp(x, y);
-
-            // 10% cơ hội rơi ra Fast Ball (khi chance >= 0.2 và < 0.3)
-        } else if (chance < 0.3) {
-            newPowerUp = new FastBallPowerUp(x, y);
+        // Nếu Factory trả về null → không rơi PowerUp lần này
+        if (newPowerUp == null) {
+            return; // Exit method
         }
-            // 15% cơ hội rơi ra Laser Paddle (khi chance >= 0.3 và < 0.4)
-        else if (chance < 0.45) {
-            newPowerUp = new LaserPaddlePowerUp(x, y);
-        }
-            // 5% cơ hội rơi ra Bomb Ball
-        else if (chance < 0.5){
-            newPowerUp = new BombBallPowerUp(x, y);
-        }
+        // Thêm PowerUp vào game
+        fallingPowerups.add(newPowerUp);
+        gamePane.getChildren().add(newPowerUp.getView());
 
-        // Nếu không rơi vào các trường hợp trên (chance >= 0.90), sẽ không có power-up nào được tạo ra.
-
-        // Chỉ thêm power-up vào game nếu nó đã được tạo (không phải là null)
-        if (newPowerUp != null) {
-            fallingPowerups.add(newPowerUp);
-            gamePane.getChildren().add(newPowerUp.getView());
-        }
+        // Optional: Log để debug
+        System.out.println("PowerUp spawned: " + newPowerUp.getClass().getSimpleName());
     }
 
     public void loseLife() throws MalformedURLException {
