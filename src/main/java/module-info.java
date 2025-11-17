@@ -36,4 +36,6 @@ module com.example.arkanoid {
     opens com.example.arkanoid.Controller.GameState to javafx.fxml;
     exports com.example.arkanoid.Controller.Loop;
     opens com.example.arkanoid.Controller.Loop to javafx.fxml;
+    exports com.example.arkanoid.Controller.Utils;
+    opens com.example.arkanoid.Controller.Utils to javafx.fxml;
 }

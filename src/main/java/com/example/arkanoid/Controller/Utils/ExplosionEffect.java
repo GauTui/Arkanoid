@@ -1,4 +1,4 @@
-package com.example.arkanoid.Model.PowerUps; // Hãy chắc chắn package này đúng
+package com.example.arkanoid.Controller.Utils; // Hãy chắc chắn package này đúng
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;

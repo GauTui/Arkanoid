@@ -1,16 +1,15 @@
 package com.example.arkanoid.Controller.Managers;
 
 import com.example.arkanoid.Application.Arkanoid;
+import com.example.arkanoid.Controller.Utils.ExplosionEffect;
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Model.Bricks.Brick;
 import com.example.arkanoid.Model.Bricks.BrickFactory;
-import com.example.arkanoid.Model.Bricks.NormalBrick;
 import com.example.arkanoid.Model.Bricks.StrongBrick;
 import com.example.arkanoid.Model.Entities.Ball;
 import com.example.arkanoid.Model.Entities.LaserBeam;
 import com.example.arkanoid.Model.Entities.Paddle;
 import com.example.arkanoid.Model.PowerUps.PowerUpFactory;
-import com.example.arkanoid.Model.PowerUps.PowerUpType;
 import com.example.arkanoid.Model.PowerUps.*;
 import com.example.arkanoid.Controller.Utils.SoundEffect;
 import com.example.arkanoid.Controller.Utils.BackgroundMusic;
@@ -28,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
