@@ -22,7 +22,6 @@ public class StartLevel extends Arkanoid {
     private static boolean leftPressed = false;
     private static boolean rightPressed = false;
     private static final double PADDLE_SPEED = 600.0;
-    public static double mouseX;
     private Pane pausePane = null;
 
     public void startLevel(Stage stage, int LevelNumber, Arkanoid mainApp) {
@@ -61,10 +60,6 @@ public class StartLevel extends Arkanoid {
         gameHUD.getChildren().add(HUDView);
 
         root.getChildren().addAll(gameHUD,gamePane);
-        // Bắt tọa độ chuột
-        scene.setOnMouseMoved(event -> {
-            mouseX = event.getX();
-        });
         // Game loop with delta-time paddle movement
         AnimationTimer gameLoop = new AnimationTimer() {
             private long lastTime = 0;
