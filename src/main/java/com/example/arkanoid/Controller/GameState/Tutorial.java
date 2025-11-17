@@ -38,6 +38,7 @@ public class Tutorial {
         backImgV.setFitHeight(80);
         backImgV.setFitWidth(160);
         backImgV.setPickOnBounds(false);
+        backImgV.setVisible(false);
         backImgV.setLayoutX(5);
         backImgV.setLayoutY(5);
         HoverEffect.addHoverEffect(backImgV);
@@ -60,6 +61,7 @@ public class Tutorial {
                 CurrentPage[0] = 6;
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
+            backImgV.setVisible(CurrentPage[0] > 0);
         });
         nextImgV.setOnMouseClicked(e->{
             CurrentPage[0] ++;
@@ -67,6 +69,7 @@ public class Tutorial {
                 CurrentPage[0] = 0;
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
+            backImgV.setVisible(CurrentPage[0] > 0);
         });
         File LoadMainMenuT = new File("src/main/resources/com/example/arkanoid/images/BackToMenu.png");
         Image BackToMenuImg = new Image(LoadMainMenuT.toURI().toString());
