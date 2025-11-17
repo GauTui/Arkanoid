@@ -70,6 +70,7 @@ public class Tutorial {
             }
             TutorialView.setImage(TutorialImg[CurrentPage[0]]);
             backImgV.setVisible(CurrentPage[0] > 0);
+            //
         });
         File LoadMainMenuT = new File("src/main/resources/com/example/arkanoid/images/BackToMenu.png");
         Image BackToMenuImg = new Image(LoadMainMenuT.toURI().toString());
