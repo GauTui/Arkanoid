@@ -3,6 +3,7 @@ package com.example.arkanoid.Controller.Managers;
 import com.example.arkanoid.Application.Arkanoid;
 import com.example.arkanoid.Model.*;
 import com.example.arkanoid.Model.Bricks.Brick;
+import com.example.arkanoid.Model.Bricks.BrickFactory;
 import com.example.arkanoid.Model.Bricks.NormalBrick;
 import com.example.arkanoid.Model.Bricks.StrongBrick;
 import com.example.arkanoid.Model.Entities.Ball;
@@ -58,6 +59,7 @@ public class GameManager {
 
     private List<Ball> balls;
     private List<Brick> bricks;
+    private BrickFactory brickFactory;
     private Pane gamePane;
     //danh sach cac PowerUp dang roi
     private List<PowerUp> fallingPowerups;
@@ -155,17 +157,8 @@ public class GameManager {
                 int LineW = line.length()*brickWidth;
                 int currentX = (SCREEN_WIDTH-LineW)/2; // tọa độ X ban đầu cho mỗi hàng
                 for (char brickType : line.toCharArray()) {
-                    Brick newBrick = null;
-                    //  đọc từng ký tự và tạo loại gạch tương ứng
-                    switch (brickType) {
-                        case '1':
-                            newBrick = new NormalBrick(currentX, currentY, brickWidth, brickHeight);
-                            break;
-                        case '2':
-                            newBrick = new StrongBrick(currentX, currentY, brickWidth, brickHeight);
-                            break;
-                        // sau này thêm case cho các loại gạch khác ở đây
-                    }
+                    // gọi parttern Factory
+                    Brick newBrick = brickFactory.createBrick(brickType, currentX, currentY);
 
                     if (newBrick != null) {
                         bricks.add(newBrick);
@@ -189,6 +182,7 @@ public class GameManager {
         bricks = new ArrayList<>();
         activePowerups = new ArrayList<>();
         fallingPowerups = new ArrayList<>();
+        brickFactory = new BrickFactory();
 
         // Khởi tạo giá trị ban đầu
         score = 0;
