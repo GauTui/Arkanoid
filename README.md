@@ -1,7 +1,7 @@
 #  GAME NAME : ARKANOID
 TÊN NHÓM : NHÓM 6  
-Đây là một dự án game 2D được phát triển bằng ngôn ngữ java với thư viện javafx.
-CÔNG CỤ PHÁT TRIỂN : IntelliJ IDEA
+Đây là một dự án game 2D được phát triển bằng ngôn ngữ java với thư viện javafx  
+CÔNG CỤ PHÁT TRIỂN :IntelliJ IDEA
 
 # TÓM TẮT
 Game Arkanoid với xu hướng cổ điển, di chuyển Paddle để đẩy bóng đập vào gạch, phá vỡ hết gạch để qua màn và cố gắng đạt điểm cao nhất
