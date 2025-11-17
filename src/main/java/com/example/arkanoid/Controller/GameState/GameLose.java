@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class GameLose {
-    public Pane GameLoseSc(Stage stage, int score, int CurrentLV, Arkanoid mainApp) throws Exception {
+    public Pane GameLoseSc(int CurrentLV, Arkanoid mainApp) throws Exception {
         Pane GameLosePane = new Pane();
         File LoadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png"); // nem dia chi nut start
         Image RestartImg2 = new Image(LoadRestart.toURI().toString());

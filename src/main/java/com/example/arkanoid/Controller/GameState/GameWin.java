@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class GameWin {
-    public Pane GameWin(Stage stage, int Score, Arkanoid mainApp) throws Exception{
+    public Pane GameWin(Arkanoid mainApp) throws Exception{
         Pane GameWinPane = new Pane();
 
         File loadRestart = new File("src/main/resources/com/example/arkanoid/images/RestartButton.png");
@@ -25,20 +25,6 @@ public class GameWin {
         RestartImgV.setLayoutX(235);
         RestartImgV.setLayoutY(300);
         HoverEffect.addHoverEffect(RestartImgV);
-        /*
-        File loadNextLV = new File("src/main/resources/com/example/arkanoid/images/NextLevelButton.png");
-        Image NextLVImg = new Image(loadNextLV.toURI().toString());
-        ImageView NextLVImgV = new ImageView(NextLVImg);
-        NextLVImgV.setFitHeight(70);
-        NextLVImgV.setFitWidth(230);
-        Button NextLevel = new Button();
-        NextLevel.setStyle("-fx-background-color: transparent");
-        NextLevel.setGraphic(NextLVImgV);
-        NextLevel.setOnMouseEntered(e-> NextLVImgV.setOpacity(0.8));
-        NextLevel.setOnMouseExited(e-> NextLVImgV.setOpacity(1.0));
-        NextLevel.setLayoutX(245);
-        NextLevel.setLayoutY(330);
-         */
 
         File LoadMainMenuImg = new File("src/main/resources/com/example/arkanoid/images/MenuButton.png"); // ở đây sẽ thêm địa chỉ của ảnh muốn render ra khi mà vẽ
         Image MainMenu2Img = new Image(LoadMainMenuImg.toURI().toString());

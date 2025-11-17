@@ -128,11 +128,11 @@ public class Arkanoid extends Application {
     }
     public Pane createGameWin(Stage stage, int score) throws Exception {
         GameWin win = new GameWin();
-        return win.GameWin(stage, score, this); // truyền mainApp vào nếu cần
+        return win.GameWin(this); // truyền mainApp vào nếu cần
     }
 
     public Pane createGameLose(Stage stage, int score, int level) throws Exception {
         GameLose lose = new GameLose();
-        return lose.GameLoseSc(stage, score, level, this);
+        return lose.GameLoseSc(level, this);
     }
 }
